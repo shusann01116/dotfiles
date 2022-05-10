@@ -1,0 +1,12 @@
+# ignore all files and folders
+/*
+/.**
+
+# whitelist
+# zsh
+!/.zshrc
+!/.zsh/completions/
+
+# git files
+!/README.md
+!/.gitignore
