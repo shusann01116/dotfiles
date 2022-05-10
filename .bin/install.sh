@@ -17,15 +17,17 @@ link_to_homedir() {
     fi
 
     # get the name of the directory this script exists
-    local script_dir="$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd -P)"
+    local script_dir
+    script_dir="$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd -P)"
 
     # get the name of parent direcotry of script directory
-    local dotdir=$(dirname ${script_dir})
+    local dotdir
+    dotdir=$(dirname ${script_dir})
 
     # exit the function when the direcotry is invalid
     [[ "$HOME" == "$dotdir" ]] && exit 1
 
-    for f in $dotdir/.??*; do
+    for f in "$dotdir"/.??*; do
         # skip for .git folder
         [[ $(basename $f) == ".git" ]] && continue
 
