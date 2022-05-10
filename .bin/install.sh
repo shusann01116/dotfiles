@@ -50,7 +50,8 @@ while [ $# -gt 0 ]; do
         set -uex
         ;;
     --help | -h)
-        helpmsg() exit 1
+        helpmsg
+        exit 1
         ;;
     *) ;;
     esac
