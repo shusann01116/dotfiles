@@ -1,0 +1,14 @@
+name: installer
+
+on: [push]
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    container: ubuntu:latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install packages
+        run: apt update && apt install -y git sudo
+      - name: Run install.sh
+        run: ./.bin/install.sh

@@ -3,6 +3,10 @@
 /.**
 
 # whitelist
+# github actions
+!/.github/
+!/.github/**
+
 # installer
 !/.bin/
 !/.bin/install.sh
