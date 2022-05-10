@@ -39,6 +39,7 @@ link_to_homedir() {
             command mv "$HOME/$(basename $f)" "$HOME/$backup_dir"
         fi
 
+        command echo "$HOME/$(basename $f) -> $HOME/$(basename $f)"
         command ln -snf "$HOME/$(basename $f)" "$HOME/$(basename $f)"
     done
 
