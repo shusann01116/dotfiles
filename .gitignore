@@ -3,6 +3,10 @@
 /.**
 
 # whitelist
+# installer
+!/.bin/
+!/.bin/install.sh
+
 # zsh
 !/.zshrc
 !/.zsh/completions/
