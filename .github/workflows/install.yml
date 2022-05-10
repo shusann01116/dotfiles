@@ -11,4 +11,4 @@ jobs:
       - name: Install packages
         run: apt update && apt install -y git sudo
       - name: Run install.sh
-        run: ./.bin/install.sh
+        run: .bin/install.sh
