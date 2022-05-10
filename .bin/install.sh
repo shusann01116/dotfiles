@@ -13,7 +13,7 @@ link_to_homedir() {
 
     if [ ! -d "$HOME/$backup_dir" ]; then
         command echo "creating $HOME/$backup_dir folder"
-        mkdir -r "$HOME/$backup_dir"
+        mkdir -p "$HOME/$backup_dir"
     fi
 
     # get the name of the directory this script exists
