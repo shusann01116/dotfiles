@@ -15,6 +15,9 @@
 !/.zshrc
 !/.zsh/completions/
 
+# brew bundle
+!/Brewfile
+
 # git files
 !/README.md
 !/.gitignore
