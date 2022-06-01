@@ -1,28 +1,16 @@
-name: installer
+name: dagger
 
 on: [push]
 
 jobs:
   ubuntu:
     runs-on: ubuntu-latest
-    container: ubuntu:latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Install packages
-        run: apt update && apt install -y git sudo
-      - name: Run install.sh
-        run: .bin/install.sh
-      - name: Verify the dotfiles are executable
-        run: source ~/.zshrc
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Check scripts with shellcheck
-        env:
-          EXCLUDE_OPTS: SC2086,SC2001
-        run: |
-          shellcheck ${EXCLUDE_OPTS:+-e $EXCLUDE_OPTS .bin/install.sh} || \
-          touch error.$$
-          test ! -e error.$$
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run dagger
+        uses: dagger/dagger-for-github@v3
+        with:
+          cmds: |
+            project update
+            do test
