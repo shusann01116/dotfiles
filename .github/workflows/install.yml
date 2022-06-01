@@ -24,3 +24,5 @@ jobs:
           shellcheck ${EXCLUDE_OPTS:+-e $EXCLUDE_OPTS .bin/install.sh} || \
           touch error.$$
           test ! -e error.$$
+      - name: Verify the dotfiles are executable
+        run: source ~/.zshrc
