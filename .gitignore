@@ -21,3 +21,6 @@
 # git files
 !/README.md
 !/.gitignore
+
+# cue files
+!/cue.mod
