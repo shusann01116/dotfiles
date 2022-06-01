@@ -12,6 +12,8 @@ jobs:
         run: apt update && apt install -y git sudo
       - name: Run install.sh
         run: .bin/install.sh
+      - name: Verify the dotfiles are executable
+        run: source ~/.zshrc
 
   lint:
     runs-on: ubuntu-latest
@@ -24,5 +26,3 @@ jobs:
           shellcheck ${EXCLUDE_OPTS:+-e $EXCLUDE_OPTS .bin/install.sh} || \
           touch error.$$
           test ! -e error.$$
-      - name: Verify the dotfiles are executable
-        run: source ~/.zshrc
