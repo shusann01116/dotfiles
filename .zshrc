@@ -75,3 +75,7 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+
+# use gihub for vsCode container extension
+# ref: https://code.visualstudio.com/docs/remote/containers#_using-ssh-keys
+ssh-add ~/.ssh/id_ed25519
