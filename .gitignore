@@ -25,3 +25,6 @@
 # cue files
 !/cue.mod
 !/*.cue
+
+# test files
+!/test
