@@ -25,7 +25,7 @@ dagger.#Plan & {
                 docker.#Run & {
                     command: {
                         name: "apt"
-                        args: [ "install", "zsh", "openssh-client", "git", "-y" ]
+                        args: [ "install", "zsh", "openssh-client", "git", "curl", "-y" ]
                     }
                 },
                 docker.#Copy & {

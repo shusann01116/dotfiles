@@ -40,19 +40,19 @@ macOS() {
 }
 
 linux() {
-    eval $(ssh-add ./.ssh/id_ed25519 -s)
+    eval "$(ssh-add ./.ssh/id_ed25519 -s)"
 }
 
 if [ -e /etc/os-release ]; then
     OS="linux"
 elif; then
-    OS=$(sw_vers -productName)
+    OS="$(sw_vers -productName)"
 fi
 
 [[ OS == "macOS" ]] && macOS
 
 # starship
-eval "$(starship init zsh)"
+# eval "$(/usr/local/bin/starship init zsh)"
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -93,4 +93,4 @@ setopt HIST_SAVE_NO_DUPS
 # use gihub for vsCode container extension
 # ref: https://code.visualstudio.com/docs/remote/containers#_using-ssh-keys
 [ ! -e ~/.ssh ] && echo "SSH-key has not been generated"
-[ -e ~/.ssh/id_ed25519 ] && ssh-add ~/.ssh/id_ed25519
+[ -e ~/.ssh/id_ed25519 ] && ssh-add ~/.ssh/id_ed25519 || true
