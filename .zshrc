@@ -9,7 +9,7 @@ export PATH="/opt/homebrew/opt/unzip/bin:$PATH"
 export DOTNET_ROOT="opt/homebrew/opt/dotnet/libexec:$PATH"
 
 # starship
-# eval "$(/usr/local/bin/starship init zsh)"
+eval "$(starship init zsh)"
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
