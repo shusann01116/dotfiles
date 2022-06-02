@@ -12,6 +12,7 @@
 !/.bin/install.sh
 
 # zsh
+!/.zprofile
 !/.zshrc
 !/.zsh/completions/
 
@@ -25,3 +26,6 @@
 # cue files
 !/cue.mod
 !/*.cue
+
+# test files
+!/test

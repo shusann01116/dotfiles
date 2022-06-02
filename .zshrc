@@ -9,7 +9,7 @@ export PATH="/opt/homebrew/opt/unzip/bin:$PATH"
 export DOTNET_ROOT="opt/homebrew/opt/dotnet/libexec:$PATH"
 
 # starship
-eval "$(starship init zsh)"
+# eval "$(/usr/local/bin/starship init zsh)"
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -78,4 +78,5 @@ unset __conda_setup
 
 # use gihub for vsCode container extension
 # ref: https://code.visualstudio.com/docs/remote/containers#_using-ssh-keys
-ssh-add ~/.ssh/id_ed25519
+[ ! -e ~/.ssh ] && echo "SSH-key has not been generated"
+[ -e ~/.ssh/id_ed25519 ] && ssh-add ~/.ssh/id_ed25519 || true

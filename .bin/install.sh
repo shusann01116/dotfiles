@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/zsh
 
-set -ue
+set -ue pipefail
 
 helpmsg() {
     command echo "Usage: $0 [--help| -h]" 0>&2
@@ -29,10 +29,10 @@ link_to_homedir() {
 
     for f in "$dotdir"/.??*; do
         # skip for .git folder
-        [[ $(basename $f) == ".git" ]] && continue
+        [[ "$(basename $f)" == ".git" ]] && continue
 
         # remove the symbolic link being generated
-        if [[ -e "$HOME/$(basename $f)" ]]; then
+        if [[ -L "$HOME/$(basename $f)" ]]; then
             command rm -f "$HOME/$(basename $f)"
         fi
 
@@ -41,10 +41,22 @@ link_to_homedir() {
             command mv "$HOME/$(basename $f)" "$HOME/$backup_dir"
         fi
 
-        command echo "$f -> $HOME/$(basename $f)"
-        command ln -snf "$f" "$HOME/$(basename $f)"
+        command echo "$HOME/$(basename $f) -> $f"
+        command ln -snf $f $HOME
     done
+}
 
+installPyenv() {
+    echo "Installing pyenv"
+    git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+}
+
+installStarShip() {
+    echo "Installing StarShip"
+    mkdir ~/tmp
+    curl -sS https://starship.rs/install.sh >~/tmp/install.sh && chmod a+x ~/tmp/install.sh
+    ~/tmp/install.sh --yes
+    rm -rf ~/tmp
 }
 
 while [ $# -gt 0 ]; do
@@ -62,4 +74,10 @@ while [ $# -gt 0 ]; do
 done
 
 link_to_homedir
+
+if [ -e /etc/os-release ]; then
+    installPyenv
+    # installStarShip
+fi
+
 command echo "Install completed!"
