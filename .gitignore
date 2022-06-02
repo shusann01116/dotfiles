@@ -12,6 +12,7 @@
 !/.bin/install.sh
 
 # zsh
+!/.zprofile
 !/.zshrc
 !/.zsh/completions/
 
