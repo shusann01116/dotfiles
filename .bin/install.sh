@@ -29,7 +29,7 @@ link_to_homedir() {
 
     for f in "$dotdir"/.??*; do
         # skip for .git folder
-        [[ $(basename $f) == ".git" ]] && continue
+        [[ "$(basename $f)" == ".git" ]] && continue
 
         # remove the symbolic link being generated
         if [[ -L "$HOME/$(basename $f)" ]]; then
@@ -47,7 +47,16 @@ link_to_homedir() {
 }
 
 installPyenv() {
+    echo "Installing pyenv"
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+}
+
+installStarShip() {
+    echo "Installing StarShip"
+    mkdir ~/tmp
+    curl -sS https://starship.rs/install.sh >~/tmp/install.sh && chmod a+x ~/tmp/install.sh
+    ~/tmp/install.sh --yes
+    rm -rf ~/tmp
 }
 
 while [ $# -gt 0 ]; do
@@ -65,5 +74,10 @@ while [ $# -gt 0 ]; do
 done
 
 link_to_homedir
-installPyenv
+
+if [ -e /etc/os-release ]; then
+    installPyenv
+    # installStarShip
+fi
+
 command echo "Install completed!"
