@@ -46,6 +46,10 @@ link_to_homedir() {
     done
 }
 
+installPyenv() {
+    git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+}
+
 while [ $# -gt 0 ]; do
     case ${1} in
     --debug | -d)
@@ -61,4 +65,5 @@ while [ $# -gt 0 ]; do
 done
 
 link_to_homedir
+installPyenv
 command echo "Install completed!"
