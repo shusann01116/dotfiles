@@ -23,6 +23,9 @@
 !/README.md
 !/.gitignore
 
+# tmux
+!.tmux.conf
+
 # cue files
 !/cue.mod
 !/*.cue
