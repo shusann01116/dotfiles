@@ -2,6 +2,7 @@ package test
 
 import(
     "dagger.io/dagger"
+    "universe.dagger.io/bash"
     "universe.dagger.io/docker"
 )
 
@@ -25,7 +26,7 @@ dagger.#Plan & {
                 docker.#Run & {
                     command: {
                         name: "apt"
-                        args: [ "install", "zsh", "openssh-client", "git", "curl", "-y" ]
+                        args: [ "-y", "install", "zsh", "openssh-client", "git", "curl", "tmux" ]
                     }
                 },
                 docker.#Copy & {
@@ -34,14 +35,16 @@ dagger.#Plan & {
                 }
             ]
         }
-        test: {
-            installer: docker.#Run & {
-                input: build.output
-                workdir: "/src/test"
-                command: {
-                    name: "./installer.sh"
-                }
+        install: docker.#Run & {
+            input: build.output
+            workdir: "/src/.bin"
+            command: {
+                name: "/src/.bin/install.sh"
             }
+        }
+        test: bash.#Run & {
+            input: install.output
+            script: contents: "/src/test/test.sh"
         }
     }
 }

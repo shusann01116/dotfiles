@@ -53,9 +53,10 @@ installPyenv() {
 
 installStarShip() {
     echo "Installing StarShip"
-    mkdir ~/tmp
-    curl -sS https://starship.rs/install.sh >~/tmp/install.sh && chmod a+x ~/tmp/install.sh
-    ~/tmp/install.sh --yes
+    mkdir ${HOME}/tmp
+    curl -sS https://starship.rs/install.sh >${HOME}/tmp/install.sh && chmod a+x ${HOME}/tmp/install.sh
+    ${HOME}/tmp/install.sh --yes
+    echo 'eval "$(starship init zsh)"' >>$HOME/.zshrc
     rm -rf ~/tmp
 }
 
@@ -77,7 +78,7 @@ link_to_homedir
 
 if [ -e /etc/os-release ]; then
     installPyenv
-    # installStarShip
+    installStarShip
 fi
 
 command echo "Install completed!"
