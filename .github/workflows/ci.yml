@@ -1,4 +1,4 @@
-name: dagger
+name: ci
 
 on: [push]
 
