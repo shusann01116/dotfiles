@@ -41,6 +41,10 @@ alias gcom='git commit'
 alias gp='git push'
 alias gpu='git pull'
 
+# kubectl
+alias kc='kubectl'
+alias mk='minikube'
+
 # completion
 if type brew &>/dev/null; then
     FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
