@@ -1,3 +1,6 @@
+# tmux
+if [ "$TMUX" = "" ]; then tmux; fi
+
 # color
 autoload -Uz colors && colors
 
