@@ -38,11 +38,7 @@ alias ll='ls --git --time-style=long-iso -gl'
 alias la='ls --git --time-style=long-iso -agl'
 alias l1='exa -1'
 
-alias gch='git checkout'
-alias gchb='git checkout -b'
-alias gcom='git commit'
-alias gp='git push'
-alias gpu='git pull'
+alias g='git'
 
 # kubectl
 alias kc='kubectl'
