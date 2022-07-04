@@ -44,6 +44,12 @@ alias g='git'
 alias kc='kubectl'
 alias mk='minikube'
 
+alias cz='code ~/.zshrc'
+alias sz='souce ~/.zshrc'
+
+# aws-cli
+alias aws='docker run --rm -it -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli'
+
 # completion
 if type brew &>/dev/null; then
     FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
