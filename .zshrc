@@ -1,3 +1,6 @@
+# tmux
+if [ "$TMUX" = "" ]; then tmux; fi
+
 # color
 autoload -Uz colors && colors
 
@@ -35,11 +38,17 @@ alias ll='ls --git --time-style=long-iso -gl'
 alias la='ls --git --time-style=long-iso -agl'
 alias l1='exa -1'
 
-alias gch='git checkout'
-alias gchb='git checkout -b'
-alias gcom='git commit'
-alias gp='git push'
-alias gpu='git pull'
+alias g='git'
+
+# kubectl
+alias kc='kubectl'
+alias mk='minikube'
+
+alias cz='code ~/.zshrc'
+alias sz='source ~/.zshrc'
+
+# aws-cli
+alias aws='docker run --rm -it -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli'
 
 # completion
 if type brew &>/dev/null; then
@@ -48,6 +57,11 @@ if type brew &>/dev/null; then
 fi
 zstyle ':completion:*' menu select
 zstyle ':completion:*' rehash true
+
+# completions
+source <(kubectl completion zsh)
+source <(minikube completion zsh)
+source <(gh completion -s zsh)
 
 # autosuggestions
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
