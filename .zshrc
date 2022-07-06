@@ -58,9 +58,10 @@ fi
 zstyle ':completion:*' menu select
 zstyle ':completion:*' rehash true
 
-# kubectl & minikube completion
+# completions
 source <(kubectl completion zsh)
 source <(minikube completion zsh)
+source <(gh completion -s zsh)
 
 # autosuggestions
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
