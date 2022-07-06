@@ -45,7 +45,7 @@ alias kc='kubectl'
 alias mk='minikube'
 
 alias cz='code ~/.zshrc'
-alias sz='souce ~/.zshrc'
+alias sz='source ~/.zshrc'
 
 # aws-cli
 alias aws='docker run --rm -it -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli'
