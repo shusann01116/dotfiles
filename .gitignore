@@ -36,3 +36,6 @@
 # dotnet files
 bin
 obj
+
+# custom cue modules
+!/ci

@@ -1,18 +1,16 @@
 #!/bin/zsh
 
-set -ue pipefail
-
 helpmsg() {
-    command echo "Usage: $0 [--help| -h]" 0>&2
-    command echo ""
+    echo "Usage: $0 [--help| -h]" 0>&2
+    echo ""
 }
 
 link_to_homedir() {
     local backup_dir=".dotbackup"
-    command echo "backing up dotfiles..."
+    echo "backing up dotfiles..."
 
     if [ ! -d "$HOME/$backup_dir" ]; then
-        command echo "creating $HOME/$backup_dir folder"
+        echo "creating $HOME/$backup_dir folder"
         mkdir -p "$HOME/$backup_dir"
     fi
 
@@ -33,16 +31,16 @@ link_to_homedir() {
 
         # remove the symbolic link being generated
         if [[ -L "$HOME/$(basename $f)" ]]; then
-            command rm -f "$HOME/$(basename $f)"
+            rm -f "$HOME/$(basename $f)"
         fi
 
         # backup the file being overided in home directory
         if [[ -e "$HOME/$(basename $f)" ]]; then
-            command mv "$HOME/$(basename $f)" "$HOME/$backup_dir"
+            mv "$HOME/$(basename $f)" "$HOME/$backup_dir"
         fi
 
-        command echo "$HOME/$(basename $f) -> $f"
-        command ln -snf $f $HOME
+        echo "$HOME/$(basename $f) -> $f"
+        ln -snf $f $HOME
     done
 }
 
