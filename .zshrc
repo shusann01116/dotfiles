@@ -94,3 +94,5 @@ unset __conda_setup
 # ref: https://code.visualstudio.com/docs/remote/containers#_using-ssh-keys
 [ ! -e ~/.ssh ] && echo "SSH-key has not been generated"
 [ -e ~/.ssh/id_ed25519 ] && ssh-add ~/.ssh/id_ed25519 || true
+
+export GPG_TTY=$(tty)
