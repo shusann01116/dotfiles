@@ -14,7 +14,6 @@ import (
     version: string | *"3.1.2-slim"
     rules: [...string] | *["~MD002", "~MD013", "~MD026", "~MD036"]
     contents: dagger.#FS
-    result: _run.success
 
     _build: docker.#Build & {
         steps: [
@@ -27,16 +26,17 @@ import (
         ]
     }
 
-    _run: docker.#Run & {
+    docker.#Run & {
         input: _build.output
         mounts: "src": core.#Mount & {
             dest: "/src"
             "contents": contents
         }
 
+        workdir: "/scr"
         command: {
             name: "mdl"
-            args: ["/src", "-r", "\(strings.Join(rules, ","))"]
+            args: ["-r", "\(strings.Join(rules, ","))"]
         }
     }
 }
