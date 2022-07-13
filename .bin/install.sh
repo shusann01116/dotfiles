@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 helpmsg() {
     echo "Usage: $0 [--help| -h]" 0>&2
@@ -20,27 +20,27 @@ link_to_homedir() {
 
     # get the name of parent direcotry of script directory
     local dotdir
-    dotdir=$(dirname ${script_dir})
+    dotdir=$(dirname "${script_dir}")
 
     # exit the function when the direcotry is invalid
     [[ "$HOME" == "$dotdir" ]] && exit 1
 
     for f in "$dotdir"/.??*; do
         # skip for .git folder
-        [[ "$(basename $f)" == ".git" ]] && continue
+        [[ "$(basename "$f")" == .git ]] && continue
 
         # remove the symbolic link being generated
-        if [[ -L "$HOME/$(basename $f)" ]]; then
-            rm -f "$HOME/$(basename $f)"
+        if [[ -L "$HOME"/"$(basename "$f")" ]]; then
+            rm -f "$HOME"/"$(basename "$f")"
         fi
 
         # backup the file being overided in home directory
-        if [[ -e "$HOME/$(basename $f)" ]]; then
-            mv "$HOME/$(basename $f)" "$HOME/$backup_dir"
+        if [[ -e "$HOME"/"$(basename "$f")" ]]; then
+            mv "$HOME"/"$(basename "$f")" "$HOME"/"$backup_dir"
         fi
 
-        echo "$HOME/$(basename $f) -> $f"
-        ln -snf $f $HOME
+        echo "$HOME"/"$(basename "$f")" - >"$f"
+        ln -snf "$f" "$HOME"
     done
 }
 
@@ -51,10 +51,10 @@ installPyenv() {
 
 installStarShip() {
     echo "Installing StarShip"
-    mkdir ${HOME}/tmp
-    curl -sS https://starship.rs/install.sh >${HOME}/tmp/install.sh && chmod a+x ${HOME}/tmp/install.sh
-    ${HOME}/tmp/install.sh --yes
-    echo 'eval "$(starship init zsh)"' >>$HOME/.zshrc
+    mkdir "${HOME}"/tmp
+    curl -sS https://starship.rs/install.sh >"${HOME}"/tmp/install.sh && chmod a+x "${HOME}"/tmp/install.sh
+    "${HOME}"/tmp/install.sh --yes
+    echo "eval \"$(starship init zsh)\"" >>"$HOME"/.zshrc
     rm -rf ~/tmp
 }
 

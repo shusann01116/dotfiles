@@ -28,7 +28,7 @@ import (
 
 	docker.#Run & {
 		input: _build.output
-		mounts: "src": core.#Mount & {
+		mounts: src: core.#Mount & {
 			dest:       "/src"
 			"contents": contents
 		}

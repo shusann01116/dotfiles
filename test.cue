@@ -11,9 +11,7 @@ import (
 )
 
 dagger.#Plan & {
-	client: filesystem: {
-		".": read: contents: dagger.#FS
-	}
+	client: filesystem: ".": read: contents: dagger.#FS
 
 	actions: {
 		build: docker.#Build & {
@@ -42,9 +40,7 @@ dagger.#Plan & {
 		install: docker.#Run & {
 			input:   build.output
 			workdir: "/src/.bin"
-			command: {
-				name: "/src/.bin/install.sh"
-			}
+			command: name: "/src/.bin/install.sh"
 		}
 		lint: {
 			md: markdown.#Lint & {

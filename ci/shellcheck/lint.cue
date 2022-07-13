@@ -17,7 +17,7 @@ import (
 
 	docker.#Run & {
 		input: _image.output
-		mounts: "src": core.#Mount & {
+		mounts: src: core.#Mount & {
 			dest:       "/src"
 			"contents": contents
 		}
