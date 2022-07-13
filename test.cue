@@ -7,6 +7,7 @@ import (
 
 	"github.com/shusann01116/dotfile/ci/markdown"
 	"github.com/shusann01116/dotfile/ci/shellcheck"
+	"github.com/shusann01116/dotfile/ci/cue"
 )
 
 dagger.#Plan & {
@@ -50,6 +51,9 @@ dagger.#Plan & {
 				contents: client.filesystem.".".read.contents
 			}
 			shell: shellcheck.#Lint & {
+				contents: client.filesystem.".".read.contents
+			}
+			"cue": cue.#Lint & {
 				contents: client.filesystem.".".read.contents
 			}
 		}
