@@ -5,8 +5,8 @@ import (
 	"universe.dagger.io/bash"
 	"universe.dagger.io/docker"
 
-    "github.com/shusann01116/dotfile/ci/markdown"
-    "github.com/shusann01116/dotfile/ci/shellcheck"
+	"github.com/shusann01116/dotfile/ci/markdown"
+	"github.com/shusann01116/dotfile/ci/shellcheck"
 )
 
 dagger.#Plan & {
@@ -45,14 +45,14 @@ dagger.#Plan & {
 				name: "/src/.bin/install.sh"
 			}
 		}
-        lint: {
-            md: markdown.#Lint & {
-                contents: client.filesystem.".".read.contents
-            }
-            shell: shellcheck.#Lint & {
-                contents: client.filesystem.".".read.contents
-            }
-        }
+		lint: {
+			md: markdown.#Lint & {
+				contents: client.filesystem.".".read.contents
+			}
+			shell: shellcheck.#Lint & {
+				contents: client.filesystem.".".read.contents
+			}
+		}
 		test: bash.#Run & {
 			input: install.output
 			script: contents: "/src/test/test.sh"
