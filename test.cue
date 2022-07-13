@@ -6,6 +6,7 @@ import (
 	"universe.dagger.io/docker"
 
     "github.com/shusann01116/dotfile/ci/markdown"
+    "github.com/shusann01116/dotfile/ci/shellcheck"
 )
 
 dagger.#Plan & {
@@ -45,7 +46,10 @@ dagger.#Plan & {
 			}
 		}
         lint: {
-            mdlint: markdown.#Lint & {
+            md: markdown.#Lint & {
+                contents: client.filesystem.".".read.contents
+            }
+            shell: shellcheck.#Lint & {
                 contents: client.filesystem.".".read.contents
             }
         }
