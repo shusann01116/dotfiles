@@ -58,6 +58,18 @@ installStarShip() {
     rm -rf ~/tmp
 }
 
+main() {
+    link_to_homedir
+
+    # Check if is the host Linux
+    if [[ $(uname -s) == "Linux" ]]; then
+        installPyenv
+        installStarShip
+    fi
+
+    command echo "Install completed!"
+}
+
 while [ $# -gt 0 ]; do
     case ${1} in
     --debug | -d)
@@ -72,11 +84,4 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-link_to_homedir
-
-if [ -e /etc/os-release ]; then
-    installPyenv
-    installStarShip
-fi
-
-command echo "Install completed!"
+main
