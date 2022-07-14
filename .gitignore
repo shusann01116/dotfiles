@@ -8,8 +8,8 @@
 !/.github/**
 
 # installer
-!/.bin/
-!/.bin/install.sh
+!/bin
+!/bin/**
 
 # zsh
 !/.zprofile
