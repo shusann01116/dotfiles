@@ -39,8 +39,8 @@ dagger.#Plan & {
 		}
 		install: docker.#Run & {
 			input:   build.output
-			workdir: "/src/.bin"
-			command: name: "/src/.bin/install.sh"
+			workdir: "/src/bin"
+			command: name: "./install.sh"
 		}
 		lint: {
 			md: markdown.#Lint & {
