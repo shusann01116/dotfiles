@@ -39,3 +39,7 @@ obj
 
 # custom cue modules
 !/ci
+
+# devcontainer
+!/.devcontainer
+!/.devcontainer/**
