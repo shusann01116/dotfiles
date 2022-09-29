@@ -347,12 +347,12 @@ set -g mouse on
 #set -g status-keys vi
 #set -g mode-keys vi
 
-# replace C-b by C-a instead of using both prefixes
-# set -gu prefix2
-unbind C-a
+# replace C-b by C-s instead of using both prefixes
+set -gu prefix0
+unbind C-s
 unbind C-b
-set -g prefix C-a
-bind C-a send-prefix
+set -g prefix C-s
+
 
 # if you don't want Oh my tmux! to alter a binding, use #!important
 # bind v new-window -c #{pane_current_path} #!important
