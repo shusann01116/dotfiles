@@ -5,6 +5,9 @@
 #         Copyright 2012— Gregory Pakosz (@gpakosz).
 
 
+# fix backspace bad behaviour
+set -g default-terminal "xterm-256color"
+
 # -- navigation ----------------------------------------------------------------
 
 # if you're running tmux within iTerm2
@@ -348,7 +351,7 @@ set -g mouse on
 #set -g mode-keys vi
 
 # replace C-b by C-s instead of using both prefixes
-set -gu prefix0
+set -gu prefix2
 unbind C-s
 unbind C-b
 set -g prefix C-s
