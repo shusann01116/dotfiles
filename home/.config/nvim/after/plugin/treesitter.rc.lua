@@ -14,7 +14,8 @@ ts.setup {
     'tsx',
     'lua',
     'json',
-    'css'
+    'css',
+    'hcl',
   },
   autotag = {
     enable = true,
