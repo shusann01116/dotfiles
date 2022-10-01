@@ -6,7 +6,12 @@
 
 
 # fix backspace bad behaviour
-set -g default-terminal "xterm-256color"
+set -g default-terminal "screen-256color"
+
+# set terminal for macOS
+if-shell -b '[ "$(uname)" == "Darwin" ]' {
+  set -g default-terminal "xterm-256color"
+}
 
 # -- navigation ----------------------------------------------------------------
 
