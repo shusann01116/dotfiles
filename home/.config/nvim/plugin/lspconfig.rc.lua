@@ -45,3 +45,19 @@ nvim_lsp.dagger.setup {
   on_attach = on_attach,
   cmd = { 'dagger', 'cuelsp' }
 }
+
+nvim_lsp.dockerls.setup {
+  on_attach = on_attach,
+}
+
+nvim_lsp.yamlls.setup {
+  on_attach = on_attach,
+  settings = {
+    yaml = {
+      schemas = {
+        ["https://json.schemastore.org/github-workflow.json"] = { "/.github/workflows/*" },
+        ["https://github.com/compose-spec/compose-spec/blob/master/schema/compose-spec.json"] = "*docker-compose.yml"
+      },
+    },
+  }
+}
