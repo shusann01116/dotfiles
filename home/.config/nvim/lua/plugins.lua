@@ -1,6 +1,7 @@
 local status, packer = pcall(require, 'packer')
 if (not status) then
   print("Packer is not installed")
+  return
 end
 
 vim.cmd [[packadd packer.nvim]]
@@ -17,6 +18,7 @@ packer.startup(function(use)
   } -- Statusline
   use 'kyazdani42/nvim-web-devicons' -- File icons
   use 'L3MON4D3/LuaSnip' -- Snippet
+  use 'glepnir/lspsaga.nvim' -- LSP UIs
   use 'onsails/lspkind-nvim' -- vscode-like pictograms
   use 'hrsh7th/cmp-buffer' -- nvim-cmp source for buffer words
   use 'hrsh7th/cmp-nvim-lsp' -- nvim-cmp source for neovim's build-in LSP
@@ -31,5 +33,7 @@ packer.startup(function(use)
   use 'nvim-lua/plenary.nvim' -- Common utilities
   use 'nvim-telescope/telescope.nvim'
   use 'nvim-telescope/telescope-file-browser.nvim'
+
   use 'akinsho/bufferline.nvim'
+  use 'norcalli/nvim-colorizer.lua'
 end)
