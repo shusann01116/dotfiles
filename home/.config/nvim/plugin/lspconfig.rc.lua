@@ -3,6 +3,8 @@ if (not status) then return end
 
 local protocol = require('vim.lsp.protocol')
 
+-- use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
   -- formatting
   if client.server_capabilities.documentFormattingProvider then
@@ -34,30 +36,5 @@ nvim_lsp.sumneko_lua.setup {
         checkThirdParty = false
       }
     }
-  }
-}
-
-nvim_lsp.terraformls.setup {
-  on_attach = on_attach
-}
-
-nvim_lsp.dagger.setup {
-  on_attach = on_attach,
-  cmd = { 'dagger', 'cuelsp' }
-}
-
-nvim_lsp.dockerls.setup {
-  on_attach = on_attach,
-}
-
-nvim_lsp.yamlls.setup {
-  on_attach = on_attach,
-  settings = {
-    yaml = {
-      schemas = {
-        ["https://json.schemastore.org/github-workflow.json"] = { "/.github/workflows/*" },
-        ["https://github.com/compose-spec/compose-spec/blob/master/schema/compose-spec.json"] = "*docker-compose.yml"
-      },
-    },
   }
 }

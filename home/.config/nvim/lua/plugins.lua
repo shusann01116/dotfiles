@@ -28,12 +28,22 @@ packer.startup(function(use)
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate'
   }
+  use 'jose-elias-alvarez/null-ls.nvim' -- Use neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
+  use 'MunifTanjim/prettier.nvim' -- Prettier plugin for Neovim's buil-in LSP client
+
   use 'windwp/nvim-autopairs'
   use 'windwp/nvim-ts-autotag'
+
   use 'nvim-lua/plenary.nvim' -- Common utilities
   use 'nvim-telescope/telescope.nvim'
   use 'nvim-telescope/telescope-file-browser.nvim'
 
   use 'akinsho/bufferline.nvim'
   use 'norcalli/nvim-colorizer.lua'
+
+  use 'lewis6991/gitsigns.nvim'
+  use 'dinhhuy258/git.nvim' -- For git blame & brows
+
+  use 'williamboman/mason.nvim'
+  use 'williamboman/mason-lspconfig.nvim'
 end)

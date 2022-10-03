@@ -33,6 +33,9 @@ ts.setup {
     'css',
     'hcl',
     'cue',
+    'c_sharp',
+    'yaml',
+    'bash',
   },
   autotag = {
     enable = true,
