@@ -73,7 +73,7 @@ vim.keymap.set('n', 'sf', function()
     hidden = true,
     grouped = true,
     previewer = false,
-    ititial_mode = "normal",
+    initial_mode = "normal",
     layout_config = { height = 40 }
   })
 end)
