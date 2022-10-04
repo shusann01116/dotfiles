@@ -16,5 +16,6 @@ null_ls.setup {
     }),
     null_ls.builtins.diagnostics.zsh,
     null_ls.builtins.diagnostics.cfn_lint,
+    null_ls.builtins.diagnostics.shellcheck,
   }
 }
