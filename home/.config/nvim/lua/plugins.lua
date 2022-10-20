@@ -16,6 +16,10 @@ packer.startup(function(use)
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   } -- Statusline
+
+  use 'williamboman/mason.nvim' -- Package manager
+  use 'williamboman/mason-lspconfig.nvim' -- Mason integration with lspconfig
+
   use 'kyazdani42/nvim-web-devicons' -- File icons
   use 'L3MON4D3/LuaSnip' -- Snippet
   use 'glepnir/lspsaga.nvim' -- LSP UIs
@@ -44,6 +48,4 @@ packer.startup(function(use)
   use 'lewis6991/gitsigns.nvim'
   use 'dinhhuy258/git.nvim' -- For git blame & brows
 
-  use 'williamboman/mason.nvim'
-  use 'williamboman/mason-lspconfig.nvim'
 end)
