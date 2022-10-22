@@ -371,6 +371,9 @@ set -g prefix C-s
 # refresh status-bar each seconds
 set -g status-interval 1
 
+# set Bindkey timeout to 0.1s
+set -g repeat-time 60
+
 # -- tpm -----------------------------------------------------------------------
 
 # while I don't use tpm myself, many people requested official support so here
