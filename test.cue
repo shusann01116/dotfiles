@@ -25,12 +25,6 @@ dagger.#Plan & {
 						args: [ "update"]
 					}
 				},
-				docker.#Run & {
-					command: {
-						name: "apt"
-						args: [ "-y", "install", "zsh", "openssh-client", "git", "curl", "tmux"]
-					}
-				},
 				docker.#Copy & {
 					contents: client.filesystem.".".read.contents
 					dest:     "/src"
