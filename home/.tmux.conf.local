@@ -374,6 +374,9 @@ set -g status-interval 1
 # set Bindkey timeout to 0.1s
 set -g repeat-time 60
 
+# kill current and move session
+bind X run-shell 'tmux switch-client -n \; kill-session -t "#S"'
+
 # -- tpm -----------------------------------------------------------------------
 
 # while I don't use tpm myself, many people requested official support so here
