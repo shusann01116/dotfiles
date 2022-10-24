@@ -12,7 +12,7 @@ import (
 #Lint: {
 	contents:       dagger.#FS
 	version:        string | *"latest"
-	go_version:     string | *"1.18.4"
+	go_version:     string | *"1.19.2"
 	alpine_version: string | *"3.16"
 
 	packages: ["git", "bash"]
