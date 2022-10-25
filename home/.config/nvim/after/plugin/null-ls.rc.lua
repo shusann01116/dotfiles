@@ -15,8 +15,9 @@ null_ls.setup {
       diagnostics_format = '[eslint] #{m}\n(#{c]})'
     }),
     null_ls.builtins.diagnostics.markdownlint,
-    null_ls.builtins.diagnostics.yamllint,
-    null_ls.builtins.diagnostics.cfn_lint,
+    null_ls.builtins.diagnostics.cfn_lint.with({
+      filetypes = { "yml", "yaml", "json" }
+    }),
     null_ls.builtins.code_actions.shellcheck,
     null_ls.builtins.formatting.prettier,
   }
