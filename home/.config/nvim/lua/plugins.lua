@@ -33,7 +33,6 @@ packer.startup(function(use)
     run = ':TSUpdate'
   }
   use 'jose-elias-alvarez/null-ls.nvim' -- Use neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
-  use 'MunifTanjim/prettier.nvim' -- Prettier plugin for Neovim's buil-in LSP client
 
   use 'windwp/nvim-autopairs'
   use 'windwp/nvim-ts-autotag'
