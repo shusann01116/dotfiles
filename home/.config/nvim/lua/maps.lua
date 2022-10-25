@@ -17,7 +17,7 @@ keymap.set('n', '<C-a>', 'gg<S-v>G')
 keymap.set('n', 'te', ':tabedit<Return>', { silent = true })
 -- Split widow
 keymap.set('n', 'ss', ':split<Return><C-w>w', { silent = true })
-keymap.set('n', 'sv', ':vsplit<Return><C-w>', { silent = true })
+keymap.set('n', 'sv', ':vsplit<Return><C-w>w', { silent = true })
 -- Move window
 keymap.set('n', '<Space>', '<C-w>w')
 keymap.set('', 'sh', '<C-w>h')
