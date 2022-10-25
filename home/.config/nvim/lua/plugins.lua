@@ -17,6 +17,8 @@ packer.startup(function(use)
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   } -- Statusline
 
+  use 'nvim-tree/nvim-tree.lua'
+
   use 'williamboman/mason.nvim' -- Package manager
   use 'williamboman/mason-lspconfig.nvim' -- Mason integration with lspconfig
 
