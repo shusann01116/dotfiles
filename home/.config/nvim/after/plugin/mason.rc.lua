@@ -7,7 +7,7 @@ mason.setup {}
 lspconfig.setup {
   ensure_installed = {
     'tailwindcss',
-    'csharp-language-server',
+    'csharp_ls',
   }
 }
 
