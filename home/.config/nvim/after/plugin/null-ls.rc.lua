@@ -18,6 +18,8 @@ null_ls.setup {
     null_ls.builtins.diagnostics.yamllint,
     null_ls.builtins.diagnostics.cfn_lint,
     null_ls.builtins.code_actions.shellcheck,
-    null_ls.builtins.formatting.prettier,
+    null_ls.builtins.formatting.prettierd.with({
+      filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yml", "yaml", "markdown", "markdown.mdx", "graphql", "handlebars" }
+    }),
   }
 }
