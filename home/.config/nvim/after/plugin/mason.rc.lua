@@ -2,6 +2,8 @@ local status, mason = pcall(require, "mason")
 if (not status) then return end
 local status2, lspconfig = pcall(require, "mason-lspconfig")
 if (not status2) then return end
+local status3, coq = pcall(require, "coq")
+if (not status3) then return end
 
 mason.setup {}
 lspconfig.setup {
@@ -14,36 +16,40 @@ lspconfig.setup {
   }
 }
 
-require 'lspconfig'.tailwindcss.setup {}
-require 'lspconfig'.dagger.setup {}
-require 'lspconfig'.dockerls.setup {}
+local ensure = coq.lsp_ensure_capabilities
+
+require 'lspconfig'.tailwindcss.setup(ensure())
+require 'lspconfig'.dagger.setup(ensure())
+require 'lspconfig'.dockerls.setup(ensure())
 require 'lspconfig'.yamlls.setup {
-  settings = {
-    yaml = {
-      customTags = {
-        "!Base64 scalar",
-        "!Cidr scalar",
-        "!And sequence",
-        "!Equals sequence",
-        "!If sequence",
-        "!Not sequence",
-        "!Or sequence",
-        "!Condition scalar",
-        "!FindInMap sequence",
-        "!GetAtt scalar",
-        "!GetAtt sequence",
-        "!GetAZs scalar",
-        "!ImportValue scalar",
-        "!Join sequence",
-        "!Select sequence",
-        "!Split sequence",
-        "!Sub scalar",
-        "!Transform mapping",
-        "!Ref scalar",
-      },
-      schemas = {
-        ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "**/*docker-compose.yml",
-        ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "**/kube-manifests/*",
+  ensure {
+    settings = {
+      yaml = {
+        customTags = {
+          "!Base64 scalar",
+          "!Cidr scalar",
+          "!And sequence",
+          "!Equals sequence",
+          "!If sequence",
+          "!Not sequence",
+          "!Or sequence",
+          "!Condition scalar",
+          "!FindInMap sequence",
+          "!GetAtt scalar",
+          "!GetAtt sequence",
+          "!GetAZs scalar",
+          "!ImportValue scalar",
+          "!Join sequence",
+          "!Select sequence",
+          "!Split sequence",
+          "!Sub scalar",
+          "!Transform mapping",
+          "!Ref scalar",
+        },
+        schemas = {
+          ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "**/*docker-compose.yml",
+          ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "**/kube-manifests/*",
+        }
       }
     }
   }

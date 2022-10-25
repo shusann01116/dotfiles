@@ -33,6 +33,12 @@ packer.startup(function(use)
   }
   use 'jose-elias-alvarez/null-ls.nvim' -- Use neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
 
+  use {
+    'ms-jpq/coq_nvim',
+    branch = 'coq',
+    requires = { 'ms-jpq/coq.artifacts', branch = 'artifacts' }
+  }
+
   use 'windwp/nvim-autopairs'
   use 'windwp/nvim-ts-autotag'
 
