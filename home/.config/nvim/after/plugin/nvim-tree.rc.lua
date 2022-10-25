@@ -14,7 +14,8 @@ tree.setup({
     mappings = {
       list = {
         { key = "s", action = "" }, -- remove system open action
+        { key = "<Tab>", action = "" }, -- remove preview
       }
     }
-  }
+  },
 })
