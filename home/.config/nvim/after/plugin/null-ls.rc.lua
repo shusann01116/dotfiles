@@ -19,8 +19,12 @@ null_ls.setup {
       filetypes = { "yml", "yaml", "json" }
     }),
     null_ls.builtins.code_actions.shellcheck,
+    null_ls.builtins.formatting.shfmt,
     null_ls.builtins.formatting.prettierd.with({
       filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less", "html", "json", "jsonc", "yml", "yaml", "markdown", "markdown.mdx", "graphql", "handlebars" }
     }),
+    null_ls.builtins.formatting.isort,
+    null_ls.builtins.formatting.black,
+    null_ls.builtins.formatting.stylua,
   }
 }
