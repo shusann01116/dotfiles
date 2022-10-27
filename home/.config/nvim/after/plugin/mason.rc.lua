@@ -17,11 +17,13 @@ mason_lspconfig.setup({
 		"dockerls",
 		"yamlls",
 		"terraformls",
+		"tsserver",
+		"pylsp",
 	},
 })
 
 vim.g.coq_settings = {
-	auto_start = "shut-up",
+	auto_start = true,
 }
 
 local status3, coq = pcall(require, "coq")
@@ -31,7 +33,6 @@ end
 
 local lspconfig = require("lspconfig")
 
-lspconfig.sumneko_lua.setup(coq.lsp_ensure_capabilities())
 lspconfig.tailwindcss.setup(coq.lsp_ensure_capabilities())
 lspconfig.dagger.setup(coq.lsp_ensure_capabilities())
 lspconfig.dockerls.setup(coq.lsp_ensure_capabilities())
@@ -70,23 +71,29 @@ lspconfig.yamlls.setup({
 })
 lspconfig.terraformls.setup(coq.lsp_ensure_capabilities())
 lspconfig.pylsp.setup(coq.lsp_ensure_capabilities())
-lspconfig.tsserver.setup {
-  filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-  cmd = { "typescript-language-server", "--stdio" }
-}
-lspconfig.sumneko_lua.setup {
-  settings = {
-    Lua = {
-      diagnostics = {
-        -- Get the language server to recognize the 'vim' global
-        globals = { 'vim' }
-      },
+lspconfig.tsserver.setup(coq.lsp_ensure_capabilities({
+	filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+	cmd = { "typescript-language-server", "--stdio" },
+}))
+lspconfig.sumneko_lua.setup(coq.lsp_ensure_capabilities({
+	settings = {
+		Lua = {
+			diagnostics = {
+				-- Get the language server to recognize the 'vim' global
+				globals = { "vim" },
+			},
+			workspace = {
+				-- Make the server aware of Neovim runtime files
+				library = vim.api.nvim_get_runtime_file("", true),
+				checkThirdParty = false,
+			},
+		},
+	},
+}))
 
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-        checkThirdParty = false
-      }
-    }
-  }
-}
+vim.cmd([[
+  augroup COQ
+    autocmd!
+    autocmd VimEnter * COQnow -s
+  augroup END
+]])
