@@ -1,65 +1,80 @@
 local status, mason = pcall(require, "mason")
-if (not status) then return end
-local status2, lspconfig = pcall(require, "mason-lspconfig")
-if (not status2) then return end
+if not status then
+	return
+end
+local status2, mason_lspconfig = pcall(require, "mason-lspconfig")
+if not status2 then
+	return
+end
+
+mason.setup({})
+mason_lspconfig.setup({
+	ensure_installed = {
+		"sumneko_lua",
+		"tailwindcss",
+		"csharp_ls",
+		"dagger",
+		"dockerls",
+		"yamlls",
+		"terraformls",
+	},
+})
+
+vim.g.coq_settings = {
+	auto_start = "shut-up",
+}
+
 local status3, coq = pcall(require, "coq")
-if (not status3) then return end
+if not status3 then
+	return
+end
 
-mason.setup {}
-lspconfig.setup {
-  ensure_installed = {
-    'tailwindcss',
-    'csharp_ls',
-    'dagger',
-    'dockerls',
-    'yamlls',
-  }
-}
+local lspconfig = require("lspconfig")
 
-local ensure = coq.lsp_ensure_capabilities
-
-require 'lspconfig'.tailwindcss.setup(ensure())
-require 'lspconfig'.dagger.setup(ensure())
-require 'lspconfig'.dockerls.setup(ensure())
-require 'lspconfig'.yamlls.setup {
-  ensure {
-    settings = {
-      yaml = {
-        customTags = {
-          "!Base64 scalar",
-          "!Cidr scalar",
-          "!And sequence",
-          "!Equals sequence",
-          "!If sequence",
-          "!Not sequence",
-          "!Or sequence",
-          "!Condition scalar",
-          "!FindInMap sequence",
-          "!GetAtt scalar",
-          "!GetAtt sequence",
-          "!GetAZs scalar",
-          "!ImportValue scalar",
-          "!Join sequence",
-          "!Select sequence",
-          "!Split sequence",
-          "!Sub scalar",
-          "!Transform mapping",
-          "!Ref scalar",
-        },
-        schemas = {
-          ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "**/*docker-compose.yml",
-          ["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "**/kube-manifests/*",
-        }
-      }
-    }
-  }
-}
-require 'lspconfig'.tsserver.setup {
+lspconfig.sumneko_lua.setup(coq.lsp_ensure_capabilities())
+lspconfig.tailwindcss.setup(coq.lsp_ensure_capabilities())
+lspconfig.dagger.setup(coq.lsp_ensure_capabilities())
+lspconfig.dockerls.setup(coq.lsp_ensure_capabilities())
+lspconfig.yamlls.setup({
+	coq.lsp_ensure_capabilities({
+		settings = {
+			yaml = {
+				customTags = {
+					"!Base64 scalar",
+					"!Cidr scalar",
+					"!And sequence",
+					"!Equals sequence",
+					"!If sequence",
+					"!Not sequence",
+					"!Or sequence",
+					"!Condition scalar",
+					"!FindInMap sequence",
+					"!GetAtt scalar",
+					"!GetAtt sequence",
+					"!GetAZs scalar",
+					"!ImportValue scalar",
+					"!Join sequence",
+					"!Select sequence",
+					"!Split sequence",
+					"!Sub scalar",
+					"!Transform mapping",
+					"!Ref scalar",
+				},
+				schemas = {
+					["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "**/*docker-compose.yml",
+					["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "**/kube-manifests/*",
+				},
+			},
+		},
+	}),
+})
+lspconfig.terraformls.setup(coq.lsp_ensure_capabilities())
+lspconfig.pylsp.setup(coq.lsp_ensure_capabilities())
+lspconfig.tsserver.setup {
   filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
   cmd = { "typescript-language-server", "--stdio" }
 }
-
-require 'lspconfig'.sumneko_lua.setup {
+lspconfig.sumneko_lua.setup {
   settings = {
     Lua = {
       diagnostics = {
