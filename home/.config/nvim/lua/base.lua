@@ -44,5 +44,21 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 	command = "set nopaste",
 })
 
+local remember_folds = vim.api.nvim_create_augroup("vemember_folds", { clear = true })
+vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
+	group = remember_folds,
+	pattern = "*.*",
+	callback = function()
+		pcall(vim.cmd, "mkview")
+	end,
+})
+vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+	group = remember_folds,
+	pattern = "*.*",
+	callback = function()
+		pcall(vim.cmd, "loadview")
+	end,
+})
+
 -- Add asterisks in block comments
 vim.opt.formatoptions:append({ "r" })
