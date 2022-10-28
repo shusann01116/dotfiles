@@ -37,37 +37,36 @@ lspconfig.tailwindcss.setup(coq.lsp_ensure_capabilities())
 lspconfig.dagger.setup(coq.lsp_ensure_capabilities())
 lspconfig.dockerls.setup(coq.lsp_ensure_capabilities())
 lspconfig.yamlls.setup({
-	coq.lsp_ensure_capabilities({
-		settings = {
-			yaml = {
-				customTags = {
-					"!Base64 scalar",
-					"!Cidr scalar",
-					"!And sequence",
-					"!Equals sequence",
-					"!If sequence",
-					"!Not sequence",
-					"!Or sequence",
-					"!Condition scalar",
-					"!FindInMap sequence",
-					"!GetAtt scalar",
-					"!GetAtt sequence",
-					"!GetAZs scalar",
-					"!ImportValue scalar",
-					"!Join sequence",
-					"!Select sequence",
-					"!Split sequence",
-					"!Sub scalar",
-					"!Transform mapping",
-					"!Ref scalar",
-				},
-				schemas = {
-					["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "**/*docker-compose.yml",
-					["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "**/kube-manifests/*",
-				},
+	settings = {
+		coq.lsp_ensure_capabilities(),
+		yaml = {
+			customTags = {
+				"!Base64 scalar",
+				"!Cidr scalar",
+				"!And sequence",
+				"!Equals sequence",
+				"!If sequence",
+				"!Not sequence",
+				"!Or sequence",
+				"!Condition scalar",
+				"!FindInMap sequence",
+				"!GetAtt scalar",
+				"!GetAtt sequence",
+				"!GetAZs scalar",
+				"!ImportValue scalar",
+				"!Join sequence",
+				"!Select sequence",
+				"!Split sequence",
+				"!Sub scalar",
+				"!Transform mapping",
+				"!Ref scalar",
+			},
+			schemas = {
+				["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "**/*docker-compose.yml",
+				["https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.18.0-standalone-strict/all.json"] = "**/kube-manifests/*",
 			},
 		},
-	}),
+	},
 })
 lspconfig.terraformls.setup(coq.lsp_ensure_capabilities())
 lspconfig.pylsp.setup(coq.lsp_ensure_capabilities())
