@@ -8,8 +8,6 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 tree.setup({
-  open_on_setup = true,
-  open_on_tab = true,
   view = {
     mappings = {
       list = {
@@ -19,3 +17,5 @@ tree.setup({
     }
   },
 })
+
+vim.keymap.set("n", "st", "<Cmd>NvimTreeToggle<CR>", {})
