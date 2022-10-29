@@ -53,4 +53,11 @@ packer.startup(function(use)
 	use("anuvyklack/keymap-amend.nvim")
 	use("anuvyklack/pretty-fold.nvim")
 	use("anuvyklack/fold-preview.nvim")
+
+	use({
+		"iamcco/markdown-preview.nvim",
+		run = function()
+			vim.fn["mkdp#util#install"]()
+		end,
+	})
 end)
