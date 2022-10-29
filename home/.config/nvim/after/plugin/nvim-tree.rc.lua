@@ -17,3 +17,5 @@ tree.setup({
     }
   },
 })
+
+vim.keymap.set("n", "st", "<Cmd>NvimTreeToggle<CR>", {})
