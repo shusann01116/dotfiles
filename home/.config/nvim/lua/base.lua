@@ -33,6 +33,7 @@ vim.opt.relativenumber = true
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.foldlevel = 1000
+vim.opt.signcolumn = "yes:1"
 
 -- Undercurl
 vim.cmd([[let &t_Cs = "\e[4:3m"]])
