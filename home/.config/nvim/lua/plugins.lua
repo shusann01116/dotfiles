@@ -19,6 +19,8 @@ packer.startup(function(use)
 	use("williamboman/mason.nvim") -- Package manager
 	use("williamboman/mason-lspconfig.nvim") -- Mason integration with lspconfig
 
+	use("akinsho/bufferline.nvim")
+
 	use("kyazdani42/nvim-web-devicons") -- File icons
 	use("L3MON4D3/LuaSnip") -- Snippet
 	use("glepnir/lspsaga.nvim") -- LSP UIs
@@ -41,7 +43,6 @@ packer.startup(function(use)
 	use("nvim-telescope/telescope.nvim")
 	use("nvim-telescope/telescope-file-browser.nvim")
 
-	use("akinsho/bufferline.nvim")
 	use("norcalli/nvim-colorizer.lua")
 
 	use("lewis6991/gitsigns.nvim")

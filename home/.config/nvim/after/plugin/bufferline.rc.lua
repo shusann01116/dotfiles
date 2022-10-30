@@ -1,44 +1,42 @@
 local status, bufferline = pcall(require, "bufferline")
-if (not status) then return end
+if not status then
+	return
+end
+local status2, c = pcall(require, "vscode.colors")
+if not status then
+	return
+end
 
-bufferline.setup {
-  options = {
-    mode = "tabs",
-    separator_style = "thick",
-    always_show_bufferline = false,
-    show_buffer_close_icons = false,
-    show_close_icon = false,
-    color_icons = true,
-    offsets = {
-      {
-        filetype = "NvimTree",
-        text = "File Explorer",
-        highlight = "Directory",
-        separator = true
-      }
-    }
-  },
-  highlights = {
-    separator = {
-      fg = '#073642',
-      bg = '#002b36',
-    },
-    separator_selected = {
-      fg = '#073642',
-    },
-    background = {
-      fg = '#657b83',
-      bg = '#002b36'
-    },
-    buffer_selected = {
-      fg = '#fdf6e3',
-      bold = true,
-    },
-    fill = {
-      bg = '#073642'
-    }
-  },
-}
+bufferline.setup({
+	options = {
+		mode = "tabs",
+		separator_style = "thin",
+		diagnostics = "nvim_lsp",
+		diagnostics_indicator = function(count, level, diagnostics_dict, context)
+			return "(" .. count .. ")"
+		end,
+		offsets = {
+			{
+				filetype = "NvimTree",
+				text = "File Explorer",
+				text_align = "center",
+				separator = true,
+			},
+		},
+		color_icons = true,
+		show_buffer_close_icons = false,
+		show_close_icon = false,
+		show_tab_indicators = false,
+		always_show_bufferline = true,
+		hover = {
+			enabled = true,
+			delay = 200,
+			reveal = { "close" },
+		},
+	},
+})
 
-vim.keymap.set('n', '<Tab>', '<Cmd>BufferLineCycleNext<CR>', {})
-vim.keymap.set('n', '<S-Tab>', '<Cmd>BufferLineCyclePrev<CR>', {})
+vim.cmd("highlight BufferLineFill guibg=none")
+
+vim.keymap.set("n", "<Tab>", "<Cmd>BufferLineCycleNext<CR>", {})
+vim.keymap.set("n", "<S-Tab>", "<Cmd>BufferLineCyclePrev<CR>", {})
