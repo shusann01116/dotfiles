@@ -75,11 +75,13 @@ local config = {
 -- Inserts a component in lualine_c at left section
 local function ins_left(component)
 	table.insert(config.sections.lualine_c, component)
+	table.insert(config.inactive_sections.lualine_c, component)
 end
 
 -- Inserts a component in lualine_x ot right section
 local function ins_right(component)
 	table.insert(config.sections.lualine_x, component)
+	table.insert(config.inactive_sections.lualine_x, component)
 end
 
 ins_left({
