@@ -8,6 +8,7 @@ import (
 	"github.com/shusann01116/dotfile/ci/markdown"
 	"github.com/shusann01116/dotfile/ci/shellcheck"
 	"github.com/shusann01116/dotfile/ci/cue"
+	"github.com/shusann01116/dotfile/ci/stylua"
 )
 
 dagger.#Plan & {
@@ -50,6 +51,9 @@ dagger.#Plan & {
 				contents: client.filesystem.".".read.contents
 			}
 			"cue": cue.#Lint & {
+				contents: client.filesystem.".".read.contents
+			}
+			lua: stylua.#Lint & {
 				contents: client.filesystem.".".read.contents
 			}
 		}
