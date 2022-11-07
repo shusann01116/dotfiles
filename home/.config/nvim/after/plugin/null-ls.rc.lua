@@ -38,6 +38,7 @@ null_ls.setup({
 			filetypes = { "yml", "yaml", "json" },
 		}),
 		null_ls.builtins.diagnostics.golangci_lint,
+		null_ls.builtins.diagnostics.shellcheck,
 		null_ls.builtins.code_actions.shellcheck,
 		null_ls.builtins.formatting.shfmt,
 		null_ls.builtins.formatting.prettierd.with({
