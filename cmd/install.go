@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/shusann01116/dotfiles/dotfiles"
 	"github.com/spf13/cobra"
 )
 
@@ -19,8 +20,8 @@ var (
 		Long:  `You can pass a multiple arguments to install multiple packages. This command search packages in packages to install.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			for _, pkg := range args {
-				pkg = strings.TrimSpace(pkg)
-				err := InstallPackage(pkg)
+				name := strings.TrimSpace(pkg)
+				err := dotfiles.Install(dotfiles.Pkg{Name: name})
 				if err != nil {
 					return err
 				}
