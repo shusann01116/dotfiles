@@ -1,0 +1,10 @@
+version: 0.1
+
+install:
+  cmds:
+    - ln -sf $(pwd)/nvim ${HOME}/.config
+unintall:
+  cmds:
+    - rm -rf ${HOME}/.config/nvim
+backup:
+  - ${HOME}/.config/nvim
