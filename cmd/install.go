@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/shusann01116/dotfiles/dotfiles"
+	"github.com/shusann01116/dotfiles/pkg/dotfiles"
 	"github.com/spf13/cobra"
 )
 
@@ -26,6 +26,7 @@ var (
 					return err
 				}
 			}
+
 			return nil
 		},
 	}
