@@ -381,6 +381,9 @@ bind X run-shell 'tmux switch-client -n \; kill-session -t "#S"'
 # FIXME: The command return 1 as a exit status, we added 'exit 0' for workaround.
 bind S run-shell 'tmux attach-session -t . -c "#{pane_current_path}" || exit 0'
 
+# swap window
+bind T swap-window -t 1
+
 # -- tpm -----------------------------------------------------------------------
 
 # while I don't use tpm myself, many people requested official support so here
