@@ -34,6 +34,7 @@ end
 local lspconfig = require("lspconfig")
 
 lspconfig.tailwindcss.setup(coq.lsp_ensure_capabilities())
+lspconfig.csharp_ls.setup(coq.lsp_ensure_capabilities())
 lspconfig.dagger.setup(coq.lsp_ensure_capabilities())
 lspconfig.dockerls.setup(coq.lsp_ensure_capabilities())
 lspconfig.yamlls.setup({
