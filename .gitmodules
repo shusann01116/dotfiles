@@ -1,6 +1,6 @@
 [submodule ".tmux"]
 	path = .tmux
 	url = https://github.com/gpakosz/.tmux.git
-[submodule ".config/nvim/pack/github/start/copilot.vim"]
-	path = .config/nvim/pack/github/start/copilot.vim
-	url = https://github.com/github/copilot.vim.git
+[submodule "home/.config/nvim/pack/github/start/copilot.vim"]
+	path = home/.config/nvim/pack/github/start/copilot.vim
+	url = https://github.com/github/copilot.vim
