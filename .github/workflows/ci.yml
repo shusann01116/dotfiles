@@ -28,6 +28,7 @@ jobs:
       - name: Run Dagger
         uses: dagger/dagger-for-github@v3
         with:
+          version: v0.2.36
           cmds: |
             do lint
 
