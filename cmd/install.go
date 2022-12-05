@@ -5,7 +5,6 @@ Copyright © 2022 shusann01116 26602565+shusann01116@users.noreply.github.com
 package cmd
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/shusann01116/dotfiles/pkg/dotfiles"
@@ -34,10 +33,4 @@ var (
 
 func init() {
 	rootCmd.AddCommand(installCmd)
-}
-
-// InstallPackage installs a package specified by the name argument
-func InstallPackage(name string) error {
-	fmt.Println(name)
-	return nil
 }
