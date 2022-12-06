@@ -1,9 +1,11 @@
-package util
+package util_test
 
 import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/shusann01116/dotfiles/pkg/util"
 )
 
 // TestReadYaml test ReadYaml function
@@ -33,7 +35,7 @@ func TestReadYaml(t *testing.T) {
 	var test Test
 
 	// read yaml file
-	err = ReadYaml(testFile, &test)
+	err = util.ReadYaml(testFile, &test)
 	if err != nil {
 		t.Errorf("error reading yaml file: %v", err)
 	}

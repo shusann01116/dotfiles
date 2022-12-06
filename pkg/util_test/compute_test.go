@@ -1,9 +1,11 @@
-package util
+package util_test
 
 import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/shusann01116/dotfiles/pkg/util"
 )
 
 // TestComputeDirHash tests the ComputeDirHash function
@@ -19,7 +21,7 @@ func TestComputerDirHash(t *testing.T) {
 	testDir := filepath.Join(dir, "data")
 
 	// compute hash
-	got, err := ComputeDirHash(testDir)
+	got, err := util.ComputeDirHash(testDir)
 	if got != want || err != nil {
 		t.Errorf("error computing hash: %v, %v, want %v", got, err, want)
 	}
@@ -34,7 +36,7 @@ func TestGetExePath(t *testing.T) {
 	}
 
 	// get executable path
-	got, err := GetExePath()
+	got, err := util.GetExePath()
 	if err != nil {
 		t.Errorf("error getting executable path: %v", err)
 	}
