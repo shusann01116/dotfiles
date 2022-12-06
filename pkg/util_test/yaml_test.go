@@ -19,7 +19,7 @@ func TestReadYaml(t *testing.T) {
 	testDir := filepath.Join(dir, "data")
 
 	// get test file path
-	testFile := filepath.Join(testDir, "test.yaml")
+	testFile := filepath.Join(testDir, "dummy.yaml")
 
 	// create test struct
 	type Test struct {
