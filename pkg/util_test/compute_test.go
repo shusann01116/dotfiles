@@ -10,7 +10,7 @@ import (
 
 // TestComputeDirHash tests the ComputeDirHash function
 func TestComputerDirHash(t *testing.T) {
-	var want uint32 = 1303633779
+	var want uint32 = 2766018715
 
 	// get current directory
 	dir, err := os.Getwd()
