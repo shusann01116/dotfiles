@@ -10,7 +10,7 @@ saga.init_lsp_saga({
 		enable = true,
 	},
 	server_filetype_map = {
-		typescript = "typescript",
+		typescript = { "typescript" },
 	},
 })
 
