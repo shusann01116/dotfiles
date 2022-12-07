@@ -1,6 +1,7 @@
 /*
 Copyright © 2022 shusann01116 <26602565+shusann01116@users.noreply.github.com>
 */
+
 package cmd
 
 import (
@@ -13,11 +14,9 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "dotfiles",
 	Short: "A tool install dotfiles in elegant way.",
-	Long: `This tool dedicates to installing packages and dotfiles.
-Each dotfile is separated into packages and configurable to choose whether a package to install or not.
-Also, this tool supports installing additional packages in plugin style.`,
-
-	Run: func(cmd *cobra.Command, args []string) { },
+	Long: `This tool dedicates to install packages as a package.
+Packages are configurable with manifest.yaml by package/<packagename>/manifest.yaml.`,
+	Run: func(cmd *cobra.Command, args []string) {},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
