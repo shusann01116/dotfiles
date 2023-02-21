@@ -10,7 +10,7 @@ end
 mason.setup({})
 mason_lspconfig.setup({
 	ensure_installed = {
-		"sumneko_lua",
+		"lua_ls",
 		"tailwindcss",
 		"csharp_ls",
 		"dagger",
@@ -75,7 +75,7 @@ lspconfig.tsserver.setup(coq.lsp_ensure_capabilities({
 	filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
 	cmd = { "typescript-language-server", "--stdio" },
 }))
-lspconfig.sumneko_lua.setup({
+lspconfig.lua_ls.setup({
 	coq.lsp_ensure_capabilities({
 		settings = {
 			Lua = {
