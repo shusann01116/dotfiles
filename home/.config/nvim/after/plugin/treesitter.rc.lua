@@ -39,6 +39,9 @@ ts.setup({
 		"yaml",
 		"bash",
 		"go",
+		"markdown",
+		"markdown_inline",
+		"terraform",
 	},
 	autotag = {
 		enable = true,
