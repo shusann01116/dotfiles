@@ -13,6 +13,9 @@ keymap.set("n", "dw", 'vb"_d')
 -- Select all
 keymap.set("n", "<C-a>", "gg<S-v>G")
 
+-- Toggle hlsearch
+keymap.set("n", "<Leader>h", ":set invhlsearch<Return>", { silent = true, noremap = true })
+
 -- New tab
 keymap.set("n", "te", ":tabedit<Return>", { silent = true })
 keymap.set("n", "tc", ":tabclose<Return>", { silent = true })
