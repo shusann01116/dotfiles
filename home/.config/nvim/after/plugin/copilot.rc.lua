@@ -1,2 +1,5 @@
-vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("\\<CR>")', { silent = true, script = true, expr = true })
-vim.api.nvim_set_var("copilot_no_tab_map", true)
+local coq_3p = require("coq_3p")
+coq_3p({
+	{ src = "nvimlua", short_name = "nLUA" },
+	{ src = "copilot", short_name = "COP", accept_key = "<c-j>" },
+})
