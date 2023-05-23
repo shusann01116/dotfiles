@@ -12,7 +12,7 @@ alias g='git'
 alias vim='nvim'
 
 # terraform
-alias tf='terraform'
+alias t='terraform'
 
 # kubectl
 alias k='kubectl'
