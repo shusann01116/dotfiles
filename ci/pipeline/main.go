@@ -37,11 +37,11 @@ func test(ctx context.Context) error {
 	// get reference to the local project
 	src := client.Host().Directory(dir)
 
-	// get `ubuntu` image
-	ubuntu := client.Container().From("ubuntu:latest").WithExec([]string{"bash", "-c", "apt-get update && apt-get install -y sudo"})
-
-	// mount cloned repository into `ubuntu` image
-	ubuntu = ubuntu.WithDirectory("/src", src).WithWorkdir("/src")
+	// get `ubuntu` image and mount cloned repository into `ubuntu` image
+	ubuntu := client.Container().From("ubuntu:latest").
+		WithExec([]string{"bash", "-c", "apt-get update && apt-get install -y sudo"}).
+		WithExec([]string{"bash", "-c", "useradd -m test && echo 'test ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers"}).
+		WithDirectory("/src", src).WithWorkdir("/src")
 
 	// run the install script
 	code, err := ubuntu.WithUser("test").WithExec([]string{"bash", "-c", "DEBUG=1 NONINTERACTIVE=1 /bin/bash ./install.sh"}).ExitCode(ctx)
