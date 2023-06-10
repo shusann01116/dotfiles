@@ -1,3 +1,6 @@
+# Starship
+eval "$(starship init zsh)"
+
 # aliases
 if [ -f ${HOME}/.zshaliases ]; then
   source ${HOME}/.zshaliases
@@ -12,10 +15,10 @@ fi
 # completions
 #################################################
 
-fpath=($fpath ~/.zsh/completion)
-
 # brew completions
 FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+fpath=($fpath ~/.zsh/completion)
 
 # Enable bashcompinit
 autoload -Uz compinit
@@ -25,7 +28,7 @@ autoload -U +X bashcompinit && bashcompinit
 complete -C 'aws_completer' aws
 source <(kubectl completion zsh)
 source <(docker completion zsh)
-complete -o nospace -C /home/linuxbrew/.linuxbrew/bin/terraform terraform
+complete -o nospace -C $(brew --prefix)/bin/terraform terraform
 
 #################################################
 # zsh features
@@ -49,9 +52,6 @@ source /home/linuxbrew/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highl
 #################################################
 # miscellaneous
 #################################################
-
-# Starship
-eval "$(starship init zsh)"
 
 # nvm
 export NVM_DIR="$HOME/.nvm"

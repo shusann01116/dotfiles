@@ -1,0 +1,23 @@
+name: test
+on:
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - README.md
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - README.md
+jobs:
+  build:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version-file: ci/pipeline/go.mod
+      - name: Run Dagger pipeline
+        run: |
+          cd ci/pipeline
+          go run main.go
