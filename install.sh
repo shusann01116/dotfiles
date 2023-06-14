@@ -3,16 +3,19 @@
 set -euo pipefail
 
 info() {
+	echo ""
 	echo "Info: $1"
 }
 
 debug() {
 	if [[ -n "${DEBUG-}" ]]; then
+		echo ""
 		echo "Debug: $1"
 	fi
 }
 
 error() {
+	echo ""
 	echo "Error: $1"
 }
 
@@ -107,8 +110,8 @@ tmux() {
 
 	backup_file "$HOME/.tmux.conf"
 	backup_file "$HOME/.tmux.conf.local"
-	link_file "$PACKAGE_ROOT/tmux.conf" "$HOME/.tmux.conf"
-	link_file "$PACKAGE_ROOT/tmux.conf.local" "$HOME/.tmux.conf.local"
+	link_file "$PACKAGE_ROOT/tmux/tmux.conf" "$HOME/.tmux.conf"
+	link_file "$PACKAGE_ROOT/tmux/tmux.conf.local" "$HOME/.tmux.conf.local"
 }
 
 homebrew() {
@@ -165,6 +168,7 @@ neovim() {
 }
 
 zsh() {
+	local os=$1
 	if ! command -v zsh >/dev/null 2>&1; then
 		info "Installing zsh..."
 		brew install zsh
@@ -179,25 +183,27 @@ zsh() {
 
 	for dotfile in "${zsh_dotfiles[@]}"; do
 		backup_file "$HOME/$dotfile"
-		link_file "$PACKAGE_ROOT/zsh/$dotfile" "$HOME/$dotfile"
+		link_file "$PACKAGE_ROOT/zsh_$os/$dotfile" "$HOME/$dotfile"
 	done
 
 	return $?
 }
 
 linux() {
+	info "Entering linux setup..."
 	execute_sudo apt-get update && execute_sudo apt-get install -y build-essential curl file git || exit 1
 	homebrew
 	install_brew_tap "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewtap")"
 	install_brew_app "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewlist")"
 	tmux
 	neovim
-	zsh
+	zsh wsl
 
 	return $?
 }
 
 macos() {
+	info "Entering macos setup..."
 	homebrew
 
 	return $?
@@ -225,3 +231,4 @@ main() {
 }
 
 main
+info "Done!"
