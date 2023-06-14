@@ -4,14 +4,8 @@
 #         without any warranty.
 #         Copyright 2012— Gregory Pakosz (@gpakosz).
 
-
-# fix backspace bad behaviour
+# set $TERM to screen-256color
 set -g default-terminal "screen-256color"
-
-# set terminal for macOS
-if-shell -b '[ "$(uname)" == "Darwin" ]' {
-  set -g default-terminal "xterm-256color"
-}
 
 # -- navigation ----------------------------------------------------------------
 
