@@ -205,6 +205,11 @@ linux() {
 macos() {
 	info "Entering macos setup..."
 	homebrew
+	install_brew_tap "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewtap")"
+	install_brew_app "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewlist")"
+	tmux
+	neovim
+	zsh mac
 
 	return $?
 }
