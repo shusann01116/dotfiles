@@ -26,6 +26,11 @@ func test(ctx context.Context) error {
 	}
 	defer client.Close()
 
+	// create a cache volume
+	brewCache := client.CacheVolume("brew-cache")
+	brewTapCache := client.CacheVolume("brew-tap-cache")
+	aptCache := client.CacheVolume("apt-cache")
+
 	// resolve the relative path to the ../.. directory
 	// this is where the cloned repository will be mounted
 	dir, err := os.Getwd()
@@ -44,7 +49,13 @@ func test(ctx context.Context) error {
 		WithDirectory("/src", src).WithWorkdir("/src")
 
 	// run the install script
-	code, err := ubuntu.WithUser("test").WithExec([]string{"bash", "-c", "DEBUG=1 NONINTERACTIVE=1 /bin/bash ./install.sh"}).ExitCode(ctx)
+	code, err := ubuntu.
+		WithUser("test").
+		WithMountedCache("/home/test/.cache/Homebrew", brewCache).
+		WithMountedCache("/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps", brewTapCache).
+		WithMountedCache("/var/cache/apt", aptCache).
+		WithExec([]string{"bash", "-c", "DEBUG=1 NONINTERACTIVE=1 /bin/bash ./install.sh"}).
+		ExitCode(ctx)
 	if err != nil || code != 0 {
 		return fmt.Errorf("install.sh failed with code %d: %w", code, err)
 	}
