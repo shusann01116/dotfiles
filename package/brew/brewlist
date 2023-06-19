@@ -12,6 +12,7 @@ jq
 kubernetes-cli
 lazydocker
 lazygit
+lsd
 neovim
 node
 openssl@3
