@@ -1,1 +1,17 @@
-/Users/shusann/src/dotfiles/package/../package/zsh_wsl/.zshaliases
+# aliases
+alias ls='lsd'
+alias ll='ls -lF'
+alias la='ll -A'
+
+alias d=docker
+alias g=git
+alias a=aws
+alias vim=nvim
+alias v=vim
+alias k=kubectl
+alias t=terraform
+alias l=lazygit
+alias mk=minikube
+
+alias s='source ~/.zshrc'
+

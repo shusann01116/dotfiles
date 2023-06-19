@@ -6,9 +6,9 @@ if type brew &> /dev/null; then
     compinit
 fi
 
-[ command -v kubectl ] && source <(kubectl completion zsh)
-[ command -v minikube ] && source <(minikube completion zsh)
-[ command -v gh ] && source <(gh completion -s zsh)
+command -v kubectl >/dev/null && source <(kubectl completion zsh)
+command -v minikube >/dev/null && source <(minikube completion zsh)
+command -v gh >/dev/null && source <(gh completion -s zsh)
 
 # bash completions
 autoload bashcompinit && bashcompinit

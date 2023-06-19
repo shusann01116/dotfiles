@@ -92,14 +92,9 @@ backup_file() {
 link_file() {
 	src=$1
 	dest=$2
-	if [[ -e "$dest" ]]; then
-		if [[ "$(readlink "$dest")" != "$src" ]]; then
-			info "File already exists: $dest"
-		fi
-	else
-		info "Linking $src to $dest"
-		ln -s "$src" "$dest"
-	fi
+
+	info "Linking $src to $dest"
+	ln -sf "$src" "$dest"
 }
 
 tmux() {
@@ -110,8 +105,8 @@ tmux() {
 
 	backup_file "$HOME/.tmux.conf"
 	backup_file "$HOME/.tmux.conf.local"
-	link_file "$PACKAGE_ROOT/tmux/tmux.conf" "$HOME/.tmux.conf"
-	link_file "$PACKAGE_ROOT/tmux/tmux.conf.local" "$HOME/.tmux.conf.local"
+	link_file "$PACKAGE_ROOT/tmux/.tmux.conf" "$HOME/.tmux.conf"
+	link_file "$PACKAGE_ROOT/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
 }
 
 homebrew() {
@@ -183,7 +178,7 @@ zsh() {
 
 	for dotfile in "${zsh_dotfiles[@]}"; do
 		backup_file "$HOME/$dotfile"
-		link_file "$PACKAGE_ROOT/zsh_$os/$dotfile" "$HOME/$dotfile"
+		[[ -f "$PACKAGE_ROOT/zsh_$os/$dotfile" ]] && link_file "$PACKAGE_ROOT/zsh_$os/$dotfile" "$HOME/$dotfile"
 	done
 
 	return $?
