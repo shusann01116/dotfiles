@@ -6,12 +6,11 @@ if type brew &> /dev/null; then
     compinit
 fi
 
+command -v kubectl >/dev/null && source <(kubectl completion zsh)
+command -v minikube >/dev/null && source <(minikube completion zsh)
+command -v gh >/dev/null && source <(gh completion -s zsh)
+
+# bash completions
 autoload bashcompinit && bashcompinit
-autoload -Uz compinit && compinit
-
-complete -C '/opt/homebrew/bin/aws_completer' aws
-
-source <(kubectl completion zsh)
-source <(minikube completion zsh)
-source <(gh completion -s zsh)
-fpath=("$fpath" ~/.zsh/completion)
+source $(brew --prefix)/etc/bash_completion.d/az
+complete -C "$(brew --prefix)/bin/aws_completer" aws

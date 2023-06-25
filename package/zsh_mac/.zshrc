@@ -4,8 +4,8 @@ if [ -f ~/.zshrc.base ]; then
 fi
 
 # load alias
-if [ -f ~/.zshalias ]; then
-    source ~/.zshalias
+if [ -f ~/.zshaliases ]; then
+    source ~/.zshaliases
 fi
 
 # load completions
