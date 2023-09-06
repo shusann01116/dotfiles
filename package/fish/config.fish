@@ -22,3 +22,5 @@ if status is-interactive
     alias g=git
     alias k=kubectl
 end
+
+export GPG_TTY=$(tty)
