@@ -37,7 +37,7 @@ WORKDIR /home/$USER_NAME
 
 # install astronvim
 RUN git clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
-COPY --link --chown=$USER_NAME:$USER_GROUP ./package/astronvim_config/ ./.config/nvim/lua/user/
+COPY --chown=$USER_NAME:$USER_GROUP ./package/astronvim_config/ ./.config/nvim/lua/user/
 RUN nvim --headless +q
 
 ENTRYPOINT ["/usr/bin/nvim"]
