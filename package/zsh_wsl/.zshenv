@@ -13,4 +13,3 @@ export EDITOR=vim
 export TZ=Asia/Tokyo
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 export OPENAI_API_KEY=$(cat ~/.openai/api_key)
-
