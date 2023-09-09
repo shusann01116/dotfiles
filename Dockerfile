@@ -33,11 +33,11 @@ RUN addgroup -S $USER_GROUP && adduser -S $USER_NAME -G $USER_GROUP -s /bin/sh &
 
 USER $USER_NAME
 
-WORKDIR /home/$USER_NAME
-
 # install astronvim
 RUN git clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
-COPY --chown=$USER_NAME:$USER_GROUP ./package/astronvim_config/ ./.config/nvim/lua/user/
+COPY --chown=$USER_NAME:$USER_GROUP ./package/astronvim_config/ /home/${USER_NAME}/.config/nvim/lua/user/
 RUN nvim --headless +q
+
+WORKDIR /workspace
 
 ENTRYPOINT ["/usr/bin/nvim"]
