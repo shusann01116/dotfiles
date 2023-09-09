@@ -4,7 +4,7 @@ FROM alpine:3.18.3
 ARG USER_NAME=dev
 ARG USER_GROUP=dev
 
-RUN apk add --no-cache \
+RUN apk update && apk add --no-cache \
   sudo \
   git \
   curl \
