@@ -4,9 +4,10 @@ end
 
 if status is-interactive
   # Commands to run in interactive sessions can go here
-  set PATH $PATH:/sbin
-  set PATH $PATH:/usr/local/bin
-  set PATH $PATH:$HOME/.local/bin
+  fish_add_path /sbin
+  fish_add_path /usr/local/bin
+  fish_add_path -m $HOME/.local/bin
+  fish_add_path -m $HOME/.pulumi/bin
   set BROWSER /usr/bin/wslview
   starship init fish | source
 
