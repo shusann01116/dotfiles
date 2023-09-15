@@ -8,6 +8,7 @@ if status is-interactive
   fish_add_path /usr/local/bin
   fish_add_path -m $HOME/.local/bin
   fish_add_path -m $HOME/.pulumi/bin
+
   set BROWSER /usr/bin/wslview
   starship init fish | source
 
@@ -17,8 +18,15 @@ if status is-interactive
   function __fish_complete_aws
       env COMP_LINE=(commandline -pc) aws_completer | tr -d ' '
   end
-
   complete -c aws -f -a "(__fish_complete_aws)"
+
+  # Pulumi secrets
+  if type -q pulumi
+    set SECRET_PATH $HOME/.config/secrets/pulumi-secret
+    if test -f $SECRET_PATH
+      set -x PULUMI_CONFIG_PASSPHRASE (cat $SECRET_PATH)
+    end
+  end
 
   # alias
   alias v=nvim
