@@ -8,6 +8,8 @@ if status is-interactive
   fish_add_path /usr/local/bin
   fish_add_path -m $HOME/.local/bin
   fish_add_path -m $HOME/.pulumi/bin
+  fish_add_path -m $HOME/go/bin
+  fish_add_path -m $HOME/.dotnet/tools
 
   set BROWSER /usr/bin/wslview
   starship init fish | source
@@ -30,10 +32,14 @@ if status is-interactive
 
   # alias
   alias v=nvim
-  alias t=terraform
-  alias l=lazygit
+  alias tf=terraform
+  alias tg=terragrunt
+  alias lg=lazygit
+  alias a=aws
+  alias d=docker
   alias g=git
   alias k=kubectl
 end
 
 export GPG_TTY=$(tty)
+pyenv init - | source
