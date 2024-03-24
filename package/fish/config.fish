@@ -9,6 +9,7 @@ if status is-interactive
   fish_add_path -m $HOME/.local/bin
   fish_add_path -m $HOME/.pulumi/bin
   fish_add_path -m $HOME/go/bin
+  fish_add_path -m $HOME/.cargo/bin
   fish_add_path -m $HOME/.dotnet/tools
 
   set BROWSER /usr/bin/wslview
@@ -38,8 +39,18 @@ if status is-interactive
   alias a=aws
   alias d=docker
   alias g=git
+  alias lg=lazygit
+  alias tg=terragrunt
   alias k=kubectl
+  alias ls=lsd
 end
 
 export GPG_TTY=$(tty)
 pyenv init - | source
+
+# pnpm
+set -gx PNPM_HOME "/Users/shusann/Library/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end

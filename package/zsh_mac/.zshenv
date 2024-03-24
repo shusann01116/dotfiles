@@ -20,3 +20,4 @@ export PATH="/opt/homebrew/opt/zip/bin:$PATH"
 export PATH="/opt/homebrew/opt/unzip/bin:$PATH"
 
 export GPG_TTY=$(tty)
+. "$HOME/.cargo/env"
