@@ -12,6 +12,7 @@ if status is-interactive
   fish_add_path -m $HOME/.cargo/bin
   fish_add_path -m $HOME/.dotnet/tools
 
+  # Setup fish
   set BROWSER /usr/bin/wslview
   starship init fish | source
 
@@ -46,7 +47,6 @@ if status is-interactive
 end
 
 export GPG_TTY=$(tty)
-pyenv init - | source
 
 # pnpm
 set -gx PNPM_HOME "/Users/shusann/Library/pnpm"
