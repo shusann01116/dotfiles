@@ -132,6 +132,7 @@ $env.PATH = ($env.PATH | uniq)
 
 # Aliases
 alias g = git
+alias v = nvim
 alias tf = terraform
 alias tg = terragrunt
 alias lg = lazygit
