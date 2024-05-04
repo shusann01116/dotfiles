@@ -123,6 +123,7 @@ $env.NU_PLUGIN_DIRS = [
 use std "path add"
 $env.PATH = ($env.PATH | split row (char esep))
 path add /opt/homebrew/bin
+path add /usr/local/bin
 path add ($env.HOME | path join ".cargo" "bin")
 path add ($env.HOME | path join ".local" "bin")
 $env.PATH = ($env.PATH | uniq)
