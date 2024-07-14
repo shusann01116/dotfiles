@@ -133,7 +133,7 @@ $env.PATH = ($env.PATH | uniq)
 # GOPATH
 $env.GOPATH = (go env | lines | parse "{env}='{value}'" | where $it.env == GOPATH | first | get value)
 # GHQ
-$env.GHQ_ROOT = (["src", ($env.GOPATH | path join "src"), "ghq"] | enumerate | each {|e| ($env.HOME | path join $e.item)} | str join ":")
+$env.GHQ_ROOT = ($env.HOME | path join "src")
 
 # To load from a custom file you can use:
 # source ($nu.default-config-dir | path join 'custom.nu')
@@ -146,3 +146,4 @@ alias tg = terragrunt
 alias lg = lazygit
 alias tm = tmux
 alias og = cd (ghq list -p | fzf)
+alias k = kubectl
