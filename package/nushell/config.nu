@@ -895,3 +895,5 @@ $env.config = {
 }
 
 use ~/.cache/starship/init.nu
+
+use mise.nu
