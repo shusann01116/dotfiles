@@ -44,6 +44,7 @@ if status is-interactive
   alias tg=terragrunt
   alias k=kubectl
   alias ls=lsd
+  alias og="cd \$(ghq list --full-path | fzf)"
 end
 
 export GPG_TTY=$(tty)
