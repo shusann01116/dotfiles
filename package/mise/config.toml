@@ -1,0 +1,4 @@
+[tools]
+node = "20"
+pnpm = "latest"
+go = "1.23"
