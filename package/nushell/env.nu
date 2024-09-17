@@ -131,6 +131,7 @@ path add ($env.HOME | path join ".local" "bin")
 path add ($env.HOME | path join ".ghcup" "bin")
 path add ($env.HOME | path join "go" "bin")
 path add ($env.ANDROID_HOME | path join "platform-tools")
+path add (brew --prefix | str trim | path join "share" "google-cloud-sdk" "bin")
 $env.PATH = ($env.PATH | uniq)
 
 # GOPATH
