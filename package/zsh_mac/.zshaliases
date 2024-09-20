@@ -13,5 +13,7 @@ alias t=terraform
 alias l=lazygit
 alias mk=minikube
 alias og='cd $(ghq list -p | fzf)'
+alias c=cursor
+alias lg=lazygit
 
 alias s='source ~/.zshrc'
