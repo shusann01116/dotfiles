@@ -12,5 +12,5 @@ command -v gh >/dev/null && source <(gh completion -s zsh)
 
 # bash completions
 autoload bashcompinit && bashcompinit
-source $(brew --prefix)/etc/bash_completion.d/az
-complete -C "$(brew --prefix)/bin/aws_completer" aws
+[ -f $(brew --prefix)/etc/bash_completion.d/az ] && source $(brew --prefix)/etc/bash_completion.d/az
+[ -f $(brew --prefix)/bin/aws_completer ] && complete -C "$(brew --prefix)/bin/aws_completer" aws
