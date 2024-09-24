@@ -6,6 +6,11 @@ if type brew &> /dev/null; then
     compinit
 fi
 
+# Carapace
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+source <(carapace _carapace)
+
 command -v kubectl >/dev/null && source <(kubectl completion zsh)
 command -v minikube >/dev/null && source <(minikube completion zsh)
 command -v gh >/dev/null && source <(gh completion -s zsh)
