@@ -22,6 +22,9 @@ export PATH="/opt/homebrew/opt/unzip/bin:$PATH"
 # mise shim
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 
+# yarn global path
+[[ -x "$(command -v yarn)" ]] && export PATH="$(yarn global bin):$PATH"
+
 export GHQ_ROOT="${HOME}/src"
 
 export GPG_TTY=$(tty)
