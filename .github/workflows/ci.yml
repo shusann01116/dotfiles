@@ -8,7 +8,7 @@ on:
 
 jobs:
   pre-commit:
-    runs-on: codebuild-github-sample-${{ github.run_id }}-${{ github.run_attempt }}
+    runs-on: ubuntu
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
