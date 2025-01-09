@@ -1,0 +1,11 @@
+[include]
+	path = /Users/shusann/.config/gitalias/gitalias.txt
+[pull]
+	ff = only
+[user]
+	email = 26602565+shusann01116@users.noreply.github.com
+	name = shusann01116
+[core]
+	excludesFile = .mise.toml
+[rerere]
+	enabled = true
