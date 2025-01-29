@@ -6,6 +6,6 @@
 	email = 26602565+shusann01116@users.noreply.github.com
 	name = shusann01116
 [core]
-	excludesFile = .mise.toml
+	excludesfile = ~/.gitignore_global
 [rerere]
 	enabled = true
