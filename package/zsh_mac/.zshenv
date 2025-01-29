@@ -25,6 +25,11 @@ export PATH="$HOME/.local/share/mise/shims:$PATH"
 # yarn global path
 [[ -x "$(command -v yarn)" ]] && export PATH="$(yarn global bin):$PATH"
 
+# Android
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+# ghq
 export GHQ_ROOT="${HOME}/src"
 
 export GPG_TTY=$(tty)
