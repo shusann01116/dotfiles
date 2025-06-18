@@ -22,12 +22,15 @@ export PATH="/opt/homebrew/opt/unzip/bin:$PATH"
 # mise shim
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 
-# yarn global path
-[[ -x "$(command -v yarn)" ]] && export PATH="$(yarn global bin):$PATH"
+# java
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 
 # Android
 export ANDROID_HOME=$HOME/Library/Android/sdk
+export ANDROID_SDK_ROOT=$ANDROID_HOME
+export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 
 # ghq
 export GHQ_ROOT="${HOME}/src"
