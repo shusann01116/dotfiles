@@ -1,9 +1,9 @@
 # Enable completion using the library installed by homebrew
-if type brew &> /dev/null; then
-    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
 
-    autoload -Uz compinit
-    compinit
+  autoload -Uz compinit
+  compinit
 fi
 
 # Carapace
@@ -19,3 +19,9 @@ command -v gh >/dev/null && source <(gh completion -s zsh)
 autoload bashcompinit && bashcompinit
 [ -f $(brew --prefix)/etc/bash_completion.d/az ] && source $(brew --prefix)/etc/bash_completion.d/az
 [ -f $(brew --prefix)/bin/aws_completer ] && complete -C "$(brew --prefix)/bin/aws_completer" aws
+
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/shusann/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
