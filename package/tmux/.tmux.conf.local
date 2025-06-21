@@ -347,15 +347,13 @@ set -g mouse on
 
 # force Vi mode
 #   really you should export VISUAL or EDITOR environment variable, see manual
-#set -g status-keys vi
 set -g mode-keys vi
 
 # replace C-b by C-s instead of using both prefixes
-set -gu prefix2
-unbind C-s
-unbind C-b
-set -g prefix C-s
-
+# set -gu prefix2
+# unbind C-s
+# unbind C-b
+# set -g prefix C-s
 
 # if you don't want Oh my tmux! to alter a binding, use #!important
 # bind v new-window -c #{pane_current_path} #!important
@@ -372,12 +370,24 @@ set -g repeat-time 60
 # kill current and move session
 bind X run-shell 'tmux switch-client -n \; kill-session -t "#S"'
 
-# change root directory of current session to cwd
-# FIXME: The command return 1 as a exit status, we added 'exit 0' for workaround.
-bind S run-shell 'tmux attach-session -t . -c "#{pane_current_path}" || exit 0'
-
 # swap window
 bind T swap-window -t 1
+
+# -- catppuccin plugin ---------------------------------------------------------
+# disable default Oh my tmux! theme
+tmux_conf_theme=disabled
+
+# Configure the catppuccin plugin
+set -g @catppuccin_flavor "mocha"
+set -g @catppuccin_window_status_style "rounded"
+
+# Load catppuccin
+run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
+
+# Make the status line pretty and add some modules
+set -g status-right-length 100
+set -g status-left-length 100
+tmux_conf_theme_status_right="#{E:@catppuccin_status_application}#{E:@catppuccin_status_session}#{E:@catppuccin_status_uptime}"
 
 # -- tpm -----------------------------------------------------------------------
 
