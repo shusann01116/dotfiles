@@ -158,8 +158,7 @@ neovim() {
   backup_file "$HOME/.local/state/nvim"
   backup_file "$HOME/.cache/nvim"
 
-  git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
-  git clone https://github.com/shusann01116/astronvim_config ~/.config/nvim/lua/user
+  ln -s "$(pwd)/package/astronvim_config" "$HOME/.config/nvim"
 }
 
 zsh() {
