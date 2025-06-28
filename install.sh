@@ -184,12 +184,6 @@ zsh() {
   return $?
 }
 
-omnisharp() {
-  info "Installing omnisharp settings..."
-  backup_file "$HOME/.omnisharp"
-  link_file "$PACKAGE_ROOT/omnisharp" "$HOME/.omnisharp"
-}
-
 linux() {
   info "Entering linux setup..."
   execute_sudo apt-get update && execute_sudo apt-get install -y build-essential curl file git || exit 1
@@ -212,7 +206,6 @@ macos() {
   tmux
   neovim
   zsh mac
-  omnisharp
 
   return $?
 }
