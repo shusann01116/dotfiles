@@ -7,5 +7,6 @@ config.font = wezterm.font("JetBrains Mono")
 config.default_prog = { "/bin/zsh", "-l", "-c", "tmux a -t 0 || tmux" }
 config.enable_tab_bar = false
 config.color_scheme = "Catppuccin Mocha"
+config.audible_bell = "Disabled"
 
 return config
