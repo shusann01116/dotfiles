@@ -15,6 +15,7 @@ alias mk=minikube
 alias og='cd $(ghq list -p | fzf)'
 alias c=cursor
 alias lg=lazygit
+alias ghprw='gh pr checks --watch; gh pr view -w'
 
 alias s='source ~/.zshrc'
 
