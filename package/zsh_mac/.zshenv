@@ -19,9 +19,6 @@ export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec:$PATH"
 export PATH="/opt/homebrew/opt/zip/bin:$PATH"
 export PATH="/opt/homebrew/opt/unzip/bin:$PATH"
 
-# mise shim
-export PATH="$HOME/.local/share/mise/shims:$PATH"
-
 # java
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 
