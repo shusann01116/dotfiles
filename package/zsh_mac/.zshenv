@@ -34,3 +34,18 @@ export GHQ_ROOT="${HOME}/src"
 
 export GPG_TTY=$(tty)
 . "$HOME/.cargo/env"
+
+# llvm
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+
+export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+
+export CMAKE_PREFIX_PATH="/opt/homebrew/opt/llvm"
+
+# pnpm
+export PNPM_HOME="/Users/shusann/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
