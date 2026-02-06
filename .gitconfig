@@ -9,3 +9,5 @@
 	excludesfile = ~/.gitignore_global
 [rerere]
 	enabled = true
+[commit]
+	verbose = true
