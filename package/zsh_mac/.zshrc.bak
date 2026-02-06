@@ -1,0 +1,142 @@
+export EDITOR=nvim
+
+export PATH="$HOME/.local/bin:$PATH"
+export PATH=${HOME}/go/bin:$PATH
+
+# Android
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export ANDROID_SDK_ROOT=$ANDROID_HOME
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+export GHQ_ROOT="${HOME}/src"
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+
+. "$HOME/.cargo/env"
+
+export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+export CMAKE_PREFIX_PATH="/opt/homebrew/opt/llvm"
+
+# starship
+eval "$(starship init zsh)"
+
+# color
+autoload -Uz colors && colors
+
+# zsh config
+zstyle ':completion:*' menu select
+zstyle ':completion:*' rehash true
+
+# zsh autosuggestions
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# no history duplications
+setopt EXTENDED_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+
+# mise
+eval "$(${HOMEBREW_PREFIX}/bin/mise activate zsh)"
+
+# ghq
+function ghq-fzf() {
+  local src=$(ghq list | fzf --preview "bat --color=always --style=header,grid --line-range :80 $(ghq root)/{}/README.*")
+  if [ -n "$src" ]; then
+    BUFFER="cd $(ghq root)/$src"
+    zle accept-line
+  fi
+  zle -R -c
+}
+zle -N ghq-fzf
+bindkey '^g' ghq-fzf
+
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+### End of Zinit's installer chunk
+
+# wt
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
+
+# aliases
+alias ls='lsd'
+alias ll='ls -lF'
+alias la='ll -A'
+
+alias d=docker
+alias g=git
+alias a=aws
+alias vim=nvim
+alias v=vim
+alias k=kubectl
+alias t=terraform
+alias l=lazygit
+alias mk=minikube
+alias og='cd $(ghq list -p | fzf)'
+alias c=cursor
+alias lg=lazygit
+alias ghprw='gh pr checks --watch; gh pr view -w'
+
+alias s='source ~/.zshrc'
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+# Enable completion using the library installed by homebrew
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi
+
+# Carapace
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+source <(carapace _carapace)
+
+command -v kubectl >/dev/null && source <(kubectl completion zsh)
+command -v minikube >/dev/null && source <(minikube completion zsh)
+command -v gh >/dev/null && source <(gh completion -s zsh)
+
+# bash completions
+autoload bashcompinit && bashcompinit
+[ -f $(brew --prefix)/etc/bash_completion.d/az ] && source $(brew --prefix)/etc/bash_completion.d/az
+[ -f $(brew --prefix)/bin/aws_completer ] && complete -C "$(brew --prefix)/bin/aws_completer" aws
+
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/shusann/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
+
+eval "$(zoxide init zsh)"
