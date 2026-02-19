@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "mcp__notion__*",
+      "mcp__figma-mcp__*",
+      "mcp__chrome-devtools__*",
+      "mcp__github__*",
+      "mcp__playwright__*",
+      "mcp__plugin_context7_context7__*",
+      "mcp__lsmcp__lsmcp_*",
+      "mcp__typescript__lsmcp_*",
+      "mcp__spec-workflow",
+      "mcp__claude_ai_*",
+      "Bash(gh *)",
+      "Bash(git *)",
+      "Bash(docker *)",
+      "Bash(yarn *)",
+      "Bash(pnpm *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(node *)",
+      "Bash(python3 *)",
+      "Bash(curl *)",
+      "Bash(jq *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(mv *)",
+      "Bash(ln *)",
+      "Bash(rg *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(echo *)",
+      "Bash(wc *)",
+      "Bash(tree *)",
+      "Bash(lsof *)",
+      "Bash(kill *)",
+      "Bash(yabai *)",
+      "Bash(test *)",
+      "Bash(mise *)",
+      "WebSearch",
+      "WebFetch(domain:puckeditor.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:gist.github.com)",
+      "WebFetch(domain:gist.githubusercontent.com)",
+      "WebFetch(domain:docs.cloud.google.com)",
+      "WebFetch(domain:snyk.io)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:localhost)",
+      "WebFetch(domain:skills.sh)"
+    ],
+    "ask": ["Bash(rm)", "Bash(rmdir)"]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "npx -y ccstatusline@latest",
+    "padding": 0
+  },
+  "enabledPlugins": {
+    "typescript-lsp@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "figma@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "Notion@claude-plugins-official": true,
+    "slack@claude-plugins-official": true,
+    "document-skills@anthropic-agent-skills": true,
+    "example-skills@anthropic-agent-skills": true,
+    "claude-md-management@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "productivity@knowledge-work-plugins": true,
+    "cowork-plugin-management@knowledge-work-plugins": true,
+    "data@knowledge-work-plugins": true,
+    "product-management@knowledge-work-plugins": true,
+    "enterprise-search@knowledge-work-plugins": true,
+    "code-review@claude-plugins-official": true
+  },
+  "outputStyle": "Explanatory",
+  "alwaysThinkingEnabled": true,
+  "autoUpdatesChannel": "latest",
+  "skipDangerousModePermissionPrompt": true,
+  "effortLevel": "medium",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "terminal-notifier -title 'Claude Code' -message 'Claude is waiting for your input' -sound default"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "terminal-notifier -title 'Claude Code' -message 'Claude needs your permission' -sound Basso"
+          }
+        ]
+      }
+    ]
+  }
+}

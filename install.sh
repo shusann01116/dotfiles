@@ -183,6 +183,22 @@ zsh() {
   return $?
 }
 
+claude() {
+  local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/claude"
+  mkdir -p "$config_dir"
+
+  local -a claude_files=(
+    CLAUDE.md
+    settings.json
+    settings.local.json
+  )
+
+  for file in "${claude_files[@]}"; do
+    backup_file "$config_dir/$file"
+    [[ -f "$PACKAGE_ROOT/claude/$file" ]] && link_file "$PACKAGE_ROOT/claude/$file" "$config_dir/$file"
+  done
+}
+
 linux() {
   info "Entering linux setup..."
   execute_sudo apt-get update && execute_sudo apt-get install -y build-essential curl file git || exit 1
@@ -192,6 +208,7 @@ linux() {
   tmux
   neovim
   zsh wsl
+  claude
   omnisharp
 
   return $?
@@ -205,6 +222,7 @@ macos() {
   tmux
   neovim
   zsh mac
+  claude
 
   return $?
 }
