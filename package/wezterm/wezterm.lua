@@ -9,4 +9,22 @@ config.enable_tab_bar = false
 config.color_scheme = "Catppuccin Mocha"
 config.audible_bell = "Disabled"
 
+config.keys = {
+  {
+    key = "v",
+    mods = "SUPER",
+    action = wezterm.action.PasteFrom("Clipboard"),
+  },
+  {
+    key = "LeftArrow",
+    mods = "CTRL|SHIFT|ALT",
+    action = wezterm.action.DisableDefaultAssignment,
+  },
+  {
+    key = "RightArrow",
+    mods = "CTRL|SHIFT|ALT",
+    action = wezterm.action.DisableDefaultAssignment,
+  },
+}
+
 return config
