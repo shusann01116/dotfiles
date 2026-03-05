@@ -17,12 +17,12 @@ config.keys = {
   },
   {
     key = "LeftArrow",
-    mods = "CTRL|SHIFT|ALT",
+    mods = "CTRL|SHIFT",
     action = wezterm.action.DisableDefaultAssignment,
   },
   {
     key = "RightArrow",
-    mods = "CTRL|SHIFT|ALT",
+    mods = "CTRL|SHIFT",
     action = wezterm.action.DisableDefaultAssignment,
   },
 }
