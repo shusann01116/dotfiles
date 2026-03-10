@@ -1,5 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "permissions": {
     "allow": [
       "mcp__notion__*",
@@ -12,7 +15,9 @@
       "mcp__typescript__lsmcp_*",
       "mcp__spec-workflow",
       "mcp__claude_ai_*",
+      "mcp__claude_ai_Slack__*",
       "Bash(gh *)",
+      "Bash(gh api */comments | jq *)",
       "Bash(git *)",
       "Bash(docker *)",
       "Bash(yarn *)",
@@ -54,52 +59,13 @@
       "WebFetch(domain:localhost)",
       "WebFetch(domain:skills.sh)"
     ],
-    "ask": ["Bash(rm)", "Bash(rmdir)"]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "npx -y ccstatusline@latest",
-    "padding": 0
-  },
-  "enabledPlugins": {
-    "typescript-lsp@claude-plugins-official": true,
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true,
-    "ralph-loop@claude-plugins-official": true,
-    "github@claude-plugins-official": true,
-    "figma@claude-plugins-official": true,
-    "context7@claude-plugins-official": true,
-    "playwright@claude-plugins-official": true,
-    "Notion@claude-plugins-official": true,
-    "slack@claude-plugins-official": true,
-    "document-skills@anthropic-agent-skills": true,
-    "example-skills@anthropic-agent-skills": true,
-    "claude-md-management@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true,
-    "productivity@knowledge-work-plugins": true,
-    "cowork-plugin-management@knowledge-work-plugins": true,
-    "data@knowledge-work-plugins": true,
-    "product-management@knowledge-work-plugins": true,
-    "enterprise-search@knowledge-work-plugins": true,
-    "code-review@claude-plugins-official": true
-  },
-  "outputStyle": "Explanatory",
-  "alwaysThinkingEnabled": true,
-  "autoUpdatesChannel": "latest",
-  "skipDangerousModePermissionPrompt": true,
-  "effortLevel": "medium",
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "terminal-notifier -title 'Claude Code' -message 'Claude is waiting for your input' -sound default"
-          }
-        ]
-      }
+    "ask": [
+      "Bash(rm)",
+      "Bash(rmdir)"
     ],
+    "defaultMode": "plan"
+  },
+  "hooks": {
     "Notification": [
       {
         "matcher": "permission_prompt",
@@ -109,7 +75,84 @@
             "command": "terminal-notifier -title 'Claude Code' -message 'Claude needs your permission' -sound Basso"
           }
         ]
+      },
+      {
+        "matcher": "permission_prompt|elicitation_dialog",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "workmux set-window-status waiting"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "workmux set-window-status working"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "terminal-notifier -title 'Claude Code' -message 'Claude is waiting for your input' -sound default"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "workmux set-window-status done"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "workmux set-window-status working"
+          }
+        ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "npx -y ccstatusline@latest",
+    "padding": 0
+  },
+  "enabledPlugins": {
+    "document-skills@anthropic-agent-skills": true,
+    "frontend-design@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "figma@claude-plugins-official": true,
+    "Notion@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "product-management@knowledge-work-plugins": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true
+  },
+  "outputStyle": "Explanatory",
+  "language": "Japanese",
+  "alwaysThinkingEnabled": true,
+  "autoUpdatesChannel": "latest",
+  "skipDangerousModePermissionPrompt": true,
+  "effortLevel": "high"
 }

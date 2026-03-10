@@ -10,3 +10,9 @@ After completing a plan (exiting Plan Mode), you MUST:
 4. **Ask the user to confirm** before proceeding with implementation — e.g., "The plan has been reviewed. Would you like me to proceed with implementation?"
 
 This ensures every plan is validated through code review before any code is written, preventing wasted effort on flawed approaches.
+
+## Subagent Usage Rules
+
+### Explore Subagent in Worktree
+
+Worktree 内で Explore subagent を使用する際、`cd` と `git` コマンドを組み合わせて使用しないこと。この組み合わせは毎回パーミッション確認が発生し、ワークフローが中断される。`cd` と `git` は別々のコマンドとして実行すること。

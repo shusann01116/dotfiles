@@ -187,13 +187,37 @@ claude() {
   local -a claude_files=(
     CLAUDE.md
     settings.json
-    settings.local.json
   )
 
   for file in "${claude_files[@]}"; do
     backup_file "$config_dir/$file"
     [[ -f "$PACKAGE_ROOT/claude/$file" ]] && link_file "$PACKAGE_ROOT/claude/$file" "$config_dir/$file"
   done
+
+  # Agents（個別ファイル単位でリンク、ローカル専用agentとの共存を許容）
+  if [[ -d "$PACKAGE_ROOT/claude/agents" ]]; then
+    mkdir -p "$config_dir/agents"
+    chmod 700 "$config_dir/agents"
+    for agent_file in "$PACKAGE_ROOT/claude/agents"/*.md; do
+      [[ -f "$agent_file" ]] || continue
+      local agent_name
+      agent_name=$(basename "$agent_file")
+      backup_file "$config_dir/agents/$agent_name"
+      link_file "$agent_file" "$config_dir/agents/$agent_name"
+    done
+  fi
+
+  # Skills（カスタムスキルのみ個別にリンク、外部symlinksを壊さない）
+  if [[ -d "$PACKAGE_ROOT/claude/skills" ]]; then
+    mkdir -p "$config_dir/skills"
+    for skill_item in "$PACKAGE_ROOT/claude/skills"/*; do
+      [[ -e "$skill_item" ]] || continue
+      local skill_name
+      skill_name=$(basename "$skill_item")
+      backup_file "$config_dir/skills/$skill_name"
+      link_file "$skill_item" "$config_dir/skills/$skill_name"
+    done
+  fi
 }
 
 linux() {
