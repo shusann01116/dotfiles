@@ -6,7 +6,7 @@ code in this repository.
 ## Overview
 
 This is a cross-platform dotfiles repository optimized for modern development
-workflows. It supports both macOS and Linux/WSL environments with automated
+workflows. It supports both macOS and Linux environments with automated
 installation and package management through Homebrew.
 
 ## Installation and Setup
@@ -41,7 +41,7 @@ brew update && brew upgrade
 ### Development Environment
 
 - **Primary Editor**: Neovim with AstroNvim configuration
-- **Shell**: Fish (primary) with vi-mode, Zsh (macOS/WSL variants)
+- **Shell**: Fish (primary) with vi-mode, Zsh
 - **Terminal Multiplexer**: tmux with custom configuration
 - **Version Manager**: mise for managing development tool versions
 
@@ -62,13 +62,12 @@ Each tool/application has its own directory under `package/`:
 - `package/fish/` - Fish shell configuration with aliases and completions
 - `package/brew/` - Homebrew package lists (brewlist, brewtap)
 - `package/mise/` - Development tool version configuration
+- `package/zsh/` - Zsh shell configuration
 - `package/tmux/` - Terminal multiplexer configuration
 - `package/astronvim_config/` - Custom Neovim configuration (git submodule)
 
 ### Platform-Specific Configurations
 
-- `package/zsh_mac/` - macOS-specific Zsh configuration
-- `package/zsh_wsl/` - WSL/Linux-specific Zsh configuration
 - `package/yabai/` + `package/skhd/` - macOS window management (tiling WM)
 
 ### Installation Strategy

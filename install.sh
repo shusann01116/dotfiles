@@ -162,7 +162,6 @@ neovim() {
 }
 
 zsh() {
-  local os=$1
   if ! command -v zsh >/dev/null 2>&1; then
     info "Installing zsh..."
     brew install zsh
@@ -170,14 +169,12 @@ zsh() {
 
   local -a zsh_dotfiles=(
     .zshrc
-    .zshenv
     .zprofile
-    .zsh
   )
 
   for dotfile in "${zsh_dotfiles[@]}"; do
     backup_file "$HOME/$dotfile"
-    [[ -f "$PACKAGE_ROOT/zsh_$os/$dotfile" ]] && link_file "$PACKAGE_ROOT/zsh_$os/$dotfile" "$HOME/$dotfile"
+    [[ -f "$PACKAGE_ROOT/zsh/$dotfile" ]] && link_file "$PACKAGE_ROOT/zsh/$dotfile" "$HOME/$dotfile"
   done
 
   return $?
@@ -207,9 +204,8 @@ linux() {
   install_brew_app "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewlist")"
   tmux
   neovim
-  zsh wsl
+  zsh
   claude
-  omnisharp
 
   return $?
 }
@@ -221,7 +217,7 @@ macos() {
   install_brew_app "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewlist")"
   tmux
   neovim
-  zsh mac
+  zsh
   claude
 
   return $?

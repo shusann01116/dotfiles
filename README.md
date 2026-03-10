@@ -1,6 +1,6 @@
 # dotfiles
 
-My dotfiles especially for WSL
+My dotfiles for macOS and Linux
 
 - homebrew
 - tmux
