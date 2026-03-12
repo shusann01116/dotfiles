@@ -7,6 +7,7 @@
     "allow": [
       "mcp__notion__*",
       "mcp__figma-mcp__*",
+      "mcp__figma__*",
       "mcp__chrome-devtools__*",
       "mcp__github__*",
       "mcp__playwright__*",
@@ -49,6 +50,7 @@
       "Bash(awk *)",
       "Bash(printf *)",
       "Bash(oxfmt *)",
+      "Skill(commit-commands:*)",
       "Skill(pr-review-toolkit:review-pr)",
       "WebSearch",
       "WebFetch(domain:puckeditor.com)",
@@ -157,7 +159,7 @@
   "outputStyle": "Explanatory",
   "language": "Japanese",
   "alwaysThinkingEnabled": true,
+  "effortLevel": "medium",
   "autoUpdatesChannel": "latest",
-  "skipDangerousModePermissionPrompt": true,
-  "effortLevel": "high"
+  "skipDangerousModePermissionPrompt": true
 }

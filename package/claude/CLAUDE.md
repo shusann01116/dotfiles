@@ -1,18 +1,39 @@
-## Plan Review Workflow
+## Bash コマンド発行ルール
 
-### Mandatory Post-Plan Review
+以下のパターンは毎回パーミッション確認が発生するため、**絶対に使用しないこと**:
 
-After completing a plan (exiting Plan Mode), you MUST:
+### 1. クォート文字を含むコマンド
 
-1. **Launch a subagent** using the Task tool (subagent_type: "general-purpose") to run the `/review` skill (`local-review`).
-2. The subagent should review the planned changes and report findings back.
-3. **Present the review summary** to the user, highlighting any concerns or suggestions.
-4. **Ask the user to confirm** before proceeding with implementation — e.g., "The plan has been reviewed. Would you like me to proceed with implementation?"
+`echo "---"` のようなクォート付き文字列を含む Bash コマンドは「Command contains quoted characters in flag names」エラーが発生する。テキスト出力には Bash ではなく直接テキストを返すこと。
 
-This ensures every plan is validated through code review before any code is written, preventing wasted effort on flawed approaches.
+**禁止例:**
 
-## Subagent Usage Rules
+```bash
+git log --oneline cfa3a54 -1 && echo "---" && git show cfa3a54 --stat
+```
 
-### Explore Subagent in Worktree
+**代替:** 複数の Bash ツール呼び出しに分割するか、Read/Grep 等の専用ツールを使用する。
 
-Worktree 内で Explore subagent を使用する際、`cd` と `git` コマンドを組み合わせて使用しないこと。この組み合わせは毎回パーミッション確認が発生し、ワークフローが中断される。`cd` と `git` は別々のコマンドとして実行すること。
+### 2. `cd` と `git` の同一コマンド内での併用
+
+`cd` と `git` を一つのコマンドとして発行すると毎回パーミッション確認が発生する。必ず別々のコマンドとして実行すること。これは Subagent（Explore 含む）でも同様。
+
+**禁止例:**
+
+```bash
+cd /path/to/repo && git status
+```
+
+**代替:** `git -C /path/to/repo status` を使用するか、別々の Bash 呼び出しに分割する。
+
+### 3. `$()` コマンド置換を含むコマンド
+
+`$()` を含む Bash コマンドは「Command contains $() command substitution」エラーが発生する。
+
+**禁止例:**
+
+```bash
+for dir in /path/to/*/; do echo "=== $(basename "$dir") ==="; ls -1 "$dir"; done
+```
+
+**代替:** Glob/Read/Grep 等の専用ツールを使用するか、`$()` を使わない形にコマンドを分割する。
