@@ -70,7 +70,7 @@
       "Bash(rm)",
       "Bash(rmdir)"
     ],
-    "defaultMode": "plan"
+    "defaultMode": "auto"
   },
   "hooks": {
     "Notification": [
@@ -159,7 +159,9 @@
   "outputStyle": "Explanatory",
   "language": "Japanese",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "medium",
+  "effortLevel": "high",
   "autoUpdatesChannel": "latest",
-  "skipDangerousModePermissionPrompt": true
+  "voiceEnabled": true,
+  "skipDangerousModePermissionPrompt": true,
+  "skipAutoPermissionPrompt": true
 }

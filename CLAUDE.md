@@ -65,6 +65,18 @@ Each tool/application has its own directory under `package/`:
 - `package/zsh/` - Zsh shell configuration
 - `package/tmux/` - Terminal multiplexer configuration
 - `package/astronvim_config/` - Custom Neovim configuration (git submodule)
+- `package/claude/` - Claude Code global config (settings.json, CLAUDE.md, agents, skills)
+
+### Claude Code Configuration
+
+Claude Code のコンフィグディレクトリは `CLAUDE_CONFIG_DIR` 環境変数で `$XDG_CONFIG_HOME/claude` (`~/.config/claude/`) に設定されている（`package/zsh/.zprofile` で export）。
+
+`install.sh` の `claude()` 関数により以下のシンボリックリンクが作成される:
+
+- `settings.json`, `CLAUDE.md` → `~/.config/claude/` 直下にリンク
+- `agents/`, `skills/` → 個別ファイル単位で `~/.config/claude/agents/`, `~/.config/claude/skills/` にリンク
+
+**注意**: `package/claude/settings.json` が実体であり、`~/.config/claude/settings.json` はシンボリックリンク。編集は `package/claude/settings.json` に対して行うこと。
 
 ### Platform-Specific Configurations
 
