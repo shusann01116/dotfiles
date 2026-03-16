@@ -66,10 +66,7 @@
       "WebFetch(domain:localhost)",
       "WebFetch(domain:skills.sh)"
     ],
-    "ask": [
-      "Bash(rm)",
-      "Bash(rmdir)"
-    ],
+    "ask": ["Bash(rm)", "Bash(rmdir)"],
     "defaultMode": "auto"
   },
   "hooks": {
@@ -162,5 +159,6 @@
   "autoUpdatesChannel": "latest",
   "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "cleanupPeriodDays": 0
 }
