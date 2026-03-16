@@ -159,7 +159,6 @@
   "outputStyle": "Explanatory",
   "language": "Japanese",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
   "autoUpdatesChannel": "latest",
   "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,

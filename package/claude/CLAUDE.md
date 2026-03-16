@@ -37,3 +37,10 @@ Subagent（Explore 含む）にも同様に適用される。
 - **エラー**: `Command contains $() command substitution`
 - **禁止例**: `` for dir in /path/to/*/; do echo "=== $(basename "$dir") ==="; ls -1 "$dir"; done ``
 - **代替**: Glob・Read・Grep 等の専用ツールを使用 / `$()` を使わない形にコマンドを分割
+
+### シェル演算子前のバックスラッシュ
+
+- **トリガー**: `\;`, `\|`, `\&`, `\<`, `\>` のようにシェル演算子の前にバックスラッシュがある
+- **エラー**: `Command contains a backslash before a shell operator (;, |, &, <, >) which can hide command structure`
+- **禁止例**: `find /path -name "*.css" -exec grep -l "pattern" {} \;`
+- **代替**: Glob・Grep 等の専用ツールを使用 / `find -exec` を避けて `find -print` + パイプに分割
