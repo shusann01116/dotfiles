@@ -219,6 +219,18 @@ claude() {
     done
   fi
 
+  # Hooks（PreToolUse 等のフックスクリプトをリンク）
+  if [[ -d "$PACKAGE_ROOT/claude/hooks" ]]; then
+    mkdir -p "$config_dir/hooks"
+    for hook_file in "$PACKAGE_ROOT/claude/hooks"/*; do
+      [[ -f "$hook_file" ]] || continue
+      local hook_name
+      hook_name=$(basename "$hook_file")
+      backup_file "$config_dir/hooks/$hook_name"
+      link_file "$hook_file" "$config_dir/hooks/$hook_name"
+    done
+  fi
+
   # Skills（カスタムスキルのみ個別にリンク、外部symlinksを壊さない）
   if [[ -d "$PACKAGE_ROOT/claude/skills" ]]; then
     mkdir -p "$config_dir/skills"
