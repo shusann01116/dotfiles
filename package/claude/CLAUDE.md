@@ -23,6 +23,7 @@ Subagent（Explore 含む）にも同様に適用される。
 - **エラー**: `Contains backslash-escaped whitespace`
 - **禁止例**: `echo hello\ world`
 - **代替**: クォートで囲む（`echo 'hello world'`）/ 空白を含むパスは変数に格納せず専用ツールを使用
+- **git format での回避**: `git log --format=%H\ %ai` → `git log --format=%H%x20%ai` のように `%xNN`（16進コード）で空白を表現する
 
 ### `cd` と `git` の同一コマンド内での併用
 
