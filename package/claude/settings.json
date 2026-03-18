@@ -77,7 +77,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "terminal-notifier -title 'Claude Code' -message 'Claude needs your permission' -sound Basso"
+            "command": "$HOME/.config/claude/scripts/notify.sh 'Claude needs your permission' Basso"
           }
         ]
       },
@@ -107,7 +107,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "terminal-notifier -title 'Claude Code' -message 'Claude is waiting for your input' -sound default"
+            "command": "$HOME/.config/claude/scripts/notify.sh 'Claude is waiting for your input' default"
           }
         ]
       },

@@ -207,6 +207,18 @@ claude() {
     done
   fi
 
+  # Scripts（hookから呼び出すスクリプト群をリンク）
+  if [[ -d "$PACKAGE_ROOT/claude/scripts" ]]; then
+    mkdir -p "$config_dir/scripts"
+    for script_file in "$PACKAGE_ROOT/claude/scripts"/*; do
+      [[ -f "$script_file" ]] || continue
+      local script_name
+      script_name=$(basename "$script_file")
+      backup_file "$config_dir/scripts/$script_name"
+      link_file "$script_file" "$config_dir/scripts/$script_name"
+    done
+  fi
+
   # Skills（カスタムスキルのみ個別にリンク、外部symlinksを壊さない）
   if [[ -d "$PACKAGE_ROOT/claude/skills" ]]; then
     mkdir -p "$config_dir/skills"
