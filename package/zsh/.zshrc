@@ -43,6 +43,7 @@ alias lg=lazygit
 alias d=docker
 alias ld=lazydocker
 alias b=bat
+alias c=claude
 alias wm=workmux
 alias ..='cd ..'
 
