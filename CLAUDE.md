@@ -18,9 +18,10 @@ installation and package management through Homebrew.
 # The script auto-detects platform (macOS/Linux) and installs:
 # - Homebrew (if not present)
 # - All packages from package/brew/brewlist
-# - Configured shells (Fish/Zsh)
+# - Zsh with Oh My Zsh
 # - Neovim with AstroNvim
 # - tmux configuration
+# - Claude Code configuration (XDG_CONFIG_HOME aware)
 ```
 
 ## Development Tools and Commands
@@ -41,7 +42,8 @@ brew update && brew upgrade
 ### Development Environment
 
 - **Primary Editor**: Neovim with AstroNvim configuration
-- **Shell**: Fish (primary) with vi-mode, Zsh
+- **Shell**: Zsh with Oh My Zsh
+- **Terminal Emulator**: Wezterm
 - **Terminal Multiplexer**: tmux with custom configuration
 - **Version Manager**: mise for managing development tool versions
 
@@ -50,8 +52,8 @@ brew update && brew upgrade
 - **Languages**: Go, Rust, Node.js, Python 3.11, .NET
 - **DevOps**: Docker, Kubernetes CLI, Terraform, AWS CLI, Dagger
 - **Git Tools**: lazygit, GitHub CLI (gh)
-- **Modern CLI**: fd, ripgrep, lsd, starship prompt
-- **Language Servers**: terraform-ls, yaml-language-server
+- **Modern CLI**: fd, ripgrep, lsd, starship prompt, bat, zoxide
+- **Language Servers**: terraform-ls, yaml-language-server, omnisharp
 
 ## Architecture
 
@@ -59,13 +61,13 @@ brew update && brew upgrade
 
 Each tool/application has its own directory under `package/`:
 
-- `package/fish/` - Fish shell configuration with aliases and completions
 - `package/brew/` - Homebrew package lists (brewlist, brewtap)
-- `package/mise/` - Development tool version configuration
-- `package/zsh/` - Zsh shell configuration
+- `package/zsh/` - Zsh shell configuration (Oh My Zsh)
 - `package/tmux/` - Terminal multiplexer configuration
+- `package/wezterm/` - Wezterm terminal emulator configuration
 - `package/astronvim_config/` - Custom Neovim configuration (git submodule)
 - `package/claude/` - Claude Code global config (settings.json, CLAUDE.md, agents, skills)
+- `package/yabai/` + `package/skhd/` - macOS window management (tiling WM)
 
 ### Claude Code Configuration
 
@@ -78,10 +80,6 @@ Claude Code のコンフィグディレクトリは `CLAUDE_CONFIG_DIR` 環境�
 
 **注意**: `package/claude/settings.json` が実体であり、`~/.config/claude/settings.json` はシンボリックリンク。編集は `package/claude/settings.json` に対して行うこと。
 
-### Platform-Specific Configurations
-
-- `package/yabai/` + `package/skhd/` - macOS window management (tiling WM)
-
 ### Installation Strategy
 
 The install.sh script:
@@ -91,6 +89,39 @@ The install.sh script:
 3. Backs up existing configurations with timestamps
 4. Creates symbolic links from package/ directories to expected locations
 5. Runs platform-specific setup (linux() or macos() functions)
+6. Installs Claude Code config to `$XDG_CONFIG_HOME/claude`
+
+## Development Workflow
+
+### Pre-commit Hooks
+
+This repository uses pre-commit hooks for code quality:
+
+- **end-of-file-fixer** - Ensures files end with a newline
+- **trailing-whitespace** - Removes trailing whitespace
+- **markdownlint** - Lints Markdown files
+- **prettier** - Formats supported files
+- **hadolint** - Lints Dockerfiles
+
+Run manually: `pre-commit run --all-files`
+
+### EditorConfig
+
+All files follow `.editorconfig` settings:
+
+- Charset: UTF-8
+- Line endings: LF
+- Indent: 2 spaces
+- Trim trailing whitespace
+- Insert final newline
+
+### Dependabot
+
+Automated dependency updates via `.github/dependabot.yml`:
+
+- **GitHub Actions**: weekly updates
+- **Git submodules (root)**: monthly updates
+- **AstroNvim submodule**: daily updates
 
 ## Common Development Patterns
 
@@ -101,33 +132,29 @@ The install.sh script:
 3. Add configuration files to appropriate `package/<tool>/` directory
 4. Update install.sh if symlinks needed
 
-### Fish Shell Aliases
+### Zsh Aliases
 
-Key aliases defined in `package/fish/config.fish`:
+Key aliases defined in `package/zsh/.zshrc`:
 
 - `v` → nvim
 - `lg` → lazygit
-- `tf` → terraform
-- `k` → kubectl
 - `g` → git
+- `k` → kubectl
 - `d` → docker
+- `p` → pnpm
+- `ld` → lazydocker
+- `b` → bat
 
 ### Path Management
 
-Fish automatically adds these to PATH:
+Zsh adds these to PATH via `.zshrc` and `.zprofile`:
 
 - `$HOME/.local/bin`
-- `$HOME/go/bin` (Go binaries)
-- `$HOME/.cargo/bin` (Rust binaries)
-- `$HOME/.dotnet/tools` (.NET tools)
+- `/opt/homebrew/bin` (macOS Homebrew)
+
+Additional paths are managed by mise for language-specific toolchains.
 
 ## Special Features
-
-### Containerized Development
-
-- `Dockerfile` creates Alpine Linux environment with full toolchain
-- Pre-configured with AstroNvim setup
-- Useful for consistent development environments
 
 ### macOS Window Management
 
@@ -139,12 +166,15 @@ Fish automatically adds these to PATH:
 
 - Pulumi secrets stored in `$HOME/.config/secrets/pulumi-secret`
 - GPG TTY properly configured for commit signing
+- GitHub PAT retrieved from macOS Keychain via `security` command
 
 ## Configuration Files to Modify
 
 When adding new tools or making changes:
 
 - **package/brew/brewlist** - Add new Homebrew packages
-- **package/fish/config.fish** - Add aliases, environment variables
+- **package/zsh/.zshrc** - Add aliases, environment variables
 - **package/mise/config.toml** - Manage language versions
+- **package/wezterm/wezterm.lua** - Terminal emulator configuration
+- **package/claude/settings.json** - Claude Code permissions and settings
 - **install.sh** - Add new symlink operations or installation steps
