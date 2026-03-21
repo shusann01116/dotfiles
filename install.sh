@@ -247,22 +247,23 @@ claude() {
   fi
 }
 
-linux() {
-  info "Entering linux setup..."
-  execute_sudo apt-get update && execute_sudo apt-get install -y build-essential curl file git || exit 1
-  homebrew
-  install_brew_tap "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewtap")"
-  install_brew_app "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewlist")"
-  tmux
-  neovim
-  zsh
-  claude
+AVAILABLE_PACKAGES=(homebrew tmux neovim zsh claude)
 
-  return $?
+usage() {
+  echo "Usage: $0 <package_name|all>"
+  echo ""
+  echo "Commands:"
+  echo "  all    Install everything"
+  echo ""
+  echo "Available packages: ${AVAILABLE_PACKAGES[*]}"
 }
 
-macos() {
-  info "Entering macos setup..."
+install_all() {
+  if [[ "$(uname -s)" == "Linux" ]]; then
+    info "Installing Linux build dependencies..."
+    execute_sudo apt-get update && execute_sudo apt-get install -y build-essential curl file git || exit 1
+  fi
+
   homebrew
   install_brew_tap "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewtap")"
   install_brew_app "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewlist")"
@@ -270,8 +271,6 @@ macos() {
   neovim
   zsh
   claude
-
-  return $?
 }
 
 main() {
@@ -280,20 +279,27 @@ main() {
     PACKAGE_ROOT="$(pwd)/package"
   fi
 
-  os=$(uname -s)
-  case $os in
-  Darwin)
-    macos
-    ;;
-  Linux)
-    linux
-    ;;
-  *)
-    error "Unsupported OS: $os"
-    exit 1
-    ;;
-  esac
+  if [[ $# -eq 0 ]]; then
+    usage
+    exit 0
+  fi
+
+  local cmd="$1"
+  if [[ "$cmd" == "all" ]]; then
+    install_all
+  else
+    local valid=false
+    for p in "${AVAILABLE_PACKAGES[@]}"; do
+      if [[ "$p" == "$cmd" ]]; then valid=true; break; fi
+    done
+    if [[ "$valid" == false ]]; then
+      error "Unknown package: $cmd"
+      usage
+      exit 1
+    fi
+    "$cmd"
+  fi
 }
 
-main
+main "$@"
 info "Done!"
