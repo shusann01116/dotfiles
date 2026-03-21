@@ -167,15 +167,18 @@ zsh() {
     brew install zsh
   fi
 
-  local -a zsh_dotfiles=(
-    .zshrc
-    .zprofile
-  )
+  # Clean up legacy symlinks in $HOME
+  backup_file "$HOME/.zshrc"
+  backup_file "$HOME/.zprofile"
+  backup_file "$HOME/.zshenv"
 
-  for dotfile in "${zsh_dotfiles[@]}"; do
-    backup_file "$HOME/$dotfile"
-    [[ -f "$PACKAGE_ROOT/zsh/$dotfile" ]] && link_file "$PACKAGE_ROOT/zsh/$dotfile" "$HOME/$dotfile"
-  done
+  # Directory symlink: ~/.config/zsh -> package/zsh
+  local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}"
+  backup_file "$config_dir/zsh"
+  ln -s "$PACKAGE_ROOT/zsh" "$config_dir/zsh"
+
+  # Bootstrap: only .zshenv remains in $HOME (sets ZDOTDIR)
+  link_file "$PACKAGE_ROOT/zsh/.zshenv" "$HOME/.zshenv"
 
   return $?
 }

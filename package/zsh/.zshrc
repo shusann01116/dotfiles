@@ -2,6 +2,12 @@ fpath=("$HOME/.oh-my-zsh/custom/completions" $fpath)
 
 export PATH="$HOME/.local/bin:$PATH"
 
+# XDG directories for zsh state/cache (prevent polluting ZDOTDIR)
+export HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
+mkdir -p "${HISTFILE:h}"
+export ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-${ZSH_VERSION}"
+mkdir -p "${ZSH_COMPDUMP:h}"
+
 # Oh My Zsh configuration file
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
