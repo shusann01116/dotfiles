@@ -143,6 +143,26 @@
           }
         ]
       }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_CONFIG_DIR/hooks/suggest-claude-md.sh"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_CONFIG_DIR/hooks/suggest-claude-md.sh"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -166,7 +186,17 @@
     "product-management@knowledge-work-plugins": true,
     "typescript-lsp@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true
+    "plugin-dev@claude-plugins-official": true,
+    "canary-ai-agent-skills@canary-ai-agent-skills": true,
+    "superpowers@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "canary-ai-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "SSK-TBD/ai-agent-skills"
+      }
+    }
   },
   "outputStyle": "Explanatory",
   "language": "Japanese",
