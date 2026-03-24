@@ -65,7 +65,8 @@
       "WebFetch(domain:www.npmjs.com)",
       "WebFetch(domain:medium.com)",
       "WebFetch(domain:localhost)",
-      "WebFetch(domain:skills.sh)"
+      "WebFetch(domain:skills.sh)",
+      "WebFetch(domain:support.google.com)"
     ],
     "ask": [
       "Bash(rm)",
