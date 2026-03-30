@@ -66,13 +66,26 @@
       "WebFetch(domain:medium.com)",
       "WebFetch(domain:localhost)",
       "WebFetch(domain:skills.sh)",
-      "WebFetch(domain:google.com)"
+      "WebFetch(domain:google.com)",
+      "mcp__plugin_figma_figma__*",
+      "mcp__plugin_github_github__*",
+      "mcp__claude_ai_Notion__*",
+      "mcp__plugin_Notion_notion__*",
+      "Bash(agent-browser *)",
+      "Bash(npx agent-browser *)",
+      "Bash(openspec *)",
+      "WebFetch(domain:tailwindcss.com)",
+      "WebFetch(domain:ui.shadcn.com)",
+      "Bash(git:*)",
+      "Bash(psql:*)",
+      "WebFetch(domain:www.shadcn.io)",
+      "Bash(ls:*)"
     ],
     "ask": [
       "Bash(rm)",
       "Bash(rmdir)"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "default"
   },
   "hooks": {
     "PreToolUse": [
@@ -186,5 +199,6 @@
   "autoUpdatesChannel": "latest",
   "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "useAutoModeDuringPlan": true
 }
