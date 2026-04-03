@@ -28,19 +28,26 @@ On failure: fix the issue, then return to step 3.
 Create commits following Conventional Commits (lowercase subject).
 Push to remote with `-u origin HEAD`.
 Create a draft PR following `.github/pull_request_template.md`.
-After PR creation, trigger CI review:
-
-```bash
-gh pr comment <number> --body '@claude review'
-```
+CI review is triggered automatically on draft PR creation — do NOT post `@claude review` for the initial review.
 
 Report: `workmux send <coordinator-handle> "<pr-id>: PR #<number> 作成"`
 
 ## 6. CI Review Response Loop
 
-Wait ~5 minutes, then check for CI review comments via `gh api`.
+Wait for CI checks to complete, then check for review comments.
 
-Do NOT use `/pr-review-response`. Instead, handle CI feedback directly:
+**How to wait**: Use `gh pr checks` with `--watch` in a background Bash call.
+This blocks until all checks finish and returns a notification when done.
+
+```bash
+Bash(command: "gh pr checks <number> --watch --fail-level error", run_in_background: true)
+```
+
+Do NOT use `sleep` or promise to "check in N minutes" — Claude Code has no
+timer primitive. Always use an event-driven wait (`--watch`).
+
+When the background notification arrives, handle CI feedback directly
+(do NOT use `/pr-review-response`):
 
 1. Fetch review comments via `gh api repos/<owner>/<repo>/issues/<number>/comments`
 2. Classify issues: Must Fix / Should Fix / Nice to Have
@@ -50,7 +57,8 @@ Do NOT use `/pr-review-response`. Instead, handle CI feedback directly:
 6. Push changes
 7. Post response comment via `gh pr comment`
 8. Request re-review: `gh pr comment <number> --body '@claude review'`
-9. Return to the wait step
+9. Wait again: `gh pr checks <number> --watch --fail-level error` (background)
+10. Repeat from step 1
 
 If 3+ review rounds occur without resolution:
 Report: `workmux send <coordinator-handle> "<pr-id>: BLOCKED CIレビュー3回超"`

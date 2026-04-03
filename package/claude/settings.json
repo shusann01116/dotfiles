@@ -79,12 +79,10 @@
       "Bash(git:*)",
       "Bash(psql:*)",
       "WebFetch(domain:www.shadcn.io)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(workmux *)"
     ],
-    "ask": [
-      "Bash(rm)",
-      "Bash(rmdir)"
-    ],
+    "ask": ["Bash(rm)", "Bash(rmdir)"],
     "defaultMode": "default"
   },
   "hooks": {

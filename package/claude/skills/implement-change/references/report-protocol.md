@@ -10,13 +10,13 @@ PR-N: <status>
 
 N is the PR number (1-indexed). status is one of:
 
-| status              | Meaning                                  | Timing                   |
-| ------------------- | ---------------------------------------- | ------------------------ |
-| セルフレビューPASS  | /pr-review passed with zero issues       | Before push              |
-| PR #\<number\> 作成 | Draft PR created + @claude review posted | After push + PR creation |
-| CI LGTM             | CI review returned LGTM/Approve          | After CI review passes   |
-| 完了                | /minimize-claude-comments executed       | All steps complete       |
-| BLOCKED \<reason\>  | Unresolvable issue encountered           | Any time                 |
+| status              | Meaning                                     | Timing                   |
+| ------------------- | ------------------------------------------- | ------------------------ |
+| セルフレビューPASS  | /pr-review passed with zero issues          | Before push              |
+| PR #\<number\> 作成 | Draft PR created (CI review auto-triggered) | After push + PR creation |
+| CI LGTM             | CI review returned LGTM/Approve             | After CI review passes   |
+| 完了                | /minimize-claude-comments executed          | All steps complete       |
+| BLOCKED \<reason\>  | Unresolvable issue encountered              | Any time                 |
 
 ## BLOCKED Reason Examples
 

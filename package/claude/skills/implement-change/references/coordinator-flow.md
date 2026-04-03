@@ -51,11 +51,21 @@ On timeout: run `workmux capture <handle>` for each failed agent, then escalate 
 
 ## Step 4: Wait for Completion + Receive Reports
 
+Run `workmux wait` in the **background** so the coordinator session stays idle
+and can receive `workmux send` messages from agents.
+
 ```bash
-workmux wait <handle-1> <handle-2> ... --timeout 7200
+Bash(command: "workmux wait <handle-1> <handle-2> ... --timeout 7200", run_in_background: true)
 ```
 
-Agents report progress via `workmux send`. Monitor for:
+**Why background**: A foreground `workmux wait` blocks the Bash tool, which
+blocks the coordinator session. While blocked, `workmux send` messages from
+agents arrive in the tmux input buffer but cannot be processed. Running in
+background keeps the coordinator idle — agent reports arrive as user messages
+and are processed immediately.
+
+**Message processing**: When an agent sends `workmux send <coordinator> "PR-1: CI LGTM"`,
+the coordinator receives it as a new user message. Parse the status and track progress.
 
 - `PR-N: 完了` — Agent completed all steps successfully
 - `PR-N: BLOCKED <reason>` — Agent needs help
@@ -65,7 +75,9 @@ On BLOCKED: run `workmux capture <handle>` for details, then either:
 - Send instructions via `workmux send <handle> "<instructions>"`
 - Escalate to human
 
-On timeout: run `workmux capture` on all agents, escalate to human.
+**Completion**: When the background `workmux wait` notification arrives,
+all agents have finished. Proceed to Step 5. On timeout: run `workmux capture`
+on all agents, escalate to human.
 
 ## Step 5: Phase Completion → Next Phase
 

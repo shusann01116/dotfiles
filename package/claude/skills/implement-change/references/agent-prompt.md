@@ -51,7 +51,7 @@ Execute the following steps in order.
 3. **Pre-push validation**: Run the task's \_Verification commands + lint for affected packages. On failure → fix → return to step 2.
 4. **Commit, push, create draft PR**:
    Follow .github/pull_request_template.md for PR description.
-   After PR creation: `gh pr comment <number> --body '@claude review'`
+   CI review is triggered automatically on draft PR creation — do NOT post `@claude review` for the initial review.
    → workmux send <coordinator-handle> "<pr-id>: PR #<number> 作成"
 5. **CI review response loop**:
    - Wait ~5 min → check CI review comments via `gh api`
