@@ -82,21 +82,17 @@
       "Bash(ls:*)",
       "Bash(workmux *)"
     ],
-    "ask": ["Bash(rm)", "Bash(rmdir)"],
-    "defaultMode": "default"
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)"
+    ],
+    "ask": [
+      "Bash(rm)",
+      "Bash(rmdir)"
+    ],
+    "defaultMode": "auto"
   },
   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_CONFIG_DIR/hooks/validate-bash.sh"
-          }
-        ]
-      }
-    ],
     "Notification": [
       {
         "matcher": "permission_prompt",
@@ -195,8 +191,10 @@
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "autoUpdatesChannel": "latest",
-  "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "skipAutoPermissionPrompt": true,
-  "useAutoModeDuringPlan": true
+  "teammateMode": "auto",
+  "agentPushNotifEnabled": true,
+  "useAutoModeDuringPlan": true,
+  "voiceEnabled": true,
+  "skipAutoPermissionPrompt": true
 }
