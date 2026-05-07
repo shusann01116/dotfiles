@@ -36,7 +36,6 @@ export PATH="/opt/homebrew/bin:$PATH"
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 export GITHUB_PERSONAL_ACCESS_TOKEN="$(security find-generic-password -a $USER -s github-pat -w 2>/dev/null)"
 
-
 # aliases
 alias g=git
 alias p=pnpm
@@ -59,27 +58,27 @@ if command -v workmux >/dev/null 2>&1; then eval "$(workmux completions zsh)"; f
 # dotfilesのこだわりを晒す
 # https://www.m3tech.blog/entry/dotfiles-bonsai
 case "$OSTYPE" in
-    darwin*)
-        (( ${+commands[gdate]} )) && alias date='gdate'
-        (( ${+commands[gls]} )) && alias ls='gls'
-        (( ${+commands[gmkdir]} )) && alias mkdir='gmkdir'
-        (( ${+commands[gcp]} )) && alias cp='gcp'
-        (( ${+commands[gmv]} )) && alias mv='gmv'
-        (( ${+commands[grm]} )) && alias rm='grm'
-        (( ${+commands[gdu]} )) && alias du='gdu'
-        (( ${+commands[ghead]} )) && alias head='ghead'
-        (( ${+commands[gtail]} )) && alias tail='gtail'
-        (( ${+commands[gsed]} )) && alias sed='gsed'
-        (( ${+commands[ggrep]} )) && alias grep='ggrep'
-        (( ${+commands[gfind]} )) && alias find='gfind'
-        (( ${+commands[gdirname]} )) && alias dirname='gdirname'
-        (( ${+commands[gxargs]} )) && alias xargs='gxargs'
-    ;;
+darwin*)
+  ((${+commands[gdate]})) && alias date='gdate'
+  ((${+commands[gls]})) && alias ls='gls'
+  ((${+commands[gmkdir]})) && alias mkdir='gmkdir'
+  ((${+commands[gcp]})) && alias cp='gcp'
+  ((${+commands[gmv]})) && alias mv='gmv'
+  ((${+commands[grm]})) && alias rm='grm'
+  ((${+commands[gdu]})) && alias du='gdu'
+  ((${+commands[ghead]})) && alias head='ghead'
+  ((${+commands[gtail]})) && alias tail='gtail'
+  ((${+commands[gsed]})) && alias sed='gsed'
+  ((${+commands[ggrep]})) && alias grep='ggrep'
+  ((${+commands[gfind]})) && alias find='gfind'
+  ((${+commands[gdirname]})) && alias dirname='gdirname'
+  ((${+commands[gxargs]})) && alias xargs='gxargs'
+  ;;
 esac
 
 zshaddhistory() {
-    local line="${1%%$'\n'}"
-    [[ ! "$line" =~ "^(cd|jj?|lazygit|la|ll|ls|rm|rmdir)($| )" ]]
+  local line="${1%%$'\n'}"
+  [[ ! "$line" =~ "^(cd|jj?|lazygit|la|ll|ls|rm|rmdir)($| )" ]]
 }
 
 # ghq
@@ -93,4 +92,4 @@ function ghq-fzf() {
   zle -R -c
 }
 zle -N ghq-fzf
-bindkey '^g' ghq-fzf
+bindkey '^h' ghq-fzf
