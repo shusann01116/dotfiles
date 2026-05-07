@@ -82,14 +82,8 @@
       "Bash(ls:*)",
       "Bash(workmux *)"
     ],
-    "deny": [
-      "Read(**/.env)",
-      "Read(**/.env.*)"
-    ],
-    "ask": [
-      "Bash(rm)",
-      "Bash(rmdir)"
-    ],
+    "deny": ["Read(**/.env)", "Read(**/.env.local)", "Read(**/.env.*.local)"],
+    "ask": ["Bash(rm)", "Bash(rmdir)"],
     "defaultMode": "auto"
   },
   "hooks": {

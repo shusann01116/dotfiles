@@ -1,4 +1,4 @@
-fpath=("$HOME/.oh-my-zsh/custom/completions" $fpath)
+fpath=("$ZDOTDIR/completions" "$HOME/.oh-my-zsh/custom/completions" $fpath)
 
 export PATH="$HOME/.local/bin:$PATH"
 
