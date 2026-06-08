@@ -14,10 +14,13 @@
       "mcp__playwright__*",
       "mcp__context7__*",
       "mcp__plugin_context7_context7__*",
-      "mcp__lsmcp__lsmcp_*",
-      "mcp__typescript__lsmcp_*",
+      "mcp__lsmcp__*",
+      "mcp__typescript__*",
       "mcp__spec-workflow",
-      "mcp__claude_ai_*",
+      "mcp__claude_ai_Gmail__*",
+      "mcp__claude_ai_Google_Calendar__*",
+      "mcp__claude_ai_Google_Drive__*",
+      "mcp__claude_ai_Figma__*",
       "mcp__claude_ai_Slack__*",
       "Bash(gh *)",
       "Bash(gh api */comments | jq *)",
@@ -170,7 +173,9 @@
     "claude-code-setup@claude-plugins-official": true,
     "plugin-dev@claude-plugins-official": true,
     "canary-ai-agent-skills@canary-ai-agent-skills": true,
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "playground@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "canary-ai-agent-skills": {
@@ -187,8 +192,10 @@
   "autoUpdatesChannel": "latest",
   "skipDangerousModePermissionPrompt": true,
   "teammateMode": "auto",
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
   "useAutoModeDuringPlan": true,
   "voiceEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "tui": "fullscreen"
 }
