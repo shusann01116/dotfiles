@@ -98,7 +98,10 @@ link_file() {
 }
 
 herdr() {
-  if ! command -v herdr >/dev/null 2>&1; then
+  # NOTE: this function is named `herdr`, so a bare `herdr` command would recurse
+  # into it. Detect the binary with `type -P` (PATH only) and invoke it with
+  # `command herdr` (bypasses the function).
+  if [[ -z "$(type -P herdr)" ]]; then
     info "Installing herdr..."
     brew install herdr
   fi
@@ -108,14 +111,14 @@ herdr() {
   backup_file "$config_dir/config.toml"
   link_file "$PACKAGE_ROOT/herdr/config.toml" "$config_dir/config.toml"
 
-  # worktree-bootstrap プラグインを冪等に登録
+  # worktree-bootstrap プラグインを冪等に登録（バイナリ呼び出しは command herdr）
   local plugin_dir="$PACKAGE_ROOT/herdr/plugins/worktree-bootstrap"
-  if command -v herdr >/dev/null 2>&1 && [[ -f "$plugin_dir/herdr-plugin.toml" ]]; then
-    if herdr plugin list 2>/dev/null | grep -q "shusann.worktree-bootstrap"; then
+  if [[ -n "$(type -P herdr)" ]] && [[ -f "$plugin_dir/herdr-plugin.toml" ]]; then
+    if command herdr plugin list 2>/dev/null | grep -q "shusann.worktree-bootstrap"; then
       info "herdr plugin worktree-bootstrap already linked"
     else
       info "Linking herdr plugin worktree-bootstrap"
-      herdr plugin link "$plugin_dir" || info "herdr plugin link failed (link manually once the herdr server is running)"
+      command herdr plugin link "$plugin_dir" || info "herdr plugin link failed (link manually once the herdr server is running)"
     fi
   fi
 }
