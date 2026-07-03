@@ -34,6 +34,11 @@ export PATH="/opt/homebrew/bin:$PATH"
 # mise shims を brew より前に置くことで mise 管理 tool を常に優先させる
 # （mise activate は .mise.toml 下でしか tool path を prepend しないため、shims で fallback を張る）
 export PATH="$HOME/.local/share/mise/shims:$PATH"
+# herdr worktree 配下の mise.toml を自動的に信頼する。
+# 新規 worktree を開くと setup タブの zsh 起動時に mise activate が untrusted config を
+# 検出して対話 trust プロンプトを出し、注入したセットアップコマンドと衝突する。パスを
+# 事前信頼することで shell-init 時点でプロンプトが出ず、セットアップが確実に走る。
+export MISE_TRUSTED_CONFIG_PATHS="$HOME/.herdr/worktrees"
 export GITHUB_PERSONAL_ACCESS_TOKEN="$(security find-generic-password -a $USER -s github-pat -w 2>/dev/null)"
 
 # aliases
