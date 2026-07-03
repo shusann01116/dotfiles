@@ -1,0 +1,9 @@
+id = "shusann.worktree-bootstrap"
+name = "Worktree Bootstrap"
+version = "0.1.0"
+min_herdr_version = "0.7.0"
+platforms = ["macos", "linux"]
+
+[[events]]
+on = "worktree.created"
+command = ["bash", "dispatch.sh"]
