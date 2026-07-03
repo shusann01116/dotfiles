@@ -58,7 +58,14 @@ If conflicts occur:
   `git rebase --continue`
 - If a conflict is too complex or unclear, ask for guidance before proceeding
 
-## Step 3: Merge
+## Step 3: Check merge policy
+
+Before merging, check whether the target repository follows a PR-based workflow (e.g. CLAUDE.md mentions Squash Merge, an AI review gate, or requires PRs for all changes).
+
+- If the repository is PR-based, do NOT use `workmux merge` — merging directly into the local base branch bypasses that workflow. Switch to `/open-pr` or another PR-based workflow instead.
+- If the repository has no PR-based workflow, proceed with direct merge below.
+
+## Step 4: Merge
 
 Run: `workmux merge --rebase --notification [--keep] [--no-verify]`
 

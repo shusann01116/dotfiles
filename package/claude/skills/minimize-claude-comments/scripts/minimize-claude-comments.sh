@@ -174,7 +174,7 @@ for ((i = 0; i < TARGET_COUNT; i += BATCH_SIZE)); do
     continue
   }
 
-  BATCH_SUCCESS=$(echo "${RESULT}" | jq '[to_entries[] | select(.value.minimizedComment.isMinimized == true)] | length')
+  BATCH_SUCCESS=$(echo "${RESULT}" | jq '[.data | to_entries[] | select(.value.minimizedComment.isMinimized == true)] | length')
   MINIMIZED=$((MINIMIZED + BATCH_SUCCESS))
 done
 
