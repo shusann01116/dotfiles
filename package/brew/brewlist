@@ -93,6 +93,7 @@ harfbuzz
 haskell-stack
 hdf5
 helm
+herdr
 hid_bootloader_cli
 hidapi
 highway
@@ -285,7 +286,6 @@ terraform
 tesseract
 texlive
 theora
-tmux
 tree
 tree-sitter
 unbound

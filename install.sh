@@ -97,16 +97,16 @@ link_file() {
   ln -sf "$src" "$dest"
 }
 
-tmux() {
-  if ! command -v tmux >/dev/null 2>&1; then
-    info "Installing tmux..."
-    brew install tmux
+herdr() {
+  if ! command -v herdr >/dev/null 2>&1; then
+    info "Installing herdr..."
+    brew install herdr
   fi
 
-  backup_file "$HOME/.tmux.conf"
-  backup_file "$HOME/.tmux.conf.local"
-  link_file "$PACKAGE_ROOT/tmux/.tmux.conf" "$HOME/.tmux.conf"
-  link_file "$PACKAGE_ROOT/tmux/.tmux.conf.local" "$HOME/.tmux.conf.local"
+  local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/herdr"
+  mkdir -p "$config_dir"
+  backup_file "$config_dir/config.toml"
+  link_file "$PACKAGE_ROOT/herdr/config.toml" "$config_dir/config.toml"
 }
 
 homebrew() {
@@ -247,7 +247,7 @@ claude() {
   fi
 }
 
-AVAILABLE_PACKAGES=(homebrew tmux neovim zsh claude)
+AVAILABLE_PACKAGES=(homebrew herdr neovim zsh claude)
 
 usage() {
   echo "Usage: $0 <package_name|all>"
@@ -267,7 +267,7 @@ install_all() {
   homebrew
   install_brew_tap "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewtap")"
   install_brew_app "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewlist")"
-  tmux
+  herdr
   neovim
   zsh
   claude
