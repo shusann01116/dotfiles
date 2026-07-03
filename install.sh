@@ -107,6 +107,17 @@ herdr() {
   mkdir -p "$config_dir"
   backup_file "$config_dir/config.toml"
   link_file "$PACKAGE_ROOT/herdr/config.toml" "$config_dir/config.toml"
+
+  # worktree-bootstrap プラグインを冪等に登録
+  local plugin_dir="$PACKAGE_ROOT/herdr/plugins/worktree-bootstrap"
+  if command -v herdr >/dev/null 2>&1 && [[ -f "$plugin_dir/herdr-plugin.toml" ]]; then
+    if herdr plugin list 2>/dev/null | grep -q "shusann.worktree-bootstrap"; then
+      info "herdr plugin worktree-bootstrap already linked"
+    else
+      info "Linking herdr plugin worktree-bootstrap"
+      herdr plugin link "$plugin_dir" || info "herdr plugin link failed (link manually once the herdr server is running)"
+    fi
+  fi
 }
 
 homebrew() {

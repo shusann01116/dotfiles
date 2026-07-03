@@ -64,6 +64,9 @@ Each tool/application has its own directory under `package/`:
 - `package/brew/` - Homebrew package lists (brewlist, brewtap)
 - `package/zsh/` - Zsh shell configuration (Oh My Zsh)
 - `package/tmux/` - Terminal multiplexer configuration
+- `package/herdr/` - herdr (terminal workspace manager) config and plugins
+  - `plugins/worktree-bootstrap/` - `worktree.created` 時に対象リポジトリの
+    `.herdr/setup`（ローカル限定スクリプト）を可視タブで自動実行する汎用プラグイン
 - `package/wezterm/` - Wezterm terminal emulator configuration
 - `package/astronvim_config/` - Custom Neovim configuration (git submodule)
 - `package/claude/` - Claude Code global config (settings.json, CLAUDE.md, agents, skills)
