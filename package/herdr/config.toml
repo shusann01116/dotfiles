@@ -1,0 +1,34 @@
+onboarding = false
+
+[theme]
+name = "catppuccin"
+
+[terminal]
+default_shell = "zsh"
+
+[update]
+channel = "stable"
+version_check = true
+manifest_check = true
+
+[keys]
+prefix = "ctrl+g"
+navigate_workspace_up = "ctrl+k"
+navigate_workspace_down = "ctrl+j"
+previous_agent = "prefix+comma"
+next_agent = "prefix+period"
+
+[[keys.command]]
+key = "prefix+alt+g"
+type = "pane"
+command = "lazygit"
+description = "run lazygit"
+
+[ui.toast]
+delivery = "system"
+
+[ui.sound]
+enabled = true
+
+[session]
+resume_agents_on_restore = true
