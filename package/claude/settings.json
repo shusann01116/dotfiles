@@ -85,10 +85,18 @@
       "Bash(ls:*)",
       "Bash(workmux *)"
     ],
-    "deny": ["Read(**/.env)", "Read(**/.env.local)", "Read(**/.env.*.local)"],
-    "ask": ["Bash(rm)", "Bash(rmdir)"],
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.local)",
+      "Read(**/.env.*.local)"
+    ],
+    "ask": [
+      "Bash(rm)",
+      "Bash(rmdir)"
+    ],
     "defaultMode": "auto"
   },
+  "model": "sonnet",
   "hooks": {
     "Notification": [
       {
@@ -186,16 +194,16 @@
     }
   },
   "outputStyle": "Explanatory",
-  "language": "Japanese",
+  "language": "English",
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
-  "teammateMode": "auto",
+  "teammateMode": "in-process",
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "useAutoModeDuringPlan": true,
-  "voiceEnabled": true,
-  "tui": "fullscreen"
+  "voiceEnabled": true
 }
