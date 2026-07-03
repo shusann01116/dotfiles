@@ -12,7 +12,7 @@ version_check = true
 manifest_check = true
 
 [keys]
-prefix = "ctrl+g"
+prefix = "ctrl+t"
 navigate_workspace_up = "ctrl+k"
 navigate_workspace_down = "ctrl+j"
 previous_agent = "prefix+comma"
