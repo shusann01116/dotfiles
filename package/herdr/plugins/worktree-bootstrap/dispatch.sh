@@ -44,8 +44,10 @@ setup="$main/.herdr/setup"
 
 echo "dispatch: bootstrapping $wt via $setup (workspace $ws)" >&2
 
-pane=$("$HERDR" tab create --workspace "$ws" --cwd "$wt" --label setup --json 2>/dev/null \
-  | jq -r '.pane_id // .focused_pane_id // .pane.id // empty' 2>/dev/null || true)
+# `tab create` has no --json flag; it returns JSON by default, with the new
+# pane id at .result.root_pane.pane_id.
+pane=$("$HERDR" tab create --workspace "$ws" --cwd "$wt" --label setup 2>/dev/null \
+  | jq -r '.result.root_pane.pane_id // .root_pane.pane_id // .pane_id // empty' 2>/dev/null || true)
 
 if [ -z "$pane" ]; then
   echo "dispatch: failed to resolve setup pane id" >&2

@@ -22,7 +22,7 @@ cat > "$FAKE_BIN/herdr" <<'EOF'
 #!/usr/bin/env bash
 echo "herdr $*" >> "$HERDR_CALLS"
 if [ "$1" = "tab" ] && [ "$2" = "create" ]; then
-  echo '{"pane_id":"pane-123"}'
+  echo '{"result":{"root_pane":{"pane_id":"pane-123"},"type":"tab_created"}}'
 fi
 EOF
 chmod +x "$FAKE_BIN/herdr"
@@ -65,7 +65,7 @@ WT="$TMP/wt"
 mkdir -p "$WT"
 : > "$TMP/calls"
 run_dispatch "$WT" "$REPO"
-grep -q "tab create --workspace ws-1 --cwd $WT --label setup --json" "$TMP/calls" \
+grep -q "tab create --workspace ws-1 --cwd $WT --label setup" "$TMP/calls" \
   || { echo "FAIL(B): tab create not issued for the new worktree:" >&2; cat "$TMP/calls" >&2; exit 1; }
 grep -qF "pane run pane-123 bash '$REPO/.herdr/setup'" "$TMP/calls" \
   || { echo "FAIL(B): pane run must target MAIN's .herdr/setup (from payload repo_root):" >&2; cat "$TMP/calls" >&2; exit 1; }
