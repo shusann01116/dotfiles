@@ -82,8 +82,7 @@
       "Bash(git:*)",
       "Bash(psql:*)",
       "WebFetch(domain:www.shadcn.io)",
-      "Bash(ls:*)",
-      "Bash(workmux *)"
+      "Bash(ls:*)"
     ],
     "deny": [
       "Read(**/.env)",
@@ -97,67 +96,6 @@
     "defaultMode": "auto"
   },
   "model": "sonnet",
-  "hooks": {
-    "Notification": [
-      {
-        "matcher": "permission_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.config/claude/scripts/notify.sh 'Claude needs your permission' Basso"
-          }
-        ]
-      },
-      {
-        "matcher": "permission_prompt|elicitation_dialog",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "workmux set-window-status waiting"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "workmux set-window-status working"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.config/claude/scripts/notify.sh 'Claude is waiting for your input' default"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "workmux set-window-status done"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "workmux set-window-status working"
-          }
-        ]
-      }
-    ]
-  },
   "statusLine": {
     "type": "command",
     "command": "npx -y ccstatusline@latest",
