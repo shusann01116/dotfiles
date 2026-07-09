@@ -7,6 +7,7 @@
 	name = shusann01116
 [core]
 	excludesfile = ~/.gitignore_global
+	pager = hunk pager
 [rerere]
 	enabled = true
 [commit]
