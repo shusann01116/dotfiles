@@ -1,8 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 99999,
+  "advisorModel": "fable",
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_ENABLE_EXPERIMENTAL_ADVISOR_TOOL": "1"
   },
   "permissions": {
     "allow": [
@@ -84,18 +86,10 @@
       "WebFetch(domain:www.shadcn.io)",
       "Bash(ls:*)"
     ],
-    "deny": [
-      "Read(**/.env)",
-      "Read(**/.env.local)",
-      "Read(**/.env.*.local)"
-    ],
-    "ask": [
-      "Bash(rm)",
-      "Bash(rmdir)"
-    ],
+    "deny": ["Read(**/.env)", "Read(**/.env.local)", "Read(**/.env.*.local)"],
+    "ask": ["Bash(rm)", "Bash(rmdir)"],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
   "statusLine": {
     "type": "command",
     "command": "npx -y ccstatusline@latest",
@@ -121,13 +115,20 @@
     "canary-ai-agent-skills@canary-ai-agent-skills": true,
     "superpowers@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
-    "playground@claude-plugins-official": true
+    "playground@claude-plugins-official": true,
+    "crit@crit": true
   },
   "extraKnownMarketplaces": {
     "canary-ai-agent-skills": {
       "source": {
         "source": "github",
         "repo": "SSK-TBD/ai-agent-skills"
+      }
+    },
+    "crit": {
+      "source": {
+        "source": "github",
+        "repo": "tomasz-tomczyk/crit"
       }
     }
   },
