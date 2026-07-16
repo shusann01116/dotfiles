@@ -111,16 +111,19 @@ herdr() {
   backup_file "$config_dir/config.toml"
   link_file "$PACKAGE_ROOT/herdr/config.toml" "$config_dir/config.toml"
 
-  # worktree-bootstrap プラグインを冪等に登録（バイナリ呼び出しは command herdr）
-  local plugin_dir="$PACKAGE_ROOT/herdr/plugins/worktree-bootstrap"
-  if [[ -n "$(type -P herdr)" ]] && [[ -f "$plugin_dir/herdr-plugin.toml" ]]; then
-    if command herdr plugin list 2>/dev/null | grep -q "shusann.worktree-bootstrap"; then
-      info "herdr plugin worktree-bootstrap already linked"
-    else
-      info "Linking herdr plugin worktree-bootstrap"
-      command herdr plugin link "$plugin_dir" || info "herdr plugin link failed (link manually once the herdr server is running)"
+  # worktree-bootstrap / hunk-diff プラグインを冪等に登録（バイナリ呼び出しは command herdr）
+  local plugin_id plugin_dir
+  for plugin_id in shusann.worktree-bootstrap shusann.hunk-diff; do
+    plugin_dir="$PACKAGE_ROOT/herdr/plugins/${plugin_id#shusann.}"
+    if [[ -n "$(type -P herdr)" ]] && [[ -f "$plugin_dir/herdr-plugin.toml" ]]; then
+      if command herdr plugin list 2>/dev/null | grep -q "$plugin_id"; then
+        info "herdr plugin ${plugin_id#shusann.} already linked"
+      else
+        info "Linking herdr plugin ${plugin_id#shusann.}"
+        command herdr plugin link "$plugin_dir" || info "herdr plugin link failed (link manually once the herdr server is running)"
+      fi
     fi
-  fi
+  done
 }
 
 homebrew() {

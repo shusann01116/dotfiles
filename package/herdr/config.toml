@@ -24,6 +24,12 @@ type = "pane"
 command = "lazygit"
 description = "run lazygit"
 
+[[keys.command]]
+key = "prefix+d"
+type = "shell"
+command = "herdr plugin action invoke toggle-watch --plugin shusann.hunk-diff"
+description = "toggle live hunk diff for focused pane"
+
 [ui.toast]
 delivery = "system"
 

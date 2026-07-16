@@ -1,0 +1,11 @@
+id = "shusann.hunk-diff"
+name = "Hunk Diff"
+version = "0.1.0"
+min_herdr_version = "0.7.0"
+platforms = ["macos", "linux"]
+
+[[actions]]
+id = "toggle-watch"
+title = "Toggle Hunk live diff"
+description = "Open a live-reloading hunk diff split for the focused pane's repo, or close it if already open."
+command = ["bash", "toggle-watch.sh"]
