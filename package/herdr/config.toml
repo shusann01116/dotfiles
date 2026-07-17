@@ -40,4 +40,12 @@ enabled = true
 resume_agents_on_restore = true
 
 [ui]
-agent_panel_sort = "spaces"
+agent_panel_sort = "priority"
+
+[ui.sidebar.agents]
+row_gap = 0
+rows = [["state_icon", "workspace", "tab"], ["agent"]]
+
+[ui.sidebar.agents.rows_by_agent]
+# Agent が端末タイトルへ出す現在の作業内容を表示する。
+claude = [["state_icon", "workspace", "tab"], ["terminal_title_stripped"], ["agent"]]
