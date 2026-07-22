@@ -68,7 +68,7 @@ Each tool/application has its own directory under `package/`:
   - `plugins/worktree-bootstrap/` - `worktree.created` 時に対象リポジトリの
     `.herdr/setup`（ローカル限定スクリプト）を可視タブで自動実行する汎用プラグイン
 - `package/wezterm/` - Wezterm terminal emulator configuration
-- `package/astronvim_config/` - Custom Neovim configuration (git submodule)
+- `package/astronvim_config/` - Custom Neovim configuration (vendored directly, formerly a git submodule)
 - `package/claude/` - Claude Code global config (settings.json, CLAUDE.md, agents, skills)
 - `package/yabai/` + `package/skhd/` - macOS window management (tiling WM)
 
@@ -123,8 +123,6 @@ All files follow `.editorconfig` settings:
 Automated dependency updates via `.github/dependabot.yml`:
 
 - **GitHub Actions**: weekly updates
-- **Git submodules (root)**: monthly updates
-- **AstroNvim submodule**: daily updates
 
 ## Common Development Patterns
 
