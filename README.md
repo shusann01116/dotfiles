@@ -4,7 +4,7 @@ My dotfiles for macOS and Linux
 
 - homebrew
 - tmux
-- neovim with [AstroNeovim](https://github.com/AstroNvim/AstroNvim) and [custom config](https://github.com/shusann01116/astronvim_config)
+- neovim with [AstroNeovim](https://github.com/AstroNvim/AstroNvim) and [custom config](package/astronvim_config)
 
 ## Install
 
