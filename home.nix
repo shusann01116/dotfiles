@@ -1,6 +1,10 @@
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, hunk, ... }:
 
 {
+  imports = [
+    inputs.hunk.homeManagerModules.default
+  ];
+
   home.username = "shusann";
   home.homeDirectory = "/Users/shusann";
   home.stateVersion = "26.05";
@@ -66,6 +70,16 @@
         name = "shusann01116";
         email = "26602565+shusann01116@users.noreply.github.com";
       };
+    };
+  };
+
+  programs.hunk = {
+    enable = true;
+    enableGitIntegration = true; # Optional: set hunk as default git pager
+    settings = {
+      theme = "graphite";
+      mode = "split";
+      line_numbers = true;
     };
   };
 }
