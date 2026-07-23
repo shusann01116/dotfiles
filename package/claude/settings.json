@@ -1,7 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 99999,
-  "advisorModel": "fable",
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_ENABLE_EXPERIMENTAL_ADVISOR_TOOL": "1"
@@ -86,10 +85,18 @@
       "WebFetch(domain:www.shadcn.io)",
       "Bash(ls:*)"
     ],
-    "deny": ["Read(**/.env)", "Read(**/.env.local)", "Read(**/.env.*.local)"],
-    "ask": ["Bash(rm)", "Bash(rmdir)"],
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.local)",
+      "Read(**/.env.*.local)"
+    ],
+    "ask": [
+      "Bash(rm)",
+      "Bash(rmdir)"
+    ],
     "defaultMode": "auto"
   },
+  "model": "sonnet",
   "statusLine": {
     "type": "command",
     "command": "npx -y ccstatusline@latest",
@@ -135,10 +142,11 @@
   "outputStyle": "Explanatory",
   "language": "English",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
   "teammateMode": "in-process",
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
