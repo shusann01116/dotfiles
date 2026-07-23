@@ -13,11 +13,14 @@
     pkgs.fzf
     pkgs.htop
     pkgs.bat
-    pkgs.lazygit
     pkgs.ghq
     pkgs.gh
     pkgs.yazi
   ];
+
+  xdg = {
+    enable = true;
+  };
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -71,6 +74,24 @@
         email = "26602565+shusann01116@users.noreply.github.com";
       };
     };
+  };
+
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
+
+  # programs.zsh = {
+  #   enable = true;
+  #   syntaxHighlighting.enable = true;
+  #   oh-my-zsh = {
+  #     enable = true;
+  #   };
+  # };
+
+  programs.lazygit = {
+    enable = true;
   };
 
   programs.hunk = {

@@ -14,12 +14,13 @@
   };
 
   outputs =
-    { nixpkgs, home-manager, hunk, ... } @ inputs:
+    { nixpkgs, home-manager, ... } @ inputs:
     let
       system = "aarch64-darwin";
       pkgs = nixpkgs.legacyPackages.${system};
     in
     {
+      formatter.${system} = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
       homeConfigurations."shusann" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [ ./home.nix ];
