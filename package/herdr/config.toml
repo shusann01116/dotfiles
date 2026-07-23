@@ -17,6 +17,7 @@ navigate_workspace_up = "ctrl+k"
 navigate_workspace_down = "ctrl+j"
 previous_agent = "prefix+comma"
 next_agent = "prefix+period"
+remove_worktree = "prefix+alt+d"
 
 [[keys.command]]
 key = "prefix+alt+g"
