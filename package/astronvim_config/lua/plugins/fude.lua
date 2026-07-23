@@ -3,6 +3,9 @@ return {
 	"flexphere/fude.nvim",
 	opts = {
 		file_list_mode = "snacks",
+		sidepanel = {
+			file_tree = "tree",
+		},
 	},
 	config = function(_, opts)
 		require("fude").setup(opts)
