@@ -14,7 +14,7 @@
 	verbose = true
 [credential "https://github.com"]
 	helper = 
-	helper = !/opt/homebrew/bin/gh auth git-credential
+	helper = !/Users/shusann/.nix-profile/bin/.gh-wrapped auth git-credential
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !/opt/homebrew/bin/gh auth git-credential
+	helper = !/Users/shusann/.nix-profile/bin/.gh-wrapped auth git-credential
