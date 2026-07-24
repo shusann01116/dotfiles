@@ -23,7 +23,7 @@
       formatter.${system} = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
       homeConfigurations."shusann" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        modules = [ ./home.nix ];
+        modules = [ ./package/nix/home.nix ];
         extraSpecialArgs = { inherit inputs; };
       };
     };
