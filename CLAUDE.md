@@ -12,31 +12,36 @@ installation and package management through Homebrew.
 ## Installation and Setup
 
 ```bash
-# Full environment setup
+# Bootstrap a new Mac (idempotent)
 ./install.sh
 
-# The script auto-detects platform (macOS/Linux) and installs:
-# - Homebrew (if not present)
-# - All packages from package/brew/brewlist
-# - Zsh with Oh My Zsh
-# - Neovim with AstroNvim
-# - tmux configuration
-# - Claude Code configuration (XDG_CONFIG_HOME aware)
+# The script only bootstraps; everything else is Nix-managed:
+# 1. Determinate Nix (if not present)
+# 2. Homebrew (if not present; packages are managed by nix-darwin, not this script)
+# 3. brew trust for the third-party taps declared in modules/darwin/homebrew.nix
+# 4. sudo darwin-rebuild switch --flake .#shusann-mac
+# 5. herdr plugin registration (imperative; talks to the running server)
+
+# Day-to-day: edit modules/ (or package/ configs), then
+sudo darwin-rebuild switch --flake .#shusann-mac
 ```
 
 ## Development Tools and Commands
 
 ### Package Management
 
+Packages are declared in Nix, not installed imperatively:
+
+- **Cross-platform CLI tools** → `home.packages` in `modules/home/default.nix` (nixpkgs)
+- **Casks and mac-only/tap formulae** → `modules/darwin/homebrew.nix` (nix-darwin's homebrew module; `cleanup = "none"` during migration, `autoUpdate = false`)
+- **Language runtimes** → mise (`package/mise/config.toml`), never Nix or brew
+
 ```bash
-# View all managed packages
-cat package/brew/brewlist
+# Add a package: edit the relevant file above, then
+sudo darwin-rebuild switch --flake .#shusann-mac
 
-# Install new package (add to brewlist for persistence)
-brew install <package>
-
-# Update all packages
-brew update && brew upgrade
+# Upgrade nixpkgs-managed tools (deliberate, not automatic)
+nix flake update && sudo darwin-rebuild switch --flake .#shusann-mac
 ```
 
 ### Development Environment
@@ -57,11 +62,21 @@ brew update && brew upgrade
 
 ## Architecture
 
+### Nix Layout (hosts/ and modules/)
+
+- `flake.nix` - inputs (nixpkgs, nix-darwin, home-manager, hunk) and outputs
+  - `darwinConfigurations."shusann-mac"` - the Mac (nix-darwin + home-manager, one `darwin-rebuild switch` applies both)
+  - `homeConfigurations."shusann"` - no-sudo fallback; a WSL variant is added when a host exists
+- `hosts/shusann-mac/` - host identity (platform, primary user)
+- `modules/darwin/` - macOS system config; `homebrew.nix` declares taps/brews/casks; `nix.enable = false` because **Determinate Nix owns the daemon/GC** (custom nix settings go in `/etc/nix/nix.custom.conf`)
+- `modules/home/` - shared home config: `default.nix` (packages, programs.*), `dotfiles.nix` (the `dotfiles.dir` option, derived from the ghq root `~/src`), `symlinks.nix` + `claude.nix` (dotfile links), `darwin.nix` (mac-only)
+
+All dotfile symlinks use `mkOutOfStoreSymlink` into `package/`, so configs stay live-editable in the repo — no rebuild needed to test a config edit. **Flake purity caveat:** new files under `package/claude/` (agents, skills) must be `git add`ed before they get linked on the next switch.
+
 ### Package-Based Organization
 
-Each tool/application has its own directory under `package/`:
+Each tool/application has its own directory under `package/` (the content source that `modules/home/` symlinks into place):
 
-- `package/brew/` - Homebrew package lists (brewlist, brewtap)
 - `package/zsh/` - Zsh shell configuration (Oh My Zsh)
 - `package/tmux/` - Terminal multiplexer configuration
 - `package/herdr/` - herdr (terminal workspace manager) config and plugins
@@ -76,23 +91,17 @@ Each tool/application has its own directory under `package/`:
 
 Claude Code のコンフィグディレクトリは `CLAUDE_CONFIG_DIR` 環境変数で `$XDG_CONFIG_HOME/claude` (`~/.config/claude/`) に設定されている（`package/zsh/.zprofile` で export）。
 
-`install.sh` の `claude()` 関数により以下のシンボリックリンクが作成される:
+`modules/home/claude.nix` が `builtins.readDir` で `package/claude/` を列挙し、個別ファイル単位で symlink を張る:
 
 - `settings.json`, `CLAUDE.md` → `~/.config/claude/` 直下にリンク
-- `agents/`, `skills/` → 個別ファイル単位で `~/.config/claude/agents/`, `~/.config/claude/skills/` にリンク
+- `agents/`, `skills/`（将来 `scripts/`, `hooks/`）→ 個別エントリ単位でリンク。`~/.config/claude/` は実ディレクトリのまま維持され、ローカル限定の agent/skill やセッション状態と共存する
+- 新規ファイルは `git add` してから `darwin-rebuild switch` で反映される（flake は git-tracked ファイルしか見えない）
 
 **注意**: `package/claude/settings.json` が実体であり、`~/.config/claude/settings.json` はシンボリックリンク。編集は `package/claude/settings.json` に対して行うこと。
 
 ### Installation Strategy
 
-The install.sh script:
-
-1. Detects platform (Darwin/Linux)
-2. Installs Homebrew if missing
-3. Backs up existing configurations with timestamps
-4. Creates symbolic links from package/ directories to expected locations
-5. Runs platform-specific setup (linux() or macos() functions)
-6. Installs Claude Code config to `$XDG_CONFIG_HOME/claude`
+`install.sh` is a thin macOS bootstrap (Determinate Nix → Homebrew → tap trust → `darwin-rebuild switch` → herdr plugins). Symlinks and packages are entirely managed by nix-darwin/home-manager; the script has no symlink or package-list logic.
 
 ## Development Workflow
 
@@ -128,10 +137,10 @@ Automated dependency updates via `.github/dependabot.yml`:
 
 ### Adding New Tools
 
-1. Add package to `package/brew/brewlist`
-2. Run `brew install <package>`
-3. Add configuration files to appropriate `package/<tool>/` directory
-4. Update install.sh if symlinks needed
+1. Cross-platform CLI → add to `home.packages` in `modules/home/default.nix`; cask/mac-only → add to `modules/darwin/homebrew.nix`
+2. Add configuration files to a `package/<tool>/` directory
+3. Link the config: add an `xdg.configFile` entry in `modules/home/symlinks.nix` (via the `pkg` helper)
+4. `sudo darwin-rebuild switch --flake .#shusann-mac`
 
 ### Zsh Aliases
 
@@ -173,9 +182,11 @@ Additional paths are managed by mise for language-specific toolchains.
 
 When adding new tools or making changes:
 
-- **package/brew/brewlist** - Add new Homebrew packages
+- **modules/home/default.nix** - Add nixpkgs CLI tools (home.packages)
+- **modules/darwin/homebrew.nix** - Add Homebrew casks / mac-only formulae
+- **modules/home/symlinks.nix** - Add dotfile symlinks for new `package/<tool>/` dirs
 - **package/zsh/.zshrc** - Add aliases, environment variables
 - **package/mise/config.toml** - Manage language versions
 - **package/wezterm/wezterm.lua** - Terminal emulator configuration
 - **package/claude/settings.json** - Claude Code permissions and settings
-- **install.sh** - Add new symlink operations or installation steps
+- **install.sh** - Bootstrap-only changes (Nix/Homebrew install, tap trust, herdr plugins)

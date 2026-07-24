@@ -7,111 +7,54 @@ info() {
   echo "Info: $1"
 }
 
-debug() {
-  if [[ -n "${DEBUG-}" ]]; then
-    echo ""
-    echo "Debug: $1"
-  fi
-}
-
 error() {
   echo ""
   echo "Error: $1"
 }
 
-unset HAVE_SUDO_ACCESS
+FLAKE_HOST="shusann-mac"
+PACKAGE_ROOT="${PACKAGE_ROOT:-$(pwd)/package}"
 
-have_sudo_access() {
-  if [[ ! -x "/usr/bin/sudo" ]]; then
-    error "sudo is not installed"
-    exit 1
+install_nix() {
+  if command -v nix >/dev/null 2>&1; then
+    info "Nix already installed: $(nix --version)"
+    return
   fi
-
-  local -a SUDO=("/usr/bin/sudo")
-  if [[ -n "${SUDO_ASKPASS-}" ]]; then
-    SUDO+=("-A")
-  elif [[ -n "${NONINTERACTIVE-}" ]]; then
-    SUDO+=("-n")
-  fi
-
-  if [[ -z "${HAVE_SUDO_ACCESS-}" ]]; then
-    if [[ -n "${NONINTERACTIVE-}" ]]; then
-      "${SUDO[@]}" -l mkdir &>/dev/null
-    else
-      "${SUDO[@]}" -v && "${SUDO[@]}" -l mkdir &>/dev/null
-    fi
-    HAVE_SUDO_ACCESS="$?"
-  fi
-
-  return "${HAVE_SUDO_ACCESS}"
+  info "Installing Determinate Nix..."
+  curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determinate --no-confirm
+  # shellcheck disable=SC1091
+  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 }
 
-execute() {
-  if ! "$@"; then
-    error "Failed to execute: $*"
-    exit 1
+install_homebrew() {
+  if command -v brew >/dev/null 2>&1; then
+    return
   fi
+  info "Installing Homebrew (packages themselves are managed by nix-darwin)..."
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
-execute_sudo() {
-  local -a args=("$@")
-  if have_sudo_access; then
-    if [[ -n "${SUDO_ASKPASS-}" ]]; then
-      args=("-A" "${args[@]}")
-    fi
-    info "Executing: sudo ${args[*]}"
-    /usr/bin/sudo "${args[@]}"
-  else
-    info "Executing: ${args[*]}"
-    "${args[@]}"
-  fi
-}
-
-ensure_installed_dependencies() {
-  dependencies=$1
-  for dependency in $dependencies; do
-    if ! command -v "$dependency" >/dev/null 2>&1; then
-      error "Missing dependency: $dependency"
-      exit 1
-    fi
+trust_brew_taps() {
+  # brew refuses to load formulae from untrusted third-party taps; trust the
+  # taps declared in modules/darwin/homebrew.nix before the switch needs them.
+  local tap
+  for tap in koekeishiya/formulae datadog-labs/pack raine/workmux; do
+    brew trust "$tap" 2>/dev/null || true
   done
 }
 
-backup_file() {
-  file=$1
-
-  local time
-  time=$(date +%Y%m%d%H%M%S)
-
-  if [[ -e "$file" ]]; then
-    info "Backing up $file to $file.$time.bak"
-    mv "$file" "$file.$time.bak"
+darwin_switch() {
+  if command -v darwin-rebuild >/dev/null 2>&1; then
+    sudo darwin-rebuild switch --flake ".#${FLAKE_HOST}"
+  else
+    info "Bootstrapping nix-darwin (first run on this machine)..."
+    sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake ".#${FLAKE_HOST}"
   fi
 }
 
-link_file() {
-  src=$1
-  dest=$2
-
-  info "Linking $src to $dest"
-  ln -sf "$src" "$dest"
-}
-
-herdr() {
-  # NOTE: this function is named `herdr`, so a bare `herdr` command would recurse
-  # into it. Detect the binary with `type -P` (PATH only) and invoke it with
-  # `command herdr` (bypasses the function).
-  if [[ -z "$(type -P herdr)" ]]; then
-    info "Installing herdr..."
-    brew install herdr
-  fi
-
-  local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/herdr"
-  mkdir -p "$config_dir"
-  backup_file "$config_dir/config.toml"
-  link_file "$PACKAGE_ROOT/herdr/config.toml" "$config_dir/config.toml"
-
-  # worktree-bootstrap / hunk-diff プラグインを冪等に登録（バイナリ呼び出しは command herdr）
+register_herdr_plugins() {
+  # herdr plugin registration talks to a running server — imperative and
+  # stateful, so it stays here rather than in home-manager activation.
   local plugin_id plugin_dir
   for plugin_id in shusann.worktree-bootstrap shusann.hunk-diff; do
     plugin_dir="$PACKAGE_ROOT/herdr/plugins/${plugin_id#shusann.}"
@@ -126,197 +69,17 @@ herdr() {
   done
 }
 
-homebrew() {
-  if ! command -v brew >/dev/null 2>&1; then
-    info "Installing homebrew..."
-    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-    test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-    test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  fi
-}
-
-install_brew_tap() {
-  if ! command -v brew >/dev/null 2>&1; then
-    error "Homebrew is not installed"
-    return 1
-  fi
-
-  local -a taps="$1"
-  info "Installing brew taps..."
-  for tap in $taps; do
-    execute brew tap "$tap"
-  done
-
-  return $?
-}
-
-install_brew_app() {
-  if ! command -v brew >/dev/null 2>&1; then
-    error "Homebrew is not installed"
-    return 1
-  fi
-
-  local apps="$1"
-  info "Installing brew apps..."
-  execute echo "${apps}" | xargs brew install
-
-  return $?
-}
-
-neovim() {
-  if ! command -v nvim >/dev/null 2>&1; then
-    info "Installing neovim..."
-    brew install neovim
-  fi
-
-  backup_file "$HOME/.config/nvim"
-  backup_file "$HOME/.local/share/nvim"
-  backup_file "$HOME/.local/state/nvim"
-  backup_file "$HOME/.cache/nvim"
-
-  ln -s "$(pwd)/package/astronvim_config" "$HOME/.config/nvim"
-}
-
-zsh() {
-  if ! command -v zsh >/dev/null 2>&1; then
-    info "Installing zsh..."
-    brew install zsh
-  fi
-
-  # Clean up legacy symlinks in $HOME
-  backup_file "$HOME/.zshrc"
-  backup_file "$HOME/.zprofile"
-  backup_file "$HOME/.zshenv"
-
-  # Directory symlink: ~/.config/zsh -> package/zsh
-  local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}"
-  backup_file "$config_dir/zsh"
-  ln -s "$PACKAGE_ROOT/zsh" "$config_dir/zsh"
-
-  # Bootstrap: only .zshenv remains in $HOME (sets ZDOTDIR)
-  link_file "$PACKAGE_ROOT/zsh/.zshenv" "$HOME/.zshenv"
-
-  return $?
-}
-
-claude() {
-  local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/claude"
-  mkdir -p "$config_dir"
-
-  local -a claude_files=(
-    CLAUDE.md
-    settings.json
-  )
-
-  for file in "${claude_files[@]}"; do
-    backup_file "$config_dir/$file"
-    [[ -f "$PACKAGE_ROOT/claude/$file" ]] && link_file "$PACKAGE_ROOT/claude/$file" "$config_dir/$file"
-  done
-
-  # Agents（個別ファイル単位でリンク、ローカル専用agentとの共存を許容）
-  if [[ -d "$PACKAGE_ROOT/claude/agents" ]]; then
-    mkdir -p "$config_dir/agents"
-    chmod 700 "$config_dir/agents"
-    for agent_file in "$PACKAGE_ROOT/claude/agents"/*.md; do
-      [[ -f "$agent_file" ]] || continue
-      local agent_name
-      agent_name=$(basename "$agent_file")
-      backup_file "$config_dir/agents/$agent_name"
-      link_file "$agent_file" "$config_dir/agents/$agent_name"
-    done
-  fi
-
-  # Scripts（hookから呼び出すスクリプト群をリンク）
-  if [[ -d "$PACKAGE_ROOT/claude/scripts" ]]; then
-    mkdir -p "$config_dir/scripts"
-    for script_file in "$PACKAGE_ROOT/claude/scripts"/*; do
-      [[ -f "$script_file" ]] || continue
-      local script_name
-      script_name=$(basename "$script_file")
-      backup_file "$config_dir/scripts/$script_name"
-      link_file "$script_file" "$config_dir/scripts/$script_name"
-    done
-  fi
-
-  # Hooks（PreToolUse 等のフックスクリプトをリンク）
-  if [[ -d "$PACKAGE_ROOT/claude/hooks" ]]; then
-    mkdir -p "$config_dir/hooks"
-    for hook_file in "$PACKAGE_ROOT/claude/hooks"/*; do
-      [[ -f "$hook_file" ]] || continue
-      local hook_name
-      hook_name=$(basename "$hook_file")
-      backup_file "$config_dir/hooks/$hook_name"
-      link_file "$hook_file" "$config_dir/hooks/$hook_name"
-    done
-  fi
-
-  # Skills（カスタムスキルのみ個別にリンク、外部symlinksを壊さない）
-  if [[ -d "$PACKAGE_ROOT/claude/skills" ]]; then
-    mkdir -p "$config_dir/skills"
-    for skill_item in "$PACKAGE_ROOT/claude/skills"/*; do
-      [[ -e "$skill_item" ]] || continue
-      local skill_name
-      skill_name=$(basename "$skill_item")
-      backup_file "$config_dir/skills/$skill_name"
-      link_file "$skill_item" "$config_dir/skills/$skill_name"
-    done
-  fi
-}
-
-AVAILABLE_PACKAGES=(homebrew herdr neovim zsh claude)
-
-usage() {
-  echo "Usage: $0 <package_name|all>"
-  echo ""
-  echo "Commands:"
-  echo "  all    Install everything"
-  echo ""
-  echo "Available packages: ${AVAILABLE_PACKAGES[*]}"
-}
-
-install_all() {
-  if [[ "$(uname -s)" == "Linux" ]]; then
-    info "Installing Linux build dependencies..."
-    execute_sudo apt-get update && execute_sudo apt-get install -y build-essential curl file git || exit 1
-  fi
-
-  homebrew
-  install_brew_tap "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewtap")"
-  install_brew_app "$(tr '\n' ' ' <"$PACKAGE_ROOT/brew/brewlist")"
-  herdr
-  neovim
-  zsh
-  claude
-}
-
 main() {
-  if [[ -z "${PACKAGE_ROOT-}" ]]; then
-    debug "Using PACKAGE_ROOT to $(pwd)/package"
-    PACKAGE_ROOT="$(pwd)/package"
+  if [[ "$(uname -s)" != "Darwin" ]]; then
+    error "This bootstrap targets macOS. For WSL/Linux: install Determinate Nix, then 'nix run home-manager -- switch --flake .#shusann'"
+    exit 1
   fi
-
-  if [[ $# -eq 0 ]]; then
-    usage
-    exit 0
-  fi
-
-  local cmd="$1"
-  if [[ "$cmd" == "all" ]]; then
-    install_all
-  else
-    local valid=false
-    for p in "${AVAILABLE_PACKAGES[@]}"; do
-      if [[ "$p" == "$cmd" ]]; then valid=true; break; fi
-    done
-    if [[ "$valid" == false ]]; then
-      error "Unknown package: $cmd"
-      usage
-      exit 1
-    fi
-    "$cmd"
-  fi
+  install_nix
+  install_homebrew
+  trust_brew_taps
+  darwin_switch
+  register_herdr_plugins
+  info "Done!"
 }
 
 main "$@"
-info "Done!"
