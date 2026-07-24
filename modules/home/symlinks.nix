@@ -10,6 +10,7 @@ in
     "wezterm".source = pkg "wezterm";
     "yabai".source = pkg "yabai";
     "skhd".source = pkg "skhd";
+    "herdr/config.toml".source = pkg "herdr/config.toml";
   };
 
   # ZDOTDIR bootstrap — the one file that must live directly in $HOME.

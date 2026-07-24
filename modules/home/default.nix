@@ -5,6 +5,7 @@
     inputs.hunk.homeManagerModules.default
     ./dotfiles.nix
     ./symlinks.nix
+    ./claude.nix
   ];
 
   home.username = "shusann";
