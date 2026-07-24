@@ -31,6 +31,8 @@ fi
 
 # env
 export PATH="/opt/homebrew/bin:$PATH"
+# Nix profiles win over Homebrew: HM-managed CLIs must shadow brew-installed ones
+export PATH="/etc/profiles/per-user/$USER/bin:$HOME/.nix-profile/bin:$PATH"
 # mise shims を brew より前に置くことで mise 管理 tool を常に優先させる
 # （mise activate は .mise.toml 下でしか tool path を prepend しないため、shims で fallback を張る）
 export PATH="$HOME/.local/share/mise/shims:$PATH"

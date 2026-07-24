@@ -11,14 +11,58 @@
   home.username = "shusann";
   home.stateVersion = "26.05";
 
-  home.packages = [
-    pkgs.ripgrep
-    pkgs.fzf
-    pkgs.htop
-    pkgs.bat
-    pkgs.ghq
-    pkgs.gh
-    pkgs.yazi
+  home.packages = with pkgs; [
+    # originals
+    ripgrep
+    fzf
+    htop
+    bat
+    ghq
+    gh
+    yazi
+    # cross-platform CLI moved off Homebrew (curated from `brew leaves`)
+    act
+    cloc
+    cmake
+    coreutils
+    duckdb
+    ffmpeg
+    findutils
+    fx
+    ghz
+    gnupg
+    gnused
+    golangci-lint
+    grpcurl
+    kubernetes-helm # brew: helm
+    istioctl
+    jq
+    kind
+    kubectx
+    kustomize
+    lazydocker
+    lftp
+    lsd
+    luaPackages.luacheck
+    minikube
+    mise
+    neovim
+    nkf
+    nushell
+    openapi-generator-cli
+    protobuf
+    pwgen
+    stylua
+    tmux
+    tree
+    uv
+    wabt
+    watchman
+    xplr
+    zip
+    zoxide
+    _7zz # brew: sevenzip
+    libwebp # brew: webp
   ];
 
   xdg.enable = true;
