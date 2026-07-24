@@ -3,6 +3,8 @@
 {
   imports = [
     inputs.hunk.homeManagerModules.default
+    ./dotfiles.nix
+    ./symlinks.nix
   ];
 
   home.username = "shusann";
