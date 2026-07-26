@@ -10,7 +10,6 @@
     };
 
     taps = [
-      "koekeishiya/formulae"
       "datadog-labs/pack"
       "raine/workmux"
     ];
@@ -40,14 +39,12 @@
       "postgresql@18"
       "datadog-labs/pack/pup"
       "samply"
-      "koekeishiya/formulae/skhd"
       "terminal-notifier"
       # terraform/tfenv intentionally undeclared: terraform is mise-managed,
       # and brew's terraform link conflicts with tfenv's shim
       "worktrunk"
       "raine/workmux/workmux"
       "xcodegen"
-      "koekeishiya/formulae/yabai"
       "zsh-autosuggestions"
       "zsh-syntax-highlighting"
     ];
