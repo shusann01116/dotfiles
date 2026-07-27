@@ -54,6 +54,7 @@
       "1password-cli"
       "alt-tab"
       "aqua-voice"
+      "azookey"
       "bettershot"
       "capcut"
       "claude"
