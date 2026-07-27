@@ -53,7 +53,6 @@
       "1password"
       "1password-cli"
       "alt-tab"
-      "aqua-voice"
       "azookey"
       "bettershot"
       "capcut"
