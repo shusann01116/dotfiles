@@ -69,6 +69,17 @@ register_herdr_plugins() {
   done
 }
 
+install_terminal_browser() {
+  # Standalone browser-in-terminal (zenbu-labs/terminal-browser); installs
+  # under ~/.local via its checksummed installer, updates itself thereafter.
+  if command -v terminal-browser >/dev/null 2>&1; then
+    info "terminal-browser already installed"
+  else
+    info "Installing terminal-browser..."
+    curl -fsSL https://terminal-browser.sh/install | bash || info "terminal-browser install failed (install manually: https://terminal-browser.com)"
+  fi
+}
+
 main() {
   if [[ "$(uname -s)" != "Darwin" ]]; then
     error "This bootstrap targets macOS. For WSL/Linux: install Determinate Nix, then 'nix run home-manager -- switch --flake .#shusann'"
@@ -79,6 +90,7 @@ main() {
   trust_brew_taps
   darwin_switch
   register_herdr_plugins
+  install_terminal_browser
   info "Done!"
 }
 
