@@ -38,7 +38,7 @@ description = "toggle live hunk diff for focused pane"
 [[keys.command]]
 key = "prefix+o"
 type = "pane"
-command = "terminal-browser open"
+command = "/Users/shusann/.local/bin/terminal-browser open"
 description = "open terminal-browser pane"
 
 [ui.toast]
