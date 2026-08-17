@@ -11,10 +11,6 @@ channel = "stable"
 version_check = true
 manifest_check = true
 
-[experimental]
-# terminal-browser renders Chromium via the kitty graphics protocol.
-kitty_graphics = true
-
 [keys]
 prefix = "ctrl+t"
 navigate_workspace_up = "ctrl+k"
@@ -34,12 +30,6 @@ key = "prefix+d"
 type = "shell"
 command = "herdr plugin action invoke toggle-watch --plugin shusann.hunk-diff"
 description = "toggle live hunk diff for focused pane"
-
-[[keys.command]]
-key = "prefix+o"
-type = "pane"
-command = "/Users/shusann/.local/bin/terminal-browser open"
-description = "open terminal-browser pane"
 
 [ui.toast]
 delivery = "system"
