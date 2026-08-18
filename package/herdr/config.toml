@@ -31,6 +31,12 @@ type = "shell"
 command = "herdr plugin action invoke toggle-watch --plugin shusann.hunk-diff"
 description = "toggle live hunk diff for focused pane"
 
+[[keys.command]]
+key = "prefix+p"
+type = "shell"
+command = "herdr plugin action invoke pick-pr --plugin shusann.pr-worktree"
+description = "pick an open PR and open it as a worktree"
+
 [ui.toast]
 delivery = "system"
 

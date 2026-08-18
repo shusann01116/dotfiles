@@ -56,7 +56,7 @@ register_herdr_plugins() {
   # herdr plugin registration talks to a running server — imperative and
   # stateful, so it stays here rather than in home-manager activation.
   local plugin_id plugin_dir
-  for plugin_id in shusann.worktree-bootstrap shusann.hunk-diff; do
+  for plugin_id in shusann.worktree-bootstrap shusann.hunk-diff shusann.pr-worktree; do
     plugin_dir="$PACKAGE_ROOT/herdr/plugins/${plugin_id#shusann.}"
     if [[ -n "$(type -P herdr)" ]] && [[ -f "$plugin_dir/herdr-plugin.toml" ]]; then
       if command herdr plugin list 2>/dev/null | grep -q "$plugin_id"; then
