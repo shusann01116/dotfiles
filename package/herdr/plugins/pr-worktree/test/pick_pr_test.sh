@@ -7,6 +7,7 @@ set -euo pipefail
 #   B. context JSON present -> split beside the focused pane at the repo root,
 #      rename the new pane to pr-pick, run picker.sh with PR_PICK_PANE set
 #   C. context JSON absent -> focused pane and cwd resolved via `pane list`
+#   D. context JSON supplies pane id but cwd unresolvable -> abort (exit 1, no pane split)
 
 HERE=$(cd "$(dirname "$0")/.." && pwd)
 PICK="$HERE/pick-pr.sh"
@@ -76,5 +77,18 @@ panes_json "$REPO"
 run_pick ""
 grep -q -- "pane split 1-1 --direction right --cwd $REPO_REAL --focus" "$TMP/calls" \
   || { echo "FAIL(C): split not issued via pane-list fallback:" >&2; cat "$TMP/calls" >&2; exit 1; }
+
+# Case D: context JSON supplies pane id but cwd unresolvable (pane list missing cwd key) -> abort.
+printf '{"result":{"panes":[{"pane_id":"1-1","tab_id":"1:1","focused":true}]}}' > "$TMP/panes.json"
+: > "$TMP/calls"
+if run_pick "{\"focused_pane_id\":\"1-1\"}"; then
+  echo "FAIL(D): must abort when focused pane cwd cannot be resolved:" >&2
+  exit 1
+fi
+if grep -q "pane split" "$TMP/calls"; then
+  echo "FAIL(D): pane split must not be issued when cwd is unresolvable:" >&2
+  cat "$TMP/calls" >&2
+  exit 1
+fi
 
 echo "PASS"

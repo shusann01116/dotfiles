@@ -28,10 +28,15 @@ if [ -z "$cwd" ]; then
   cwd=$(printf '%s' "$panes" | jq -r --arg pid "$focused_pane" '[.result.panes[]? | select(.pane_id == $pid)][0].cwd // empty' 2>/dev/null || true)
 fi
 
+if [ -z "$cwd" ]; then
+  echo "pick-pr: could not resolve focused pane cwd" >&2
+  exit 1
+fi
+
 # global-safe guard: only act inside a git repository (message lands in
 # `herdr plugin log`).
-repo=$(git -C "${cwd:-.}" rev-parse --show-toplevel 2>/dev/null) \
-  || { echo "pick-pr: ${cwd:-?} is not inside a git repository" >&2; exit 0; }
+repo=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null) \
+  || { echo "pick-pr: $cwd is not inside a git repository" >&2; exit 0; }
 
 new_pane=$("$HERDR" pane split "$focused_pane" --direction right --cwd "$repo" --focus 2>/dev/null \
   | jq -r '.result.pane.pane_id // empty' 2>/dev/null || true)
