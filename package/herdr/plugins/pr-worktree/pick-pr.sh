@@ -6,8 +6,9 @@ set -uo pipefail
 # branch as a worktree-backed workspace. CWD = plugin directory.
 #
 # Focused-pane resolution mirrors hunk-diff's toggle-watch.sh: prefer
-# HERDR_PLUGIN_CONTEXT_JSON, fall back to `pane list`. Context JSON field
-# names are unverified candidates; confirm via `herdr plugin log list`.
+# HERDR_PLUGIN_CONTEXT_JSON, fall back to `pane list`. Field names
+# (focused_pane_id, focused_pane_cwd, workspace_cwd) verified live against
+# herdr 0.7 via `plugin action invoke` context output.
 
 HERDR="${HERDR_BIN_PATH:-herdr}"
 PLUGIN_DIR=$(cd "$(dirname "$0")" && pwd)
