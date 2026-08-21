@@ -16,6 +16,8 @@ set -euo pipefail
 #   E. zero same-repo PRs -> exit 1, fzf never invoked
 #   F. context cwd outside a git repo -> exit 1, gh never invoked
 #   G. missing/empty plugin context -> exit 1
+#   H. context cwd inside a linked worktree -> worktree actions anchor on the
+#      main checkout root (herdr rejects them from a linked worktree)
 
 HERE=$(cd "$(dirname "$0")/.." && pwd)
 PICKER="$HERE/picker.sh"
@@ -170,5 +172,19 @@ if run_picker ""; then
   echo "FAIL(G): picker must exit non-zero without plugin context" >&2
   exit 1
 fi
+
+# Case H: invoked from inside a linked worktree -> anchor on the main root.
+cat > "$TMP/prs.json" <<'EOF'
+[
+  {"number":12,"title":"Fix picker","headRefName":"feature","author":{"login":"shusann"},"isCrossRepository":false}
+]
+EOF
+LINKED="$TMP/linked-wt"
+git -C "$REPO" worktree add -q "$LINKED" main
+: > "$TMP/calls"
+run_picker "{\"focused_pane_cwd\":\"$LINKED\"}"
+grep -q -- "worktree create --cwd $REPO_REAL --branch feature" "$TMP/calls" \
+  || { echo "FAIL(H): create must anchor on the main root, not the linked worktree:" >&2; cat "$TMP/calls" >&2; exit 1; }
+git -C "$REPO" worktree remove "$LINKED"
 
 echo "PASS"

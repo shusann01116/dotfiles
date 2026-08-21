@@ -25,8 +25,13 @@ cwd=$(printf '%s' "${HERDR_PLUGIN_CONTEXT_JSON:-}" \
   | jq -r '.focused_pane_cwd // .workspace_cwd // empty' 2>/dev/null || true)
 [ -n "$cwd" ] || fail "could not resolve focused pane cwd from plugin context"
 
-repo=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null) \
+# Resolve the MAIN checkout root (not the enclosing worktree's root): herdr
+# rejects worktree create/open issued from a linked worktree
+# (linked_worktree_source), so all worktree actions must anchor on the parent
+# repo even when the picker is invoked from inside a worktree.
+common=$(git -C "$cwd" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) \
   || fail "$cwd is not inside a git repository"
+repo=$(dirname "$common")
 cd "$repo" || fail "cannot cd to $repo"
 
 prs=$(gh pr list --limit 50 --json number,title,headRefName,author,isCrossRepository 2>&1) \
