@@ -4,8 +4,8 @@ version = "0.1.0"
 min_herdr_version = "0.7.0"
 platforms = ["macos", "linux"]
 
-[[actions]]
-id = "pick-pr"
-title = "Open PR as worktree"
-description = "Pick an open PR with fzf and open its head branch as a worktree-backed workspace."
-command = ["bash", "pick-pr.sh"]
+[[panes]]
+id = "picker"
+title = "PR picker"
+placement = "popup"
+command = ["bash", "picker.sh"]

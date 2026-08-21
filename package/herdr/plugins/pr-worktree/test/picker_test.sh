@@ -2,16 +2,20 @@
 set -euo pipefail
 
 # Unit test for picker.sh using fake `gh` / `fzf` / `herdr` plus a real git
-# repo with a local bare origin. Verifies:
+# repo with a local bare origin. picker.sh runs as a popup and resolves the
+# target repo from HERDR_PLUGIN_CONTEXT_JSON, so every case runs from a
+# neutral cwd. Verifies:
 #   A. fork PRs (isCrossRepository) are excluded from the fzf input, and the
 #      selected PR leads to `herdr worktree create --branch <head> --base
-#      origin/<head> --focus` plus a `pane close` of the picker's own pane
+#      origin/<head> --focus`
 #   B. a worktree that already has the branch checked out is reused via
 #      `herdr worktree open --path <wt> --focus` (no create)
 #   C. when `herdr worktree create` fails, the fallback creates the worktree
 #      with git at <repo>.worktrees/<branch> and opens it via `worktree open`
-#   D. fzf abort (Esc) -> no worktree commands, pane closed, exit 0
+#   D. fzf abort (Esc) -> no worktree commands, exit 0
 #   E. zero same-repo PRs -> exit 1, fzf never invoked
+#   F. context cwd outside a git repo -> exit 1, gh never invoked
+#   G. missing/empty plugin context -> exit 1
 
 HERE=$(cd "$(dirname "$0")/.." && pwd)
 PICKER="$HERE/picker.sh"
@@ -74,16 +78,16 @@ cat > "$TMP/prs.json" <<'EOF'
 ]
 EOF
 
-run_picker() {
+run_picker() { # $1 = HERDR_PLUGIN_CONTEXT_JSON value (defaults to the repo)
   (
-    cd "$REPO" &&
+    cd "$TMP" &&
     PATH="$FAKE_BIN:$PATH" \
     HERDR_BIN_PATH="$FAKE_BIN/herdr" \
     HERDR_CALLS="$TMP/calls" \
     GH_CALLS="$TMP/gh_calls" \
     GH_PRS_JSON="$TMP/prs.json" \
     FZF_INPUT="$TMP/fzf_input" \
-    PR_PICK_PANE=pane-9 \
+    HERDR_PLUGIN_CONTEXT_JSON="${1-{\"focused_pane_cwd\":\"$REPO\"}}" \
       bash "$PICKER" < /dev/null
   )
 }
@@ -98,8 +102,6 @@ if grep -q "fork-branch" "$TMP/fzf_input"; then
 fi
 grep -q -- "worktree create --cwd $REPO_REAL --branch feature --base origin/feature --focus" "$TMP/calls" \
   || { echo "FAIL(A): herdr worktree create not issued:" >&2; cat "$TMP/calls" >&2; exit 1; }
-grep -q "pane close pane-9" "$TMP/calls" \
-  || { echo "FAIL(A): picker pane not closed:" >&2; cat "$TMP/calls" >&2; exit 1; }
 
 # Case B: existing worktree for the branch is reused via worktree open.
 WT="$TMP/wt-feature"
@@ -128,7 +130,7 @@ grep -q -- "worktree open --path $FALLBACK --focus" "$TMP/calls" \
 git -C "$REPO" worktree remove "$FALLBACK"
 git -C "$REPO" branch -D feature
 
-# Case D: fzf abort -> no worktree commands, pane closed, exit 0.
+# Case D: fzf abort -> no worktree commands, exit 0.
 : > "$TMP/calls"
 FZF_ABORT=1 run_picker
 if grep -q "worktree" "$TMP/calls"; then
@@ -136,8 +138,6 @@ if grep -q "worktree" "$TMP/calls"; then
   cat "$TMP/calls" >&2
   exit 1
 fi
-grep -q "pane close pane-9" "$TMP/calls" \
-  || { echo "FAIL(D): picker pane not closed on abort:" >&2; cat "$TMP/calls" >&2; exit 1; }
 
 # Case E: zero same-repo PRs -> exit 1, fzf never invoked.
 cat > "$TMP/prs.json" <<'EOF'
@@ -153,5 +153,22 @@ if run_picker; then
 fi
 [ ! -e "$TMP/fzf_input" ] \
   || { echo "FAIL(E): fzf must not be invoked with an empty PR list" >&2; exit 1; }
+
+# Case F: context cwd outside a git repo -> exit 1, gh never invoked.
+: > "$TMP/gh_calls"
+if run_picker "{\"focused_pane_cwd\":\"$TMP\"}"; then
+  echo "FAIL(F): picker must exit non-zero outside a git repo" >&2
+  exit 1
+fi
+if grep -q "pr list" "$TMP/gh_calls"; then
+  echo "FAIL(F): gh must not be invoked outside a git repo" >&2
+  exit 1
+fi
+
+# Case G: missing/empty plugin context -> exit 1.
+if run_picker ""; then
+  echo "FAIL(G): picker must exit non-zero without plugin context" >&2
+  exit 1
+fi
 
 echo "PASS"

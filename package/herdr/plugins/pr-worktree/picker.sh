@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 set -uo pipefail
 
-# Interactive PR picker. Runs in a visible pane opened by pick-pr.sh, with the
-# pane cwd at the repo root and PR_PICK_PANE set to this pane's id.
+# Interactive PR picker. Runs in a session-modal popup opened via
+# `herdr plugin pane open` (placement = "popup" in herdr-plugin.toml); the
+# popup closes itself when this process exits, so no pane bookkeeping is
+# needed. The popup starts in the plugin dir, so the target repo is resolved
+# from HERDR_PLUGIN_CONTEXT_JSON (focused_pane_cwd, verified live on herdr
+# 0.8).
 # Flow: gh pr list -> drop fork PRs -> fzf -> open the selected PR's head
 # branch as a worktree-backed workspace (reusing a worktree that already has
 # the branch checked out). Prefers `herdr worktree create` so the
@@ -10,20 +14,20 @@ set -uo pipefail
 # to plain git + `herdr worktree open` when create refuses the branch.
 
 HERDR="${HERDR_BIN_PATH:-herdr}"
-PANE="${PR_PICK_PANE:-}"
 
-finish() { # $1 = exit code; close our own pane on the way out
-  [ -z "$PANE" ] || "$HERDR" pane close "$PANE" >/dev/null 2>&1 || true
-  exit "$1"
-}
-
-fail() { # show the error and hold the pane open until acknowledged
+fail() { # show the error and hold the popup open until acknowledged
   echo "pr-worktree: $*" >&2
   read -r -p "Press Enter to close..." _ || true
-  finish 1
+  exit 1
 }
 
-repo=$(git rev-parse --show-toplevel 2>/dev/null) || fail "not inside a git repository"
+cwd=$(printf '%s' "${HERDR_PLUGIN_CONTEXT_JSON:-}" \
+  | jq -r '.focused_pane_cwd // .workspace_cwd // empty' 2>/dev/null || true)
+[ -n "$cwd" ] || fail "could not resolve focused pane cwd from plugin context"
+
+repo=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null) \
+  || fail "$cwd is not inside a git repository"
+cd "$repo" || fail "cannot cd to $repo"
 
 prs=$(gh pr list --limit 50 --json number,title,headRefName,author,isCrossRepository 2>&1) \
   || fail "gh pr list failed: $prs"
@@ -37,7 +41,7 @@ lines=$(printf '%s' "$prs" | jq -r \
 
 sel=$(printf '%s\n' "$lines" | fzf --delimiter='\t' --with-nth=2.. \
   --prompt='PR> ' --preview='gh pr view {1}' --preview-window=right,60%) || true
-[ -n "$sel" ] || finish 0
+[ -n "$sel" ] || exit 0
 
 num=$(printf '%s' "$sel" | cut -f1)
 head_ref=$(printf '%s' "$prs" | jq -r --argjson n "$num" \
@@ -50,14 +54,14 @@ existing=$(git worktree list --porcelain | awk -v ref="branch refs/heads/$head_r
 if [ -n "$existing" ]; then
   "$HERDR" worktree open --path "$existing" --focus >/dev/null \
     || fail "herdr worktree open failed for $existing"
-  finish 0
+  exit 0
 fi
 
 git fetch origin "$head_ref" || fail "git fetch origin $head_ref failed"
 
 if "$HERDR" worktree create --cwd "$repo" --branch "$head_ref" \
      --base "origin/$head_ref" --focus >/dev/null 2>&1; then
-  finish 0
+  exit 0
 fi
 
 # Fallback: create the worktree with git, then hand it to herdr.
@@ -71,4 +75,4 @@ else
 fi
 "$HERDR" worktree open --path "$wt_path" --focus >/dev/null \
   || fail "herdr worktree open failed for $wt_path"
-finish 0
+exit 0

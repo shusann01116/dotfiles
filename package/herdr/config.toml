@@ -34,7 +34,7 @@ description = "toggle live hunk diff for focused pane"
 [[keys.command]]
 key = "prefix+p"
 type = "shell"
-command = "herdr plugin action invoke pick-pr --plugin shusann.pr-worktree"
+command = "herdr plugin pane open --plugin shusann.pr-worktree --entrypoint picker"
 description = "pick an open PR and open it as a worktree"
 
 [ui.toast]
