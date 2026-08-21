@@ -8,4 +8,6 @@ platforms = ["macos", "linux"]
 id = "picker"
 title = "PR picker"
 placement = "popup"
+width = "90%"
+height = "90%"
 command = ["bash", "picker.sh"]
