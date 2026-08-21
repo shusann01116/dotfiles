@@ -57,7 +57,7 @@ head_ref=$(printf '%s' "$prs" | jq -r --argjson n "$num" \
 existing=$(git worktree list --porcelain | awk -v ref="branch refs/heads/$head_ref" '
   /^worktree /{wt=substr($0, 10)} $0 == ref {print wt; exit}')
 if [ -n "$existing" ]; then
-  "$HERDR" worktree open --path "$existing" --focus >/dev/null \
+  "$HERDR" worktree open --cwd "$repo" --path "$existing" --focus >/dev/null \
     || fail "herdr worktree open failed for $existing"
   exit 0
 fi
@@ -78,6 +78,6 @@ else
   git -C "$repo" worktree add --track -b "$head_ref" "$wt_path" "origin/$head_ref" \
     || fail "git worktree add failed for $head_ref"
 fi
-"$HERDR" worktree open --path "$wt_path" --focus >/dev/null \
+"$HERDR" worktree open --cwd "$repo" --path "$wt_path" --focus >/dev/null \
   || fail "herdr worktree open failed for $wt_path"
 exit 0

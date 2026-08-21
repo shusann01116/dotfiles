@@ -111,7 +111,7 @@ git -C "$REPO" worktree add -q --track -b feature "$WT" origin/feature
 WT_REAL=$(cd "$WT" && pwd -P)
 : > "$TMP/calls"
 run_picker
-grep -q -- "worktree open --path $WT_REAL --focus" "$TMP/calls" \
+grep -q -- "worktree open --cwd $REPO_REAL --path $WT_REAL --focus" "$TMP/calls" \
   || { echo "FAIL(B): existing worktree not reused:" >&2; cat "$TMP/calls" >&2; exit 1; }
 if grep -q "worktree create" "$TMP/calls"; then
   echo "FAIL(B): worktree create must not run when a worktree exists:" >&2
@@ -127,7 +127,7 @@ HERDR_CREATE_EXIT=1 run_picker
 FALLBACK="$REPO_REAL.worktrees/feature"
 [ -d "$FALLBACK" ] \
   || { echo "FAIL(C): fallback worktree not created at $FALLBACK" >&2; exit 1; }
-grep -q -- "worktree open --path $FALLBACK --focus" "$TMP/calls" \
+grep -q -- "worktree open --cwd $REPO_REAL --path $FALLBACK --focus" "$TMP/calls" \
   || { echo "FAIL(C): fallback worktree not opened:" >&2; cat "$TMP/calls" >&2; exit 1; }
 git -C "$REPO" worktree remove "$FALLBACK"
 git -C "$REPO" branch -D feature
