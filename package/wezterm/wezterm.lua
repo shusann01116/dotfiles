@@ -8,6 +8,7 @@ config.default_prog = { "/bin/zsh", "-l", "-c", "herdr" }
 config.enable_tab_bar = false
 config.color_scheme = "Catppuccin Mocha"
 config.audible_bell = "Disabled"
+config.enable_kitty_graphics = true -- terminal-browser が kitty graphics で描画する
 
 config.keys = {
   {

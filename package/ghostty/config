@@ -1,0 +1,13 @@
+# Ghostty configuration
+# wezterm.lua と同等のセットアップ: フォント / テーマ / herdr 起動
+
+font-family = JetBrains Mono
+font-family = Noto Sans JP
+font-size = 13
+
+theme = Catppuccin Mocha
+
+# 起動時に herdr へアタッチする
+command = /bin/zsh -l -c herdr
+
+macos-titlebar-style = hidden

@@ -11,6 +11,8 @@ in
     "yabai".source = pkg "yabai";
     "skhd".source = pkg "skhd";
     "herdr/config.toml".source = pkg "herdr/config.toml";
+    "herdr/open-browser.sh".source = pkg "herdr/open-browser.sh";
+    "ghostty".source = pkg "ghostty";
   };
 
   # ZDOTDIR bootstrap — the one file that must live directly in $HOME.

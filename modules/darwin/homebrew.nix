@@ -70,6 +70,7 @@
       "font-noto-sans-jp"
       "font-symbols-only-nerd-font"
       "gcloud-cli" # renamed from google-cloud-sdk
+      "ghostty"
       "google-japanese-ime"
       "hyperkey"
       "karabiner-elements"
