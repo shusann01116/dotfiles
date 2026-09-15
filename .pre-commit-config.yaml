@@ -16,3 +16,19 @@ repos:
     rev: v3.0.3
     hooks:
       - id: prettier
+  - repo: local
+    hooks:
+      - id: no-automode-in-claude-settings
+        name: Block autoMode key in package/claude/settings.json
+        description: >-
+          Claude Code's auto mode writes project-specific learned context
+          (org name, secrets locations, protected branches, etc.) into the
+          global settings.json. That data belongs in the target project's
+          own .claude/settings.local.json, not in this dotfiles repo.
+        entry: >-
+          bash -c 'jq -e ".autoMode // empty" "$1" >/dev/null 2>&1 &&
+          { echo "package/claude/settings.json contains an autoMode key -
+          strip it (it holds another project'"'"'s learned context) before
+          committing"; exit 1; } || exit 0' --
+        language: system
+        files: ^package/claude/settings\.json$

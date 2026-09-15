@@ -30,9 +30,6 @@
       "Bash(yarn *)",
       "Bash(pnpm *)",
       "Bash(npm *)",
-      "Bash(npx *)",
-      "Bash(node *)",
-      "Bash(python3 *)",
       "Bash(curl *)",
       "Bash(jq *)",
       "Bash(grep *)",
@@ -96,7 +93,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5[1m]",
+  "model": "claude-fable-5-1[1m]",
   "statusLine": {
     "type": "command",
     "command": "npx -y ccstatusline@latest",
@@ -123,7 +120,9 @@
     "superpowers@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
     "playground@claude-plugins-official": true,
-    "crit@crit": true
+    "crit@crit": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "ponytail@ponytail": true
   },
   "extraKnownMarketplaces": {
     "canary-ai-agent-skills": {
@@ -137,12 +136,23 @@
         "source": "github",
         "repo": "tomasz-tomczyk/crit"
       }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
     }
   },
   "outputStyle": "Concise",
   "language": "English",
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "high"
+    }
+  },
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
