@@ -9,6 +9,8 @@ set -euo pipefail
 #      the setup runs in the NEW worktree (tab-create --cwd NEW, pane-run MAIN)
 #   C. fallback: with repo_root absent, dispatch resolves MAIN from git for a real
 #      linked worktree (main != new worktree)
+#   D. worktree.removed: MAIN's .herdr/teardown runs headlessly (no tab) with cwd
+#      MAIN and the removed path/branch exported; no-op when absent
 
 HERE=$(cd "$(dirname "$0")/.." && pwd)
 DISPATCH="$HERE/dispatch.sh"
@@ -34,14 +36,14 @@ git -C "$REPO" init -q
 git -C "$REPO" -c user.email=t@t -c user.name=t commit -q --allow-empty -m init
 REPO_REAL=$(cd "$REPO" && pwd -P)
 
-run_dispatch() { # $1 = new worktree path, $2 = main repo_root ("" to omit)
-  local ro=""
+run_dispatch() { # $1 = new worktree path, $2 = main repo_root ("" to omit), $3 = event (default worktree.created)
+  local ro="" ev="${3:-worktree.created}"
   [ -n "$2" ] && ro=$(printf '"repo_root":"%s",' "$2")
   local json
-  json=$(printf '{"event":"worktree_created","data":{"workspace":{"workspace_id":"ws-1","worktree":{%s"checkout_path":"%s"}},"worktree":{"path":"%s","branch":"feature","open_workspace_id":"ws-1"}}}' "$ro" "$1" "$1")
+  json=$(printf '{"event":"%s","data":{"workspace":{"workspace_id":"ws-1","worktree":{%s"checkout_path":"%s"}},"worktree":{"path":"%s","branch":"feature","open_workspace_id":"ws-1"}}}' "${ev/./_}" "$ro" "$1" "$1")
   HERDR_CALLS="$TMP/calls" \
   HERDR_BIN_PATH="$FAKE_BIN/herdr" \
-  HERDR_PLUGIN_EVENT="worktree.created" \
+  HERDR_PLUGIN_EVENT="$ev" \
   HERDR_PLUGIN_EVENT_JSON="$json" \
     bash "$DISPATCH"
 }
@@ -79,5 +81,19 @@ git -C "$REPO" worktree add -q "$WT2" -b feature2
 run_dispatch "$WT2" ""
 grep -qF "pane run pane-123 bash '$REPO_REAL/.herdr/setup'" "$TMP/calls" \
   || { echo "FAIL(C): pane run must target MAIN's .herdr/setup (git fallback):" >&2; cat "$TMP/calls" >&2; exit 1; }
+
+# Case D: worktree.removed. The checkout is already gone, so teardown runs
+# headlessly from MAIN with the removed path/branch in the environment.
+GONE="$TMP/gone"
+: > "$TMP/calls"
+run_dispatch "$GONE" "$REPO" worktree.removed
+[ -s "$TMP/calls" ] && { echo "FAIL(D): removed must not call herdr when .herdr/teardown absent:" >&2; cat "$TMP/calls" >&2; exit 1; }
+printf '#!/usr/bin/env bash\nprintf "%%s %%s %%s\\n" "$(pwd -P)" "$HERDR_WORKTREE_PATH" "$HERDR_WORKTREE_BRANCH" > "%s/teardown.out"\n' "$TMP" > "$REPO/.herdr/teardown"
+chmod +x "$REPO/.herdr/teardown"
+: > "$TMP/calls"
+run_dispatch "$GONE" "$REPO" worktree.removed
+[ -s "$TMP/calls" ] && { echo "FAIL(D): teardown must be headless (no herdr calls):" >&2; cat "$TMP/calls" >&2; exit 1; }
+[ "$(cat "$TMP/teardown.out" 2>/dev/null)" = "$REPO_REAL $GONE feature" ] \
+  || { echo "FAIL(D): teardown env/cwd wrong: $(cat "$TMP/teardown.out" 2>/dev/null)" >&2; exit 1; }
 
 echo "PASS"

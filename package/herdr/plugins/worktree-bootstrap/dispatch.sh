@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# herdr worktree.created dispatcher (generic, global-safe).
+# herdr worktree.created / worktree.removed dispatcher (generic, global-safe).
 # CWD = plugin directory. On a new worktree, if the repo's MAIN worktree has an
 # executable `.herdr/setup`, open a visible "setup" tab in the new workspace and
-# run it there. No-op for repos without `.herdr/setup`.
+# run it there. On removal the checkout and its workspace are already gone, so
+# MAIN's `.herdr/teardown` runs headlessly (cwd MAIN, output in
+# `herdr plugin log`) with HERDR_WORKTREE_PATH / HERDR_WORKTREE_BRANCH set.
+# No-op for repos without the corresponding script.
 #
 # The exact HERDR_PLUGIN_EVENT_JSON / `tab create --json` field names are not
 # documented; the jq expressions below accept the plausible candidates and fall
@@ -37,6 +40,15 @@ if [ -z "$main" ]; then
   main=$(git -C "$wt" worktree list --porcelain 2>/dev/null \
     | awk '/^worktree /{sub(/^worktree /, ""); print; exit}' || true)
 fi
+if [ "${HERDR_PLUGIN_EVENT:-}" = "worktree.removed" ]; then
+  teardown="$main/.herdr/teardown"
+  [ -x "$teardown" ] || exit 0
+  branch=$(printf '%s' "$payload" | jq -r '.data.worktree.branch // empty' 2>/dev/null || true)
+  echo "dispatch: tearing down $wt via $teardown" >&2
+  cd "$main"
+  HERDR_WORKTREE_PATH="$wt" HERDR_WORKTREE_BRANCH="$branch" exec bash "$teardown"
+fi
+
 setup="$main/.herdr/setup"
 
 # global-safe guard: opt-in repos only
