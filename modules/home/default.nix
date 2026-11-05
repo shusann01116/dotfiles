@@ -38,13 +38,13 @@
     istioctl
     jq
     kind
+    kubectl
     kubectx
     kustomize
     lazydocker
     lftp
     lsd
     luaPackages.luacheck
-    minikube
     mise
     neovim
     nkf
