@@ -37,6 +37,7 @@ return {
 		"FudeReviewScope",
 		"FudeReviewScopeNext",
 		"FudeReviewScopePrev",
+		"FudeReviewStackSwitch",
 		"FudeReviewOverview",
 		"FudeReviewSubmit",
 		"FudeOpenPRURL",
@@ -81,6 +82,7 @@ return {
 				maps.n[prefix .. "C"] = { "<cmd>FudeReviewScope<cr>", desc = "Select scope" }
 				maps.n[prefix .. "]"] = { "<cmd>FudeReviewScopeNext<cr>", desc = "Next scope" }
 				maps.n[prefix .. "["] = { "<cmd>FudeReviewScopePrev<cr>", desc = "Prev scope" }
+				maps.n[prefix .. "w"] = { "<cmd>FudeReviewStackSwitch<cr>", desc = "Switch PR in stack" }
 				maps.n[prefix .. "l"] = { "<cmd>FudeReviewListComments<cr>", desc = "List comments" }
 				maps.n[prefix .. "r"] = {
 					function() require("fude.comments").reply_to_comment() end,
