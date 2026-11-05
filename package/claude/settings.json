@@ -3,7 +3,8 @@
   "cleanupPeriodDays": 99999,
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_CODE_ENABLE_EXPERIMENTAL_ADVISOR_TOOL": "1"
+    "CLAUDE_CODE_ENABLE_EXPERIMENTAL_ADVISOR_TOOL": "1",
+    "CLAUDE_CODE_ENABLE_FUNCTION_HOOKS": "1"
   },
   "permissions": {
     "allow": [
@@ -93,36 +94,24 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5-1[1m]",
   "statusLine": {
     "type": "command",
     "command": "npx -y ccstatusline@latest",
     "padding": 0
   },
   "enabledPlugins": {
-    "document-skills@anthropic-agent-skills": true,
-    "frontend-design@claude-plugins-official": true,
-    "context7@claude-plugins-official": true,
-    "code-review@claude-plugins-official": true,
-    "github@claude-plugins-official": true,
-    "ralph-loop@claude-plugins-official": true,
     "commit-commands@claude-plugins-official": true,
     "pr-review-toolkit@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
     "figma@claude-plugins-official": true,
-    "Notion@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true,
     "product-management@knowledge-work-plugins": true,
     "typescript-lsp@claude-plugins-official": true,
-    "claude-code-setup@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true,
     "canary-ai-agent-skills@canary-ai-agent-skills": true,
     "superpowers@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
-    "playground@claude-plugins-official": true,
     "crit@crit": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
-    "ponytail@ponytail": true
+    "ponytail@ponytail": true,
+    "yomiyasu@yomiyasu": true,
+    "gopls-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "canary-ai-agent-skills": {
@@ -142,6 +131,12 @@
         "source": "github",
         "repo": "DietrichGebert/ponytail"
       }
+    },
+    "yomiyasu": {
+      "source": {
+        "source": "github",
+        "repo": "nanaism/yomiyasu"
+      }
     }
   },
   "outputStyle": "Concise",
@@ -151,17 +146,23 @@
   "modelSettings": {
     "claude-fable-5-1": {
       "effortLevel": "high"
+    },
+    "claude-opus-5-5": {
+      "effortLevel": "high"
     }
   },
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
+  "autoMemoryEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
   "verbose": false,
+  "switchModelsOnFlag": false,
   "teammateMode": "in-process",
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "useAutoModeDuringPlan": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "theme": "auto"
 }
