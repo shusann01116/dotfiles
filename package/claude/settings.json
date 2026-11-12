@@ -111,7 +111,8 @@
     "rust-analyzer-lsp@claude-plugins-official": true,
     "ponytail@ponytail": true,
     "yomiyasu@yomiyasu": true,
-    "gopls-lsp@claude-plugins-official": true
+    "gopls-lsp@claude-plugins-official": true,
+    "claude-security@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "canary-ai-agent-skills": {
@@ -148,7 +149,10 @@
       "effortLevel": "high"
     },
     "claude-opus-5-5": {
-      "effortLevel": "high"
+      "effortLevel": "medium"
+    },
+    "claude-fable-5-2": {
+      "effortLevel": "low"
     }
   },
   "autoUpdatesChannel": "latest",
@@ -156,6 +160,7 @@
   "autoMemoryEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
+  "theme": "auto",
   "verbose": false,
   "switchModelsOnFlag": false,
   "teammateMode": "in-process",
@@ -163,6 +168,5 @@
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "useAutoModeDuringPlan": true,
-  "voiceEnabled": true,
-  "theme": "auto"
+  "voiceEnabled": true
 }
