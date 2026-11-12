@@ -82,9 +82,9 @@ alt - 1 : yabai -m space --focus 1
 alt - 2 : yabai -m space --focus 2
 alt - 3 : yabai -m space --focus 3
 alt - 4 : yabai -m space --focus 4
-# focus prev/next space
-alt - 0x21 : yabai -m space --focus prev
-alt - 0x1E : yabai -m space --focus next
+# focus prev/next space within the focused display (wraps)
+alt - 0x21 : yabai -m space --focus "$(yabai -m query --spaces --display | jq -r 'map(.index) as $i | (map(."has-focus") | index(true)) as $c | $i[($c-1+length) % length]')"
+alt - 0x1E : yabai -m space --focus "$(yabai -m query --spaces --display | jq -r 'map(.index) as $i | (map(."has-focus") | index(true)) as $c | $i[($c+1) % length]')"
 
 # ── Space management ─────────────────────────────────────
 # create / destroy space
