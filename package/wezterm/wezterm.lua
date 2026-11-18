@@ -4,7 +4,13 @@ local config = wezterm.config_builder()
 
 config.font_size = 13
 config.font = wezterm.font_with_fallback({ "JetBrains Mono", "Noto Sans JP" })
-config.default_prog = { "/bin/zsh", "-l", "-c", "herdr" }
+-- herdr が無い環境では即終了してウィンドウが閉じるので、素の zsh にフォールバック
+config.default_prog = {
+  "/bin/zsh",
+  "-l",
+  "-c",
+  "if command -v herdr >/dev/null; then exec herdr; else exec zsh -l; fi",
+}
 config.enable_tab_bar = false
 config.color_scheme = "Catppuccin Mocha"
 config.audible_bell = "Disabled"
