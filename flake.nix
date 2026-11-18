@@ -20,9 +20,17 @@
     { nixpkgs, nix-darwin, home-manager, ... } @ inputs:
     let
       darwinSystem = "aarch64-darwin";
+      linuxSystems = [ "x86_64-linux" "aarch64-linux" ];
+      allSystems = [ darwinSystem ] ++ linuxSystems;
+
+      mkHome = system: extraModules: home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.${system};
+        extraSpecialArgs = { inherit inputs; };
+        modules = [ ./modules/home ] ++ extraModules;
+      };
     in
     {
-      formatter.${darwinSystem} = nixpkgs.legacyPackages.${darwinSystem}.nixpkgs-fmt;
+      formatter = nixpkgs.lib.genAttrs allSystems (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
 
       darwinConfigurations."shusann-mac" = nix-darwin.lib.darwinSystem {
         specialArgs = { inherit inputs; };
@@ -42,15 +50,13 @@
         ];
       };
 
-      # No-sudo fallback for this Mac. A WSL variant (x86_64-linux +
-      # modules/home/linux.nix) is added when a WSL host exists.
-      homeConfigurations."shusann" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.${darwinSystem};
-        extraSpecialArgs = { inherit inputs; };
-        modules = [
-          ./modules/home
-          ./modules/home/darwin.nix
-        ];
-      };
+      homeConfigurations = {
+        # No-sudo fallback for this Mac.
+        "shusann" = mkHome darwinSystem [ ./modules/home/darwin.nix ];
+      }
+      # Linux / WSL (standalone home-manager): "shusann@x86_64-linux", "shusann@aarch64-linux".
+      // builtins.listToAttrs (map
+        (system: nixpkgs.lib.nameValuePair "shusann@${system}" (mkHome system [ ./modules/home/linux.nix ]))
+        linuxSystems);
     };
 }

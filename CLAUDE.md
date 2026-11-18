@@ -12,7 +12,7 @@ installation and package management through Homebrew.
 ## Installation and Setup
 
 ```bash
-# Bootstrap a new Mac (idempotent)
+# Bootstrap a new Mac or Linux/WSL machine (idempotent)
 ./install.sh
 
 # The script only bootstraps; everything else is Nix-managed:
@@ -21,6 +21,9 @@ installation and package management through Homebrew.
 # 3. brew trust for the third-party taps declared in modules/darwin/homebrew.nix
 # 4. sudo darwin-rebuild switch --flake .#shusann-mac
 # 5. herdr plugin registration (imperative; talks to the running server)
+#
+# On Linux it instead runs: Determinate Nix → home-manager switch
+# --flake .#shusann@<arch>-linux (no sudo, no Homebrew) → herdr plugins
 
 # Day-to-day: edit modules/ (or package/ configs), then
 sudo darwin-rebuild switch --flake .#shusann-mac
@@ -66,10 +69,11 @@ nix flake update && sudo darwin-rebuild switch --flake .#shusann-mac
 
 - `flake.nix` - inputs (nixpkgs, nix-darwin, home-manager, hunk) and outputs
   - `darwinConfigurations."shusann-mac"` - the Mac (nix-darwin + home-manager, one `darwin-rebuild switch` applies both)
-  - `homeConfigurations."shusann"` - no-sudo fallback; a WSL variant is added when a host exists
+  - `homeConfigurations."shusann"` - no-sudo fallback for the Mac
+  - `homeConfigurations."shusann@x86_64-linux"` / `"shusann@aarch64-linux"` - standalone home-manager for Linux/WSL (`modules/home/linux.nix`)
 - `hosts/shusann-mac/` - host identity (platform, primary user)
 - `modules/darwin/` - macOS system config; `homebrew.nix` declares taps/brews/casks; `nix.enable = false` because **Determinate Nix owns the daemon/GC** (custom nix settings go in `/etc/nix/nix.custom.conf`)
-- `modules/home/` - shared home config: `default.nix` (packages, programs.*), `dotfiles.nix` (the `dotfiles.dir` option, derived from the ghq root `~/src`), `symlinks.nix` + `claude.nix` (dotfile links), `darwin.nix` (mac-only)
+- `modules/home/` - shared home config: `default.nix` (packages, programs.*), `dotfiles.nix` (the `dotfiles.dir` option, derived from the ghq root `~/src`), `symlinks.nix` + `claude.nix` (dotfile links), `darwin.nix` (mac-only: home dir, yabai/skhd), `linux.nix` (Linux-only: home dir, `targets.genericLinux`)
 
 All dotfile symlinks use `mkOutOfStoreSymlink` into `package/`, so configs stay live-editable in the repo — no rebuild needed to test a config edit. **Flake purity caveat:** new files under `package/claude/` (agents, skills) must be `git add`ed before they get linked on the next switch.
 
@@ -103,7 +107,7 @@ Claude Code のコンフィグディレクトリは `CLAUDE_CONFIG_DIR` 環境�
 
 ### Installation Strategy
 
-`install.sh` is a thin macOS bootstrap (Determinate Nix → Homebrew → tap trust → `darwin-rebuild switch` → herdr plugins). Symlinks and packages are entirely managed by nix-darwin/home-manager; the script has no symlink or package-list logic.
+`install.sh` is a thin bootstrap: on macOS Determinate Nix → Homebrew → tap trust → `darwin-rebuild switch` → herdr plugins; on Linux Determinate Nix → `home-manager switch` → herdr plugins. Symlinks and packages are entirely managed by nix-darwin/home-manager; the script has no symlink or package-list logic.
 
 ## Development Workflow
 

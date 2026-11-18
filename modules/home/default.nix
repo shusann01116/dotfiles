@@ -63,8 +63,6 @@
     zoxide
     _7zz # brew: sevenzip
     libwebp # brew: webp
-    yabai
-    skhd
   ];
 
   xdg.enable = true;

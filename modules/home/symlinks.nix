@@ -8,8 +8,6 @@ in
     "nvim".source = pkg "astronvim_config";
     "zsh".source = pkg "zsh";
     "wezterm".source = pkg "wezterm";
-    "yabai".source = pkg "yabai";
-    "skhd".source = pkg "skhd";
     "herdr/config.toml".source = pkg "herdr/config.toml";
     "herdr/open-browser.sh".source = pkg "herdr/open-browser.sh";
     "ghostty".source = pkg "ghostty";

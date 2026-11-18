@@ -69,15 +69,34 @@ register_herdr_plugins() {
   done
 }
 
-main() {
-  if [[ "$(uname -s)" != "Darwin" ]]; then
-    error "This bootstrap targets macOS. For WSL/Linux: install Determinate Nix, then 'nix run home-manager -- switch --flake .#shusann'"
-    exit 1
+home_manager_switch() {
+  local target
+  target="shusann@$(uname -m | sed 's/^arm64$/aarch64/')-linux"
+  if command -v home-manager >/dev/null 2>&1; then
+    home-manager switch -b backup --flake ".#${target}"
+  else
+    info "Bootstrapping home-manager (first run on this machine)..."
+    nix run home-manager/master -- switch -b backup --flake ".#${target}"
   fi
-  install_nix
-  install_homebrew
-  trust_brew_taps
-  darwin_switch
+}
+
+main() {
+  case "$(uname -s)" in
+  Darwin)
+    install_nix
+    install_homebrew
+    trust_brew_taps
+    darwin_switch
+    ;;
+  Linux)
+    install_nix
+    home_manager_switch
+    ;;
+  *)
+    error "Unsupported OS: $(uname -s)"
+    exit 1
+    ;;
+  esac
   register_herdr_plugins
   info "Done!"
 }
