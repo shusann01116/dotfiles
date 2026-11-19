@@ -14,11 +14,12 @@ export type Board = {
   summary: string
   asks: Ask[]
   decisions: string[]
+  prs: string[]
   error: string | null
   updatedAt: string
 }
 
-export type PrState = { pr: Pr | null; error: string | null }
+export type PrState = { prs: Pr[]; error: string | null }
 
 declare module 'claude-code' {
   interface PluginState {

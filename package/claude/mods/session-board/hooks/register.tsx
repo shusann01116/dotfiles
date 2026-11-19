@@ -9,20 +9,20 @@ const MAX = 5
 const MAX_OPTIONS = 4
 // ponytail: 保存はセッションごとに 1 件、古い順に捨てて 200 件まで。足りなくなったら日付で捨てる。
 const MAX_SAVED = 200
-const EMPTY: Board = { summary: '', asks: [], decisions: [], error: null, updatedAt: '' }
+const EMPTY: Board = { summary: '', asks: [], decisions: [], prs: [], error: null, updatedAt: '' }
 
-const board = atom({ plugin: 'session-board', key: 'board' } as const, EMPTY, { shape: 'board-4' })
+const board = atom({ plugin: 'session-board', key: 'board' } as const, EMPTY, { shape: 'board-5' })
 // 要約と PR は別々に更新が走るので、互いの書き込みを踏まないよう atom を分ける。
-const prState = atom({ plugin: 'session-board', key: 'pr' } as const, { pr: null, error: null } as PrState, {
-  shape: 'pr-2',
+const prState = atom({ plugin: 'session-board', key: 'pr' } as const, { prs: [], error: null } as PrState, {
+  shape: 'pr-3',
 })
 
 // 走っている要約の数。0 より大きい間はペインに「更新中」と出す。
 const updating = atom({ plugin: 'session-board', key: 'updating' } as const, 0, { shape: 'updating-1' })
 
 const ASK = `ここまでの会話を読み、次の JSON だけを返してください。前後に文章を付けないこと。
-{"summary": "いま何をしていて、どの段階か。2〜3 文", "asks": [{"text": "あなた（Claude）がユーザーに求めていて、まだ答えをもらっていない判断。1 件 1 文", "options": ["ユーザーが押すだけで答えになる短い回答候補"], "current": "あなたの直前の返答で求めた判断なら true、それより前から残っている判断なら false"}], "decisions": ["ユーザーに聞かずにあなたが決めたことのうち、ユーザーが決めたほうがよさそうなもの。1 件 1 文"]}
-asks と decisions は最大 ${MAX} 件、重要な順。
+{"summary": "いま何をしていて、どの段階か。2〜3 文", "asks": [{"text": "あなた（Claude）がユーザーに求めていて、まだ答えをもらっていない判断。1 件 1 文", "options": ["ユーザーが押すだけで答えになる短い回答候補"], "current": "あなたの直前の返答で求めた判断なら true、それより前から残っている判断なら false"}], "decisions": ["ユーザーに聞かずにあなたが決めたことのうち、ユーザーが決めたほうがよさそうなもの。1 件 1 文"], "prs": ["このセッションで作成・更新・レビュー対応・監視している PR の URL（https://github.com/owner/repo/pull/番号 の形。#番号 だけなら会話中のリポジトリで補う）"]}
+asks と decisions と prs は最大 ${MAX} 件、重要な順。
 options の決め方: あなたが会話で選択肢を示していればそれをそのまま使う。示していなくても、はい / いいえ、進めてよい / 止める、確認の結果（例: 出た / 出ない）のように短い答えで足りる判断なら、その候補を入れる。自由記述でしか答えられない判断だけ空配列にする。最大 ${MAX_OPTIONS} 件、各 12 文字以内。前回 options が空だった項目も、毎回この基準で見直すこと。
 該当がなければ空配列。前回の内容と意味が同じ項目は文言を変えないこと。
 前回: `
@@ -101,14 +101,16 @@ const toAsks = (value: unknown): Ask[] =>
     .filter((v): v is Ask => v !== undefined)
     .slice(0, MAX)
 
-type Summary = Pick<Board, 'summary' | 'asks' | 'decisions'>
+type Summary = Pick<Board, 'summary' | 'asks' | 'decisions' | 'prs'>
+
+const PR_URL = /^https:\/\/github\.com\/[^/\s]+\/[^/\s]+\/pull\/\d+$/
 
 const toSummary = (got: unknown): Summary | undefined => {
   if (typeof got !== 'object' || got === null) return undefined
-  const { summary, asks, decisions } = got as Record<string, unknown>
+  const { summary, asks, decisions, prs } = got as Record<string, unknown>
   if (typeof summary !== 'string') return undefined
 
-  return { summary, asks: toAsks(asks), decisions: lines(decisions) }
+  return { summary, asks: toAsks(asks), decisions: lines(decisions), prs: lines(prs).filter(u => PR_URL.test(u)) }
 }
 
 const parse = (text: string): Summary | undefined => {
@@ -164,8 +166,8 @@ const refreshBoard = async ($: EngineInterface, isQuiet = false): Promise<void> 
 
 const summarize = async ($: EngineInterface, isQuiet: boolean): Promise<void> => {
   const mine = ++latest
-  const { summary, asks, decisions } = await read($, board)
-  const prompt = ASK + JSON.stringify({ summary, asks, decisions })
+  const { summary, asks, decisions, prs } = await read($, board)
+  const prompt = ASK + JSON.stringify({ summary, asks, decisions, prs })
   const reply = await (forkAtTurn ? forkAtTurn(prompt) : $.model.fork({ prompt, effort: 'low' }))
   if (mine !== latest) return
 
@@ -195,6 +197,8 @@ const summarize = async ($: EngineInterface, isQuiet: boolean): Promise<void> =>
   const updatedAt = await clock($)
   await update($, board, b => ({ ...b, ...parsed, error: null, updatedAt }))
   await save($, parsed, updatedAt)
+  // PR の一覧は要約から取るので、変わったらすぐ取り直す。
+  if (parsed.prs.join() !== prs.join()) void refreshPr($)
 }
 
 const THREADS = `query($owner:String!,$repo:String!,$number:Int!){repository(owner:$owner,name:$repo){pullRequest(number:$number){reviewThreads(first:100){nodes{isResolved}}}}}`
@@ -210,9 +214,10 @@ const ci = (rollup: unknown): Pr['ci'] => {
   return 'pass'
 }
 
-const fetchPr = async ($: EngineInterface): Promise<Pr | null> => {
+// target を省くと、カレントディレクトリのブランチの PR を読む。
+const fetchPr = async ($: EngineInterface, target?: string): Promise<Pr | null> => {
   const view = await $.process.run([
-    'gh', 'pr', 'view', '--json', 'number,url,isDraft,state,reviewDecision,mergeable,statusCheckRollup',
+    'gh', 'pr', 'view', ...(target ? [target] : []), '--json', 'number,url,isDraft,state,reviewDecision,mergeable,statusCheckRollup',
   ])
   // PR のないブランチは非 0 終了。失敗ではなく「PR なし」。認証切れなど他の理由は失敗として扱う。
   if (view.exitCode !== 0) {
@@ -221,14 +226,17 @@ const fetchPr = async ($: EngineInterface): Promise<Pr | null> => {
   }
   const pr = JSON.parse(view.stdout) as Record<string, unknown>
   const number = Number(pr.number)
+  const url = String(pr.url ?? '')
+  // 別リポジトリの PR もあるので、owner と repo は PR の URL から取る。
+  const [, owner = '', repo = ''] = new URL(url).pathname.split('/')
   const threads = await $.process.run([
-    'gh', 'api', 'graphql', '-f', `query=${THREADS}`, '-F', 'owner={owner}', '-F', 'repo={repo}', '-F', `number=${number}`,
+    'gh', 'api', 'graphql', '-f', `query=${THREADS}`, '-f', `owner=${owner}`, '-f', `repo=${repo}`, '-F', `number=${number}`,
     '--jq', '[.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved | not)] | length',
   ])
 
   return {
     number,
-    url: String(pr.url ?? ''),
+    url,
     status: pr.state === 'MERGED' ? 'merged' : pr.state === 'CLOSED' ? 'closed' : pr.isDraft ? 'draft' : 'open',
     ci: ci(pr.statusCheckRollup),
     review: String(pr.reviewDecision ?? ''),
@@ -239,8 +247,13 @@ const fetchPr = async ($: EngineInterface): Promise<Pr | null> => {
 
 const refreshPr = async ($: EngineInterface): Promise<void> => {
   try {
-    const pr = await fetchPr($)
-    await update($, prState, () => ({ pr, error: null }))
+    const { prs: mentioned } = await read($, board)
+    const got = await Promise.all([undefined, ...mentioned].map(t => fetchPr($, t)))
+    const prs = got
+      .filter((p): p is Pr => p !== null)
+      .filter((p, i, all) => all.findIndex(q => q.url === p.url) === i)
+      .slice(0, MAX)
+    await update($, prState, () => ({ prs, error: null }))
   } catch {
     // gh が起動できない・出力が壊れている。前回の PR 表示を残す。
     const error = await failedAt($)
@@ -324,7 +337,7 @@ export const register: Register = on => {
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
     const { Box, Text, Button, Link } = $.ui.resolve(e)
     const { summary, asks, decisions, error, updatedAt } = await read($, board)
-    const { pr, error: prError } = await read($, prState)
+    const { prs, error: prError } = await read($, prState)
     const isUpdating = (await read($, updating)) > 0
     const discuss = (decision: string) =>
       void $.prompt.submit({
@@ -370,17 +383,16 @@ export const register: Register = on => {
         </Box>
         {error && <Text color="red">{`要約: ${error}`}</Text>}
         {prError && <Text color="red">{`PR: ${prError}`}</Text>}
-        <Box key="pr" flexDirection="row" flexWrap="wrap" columnGap={1}>
-          {pr ? (
+        {prs.length === 0 && <Text dimColor>PR なし</Text>}
+        {prs.map(pr => (
+          <Box key={`pr-${pr.url}`} flexDirection="row" flexWrap="wrap" columnGap={1}>
             <Link href={pr.url}>{`#${pr.number} ${STATUS[pr.status]}`}</Link>
-          ) : (
-            <Text dimColor>PR なし</Text>
-          )}
-          {pr && <Text color={CI_COLOR[pr.ci]}>{CI[pr.ci]}</Text>}
-          {pr && REVIEW[pr.review] && <Text>{REVIEW[pr.review]}</Text>}
-          {pr && pr.unresolved > 0 && <Text color="yellow">{`指摘 ${pr.unresolved}`}</Text>}
-          {pr?.hasConflict && <Text color="red">競合あり</Text>}
-        </Box>
+            <Text color={CI_COLOR[pr.ci]}>{CI[pr.ci]}</Text>
+            {REVIEW[pr.review] && <Text>{REVIEW[pr.review]}</Text>}
+            {pr.unresolved > 0 && <Text color="yellow">{`指摘 ${pr.unresolved}`}</Text>}
+            {pr.hasConflict && <Text color="red">競合あり</Text>}
+          </Box>
+        ))}
         {rule('rule-summary')}
         <Box key="summary" flexDirection="column">
           <Text bold>概要</Text>

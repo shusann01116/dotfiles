@@ -363,3 +363,22 @@ test('文中の URL は、幅に収まらなくても全体を指すリンクと
   expect(shown[1]).toBe(short)
   await ui.unmount()
 })
+
+test('会話に出た別ブランチ・別リポジトリの PR も、現在のブランチの PR と並べて出す', async ($, on) => {
+  const other = 'https://github.com/x/y/pull/12'
+  const asked: string[][] = []
+  engine(on, [JSON.stringify({ summary: 'S', asks: [], decisions: [], prs: [other, 'not a url'] })], (_, e) => {
+    asked.push([...e.argv])
+    if (e.argv.includes('graphql')) return out('0\n')
+    if (!e.argv.includes(other)) return { value: NO_PR }
+
+    return out(JSON.stringify({ number: 12, url: other, isDraft: false, state: 'OPEN', statusCheckRollup: [] }))
+  })
+  await $.turn.complete(TURN)
+  await settle()
+
+  const ui = await $.ui.mount(PANE)
+  expect((await ui.findAll({ type: 'Link' })).map(l => l.props.href)).toEqual([other])
+  expect(asked.find(a => a.includes('graphql'))).toEqual(expect.arrayContaining(['owner=x', 'repo=y']))
+  await ui.unmount()
+})
