@@ -43,6 +43,14 @@ type = "shell"
 command = "herdr plugin pane open --plugin shusann.pr-worktree --entrypoint picker"
 description = "pick an open PR and open it as a worktree"
 
+[[keys.command]]
+key = "prefix+f"
+type = "popup"
+command = '''repo=$(GHQ_ROOT="$HOME/src" ghq list -p | fzf --preview 'bat --color=always --style=header,grid --line-range :80 {}/README.*') && herdr workspace create --cwd "$repo"'''
+description = "pick a ghq repo and open it as a workspace"
+width = "80%"
+height = "80%"
+
 [ui.toast]
 delivery = "system"
 
