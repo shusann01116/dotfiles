@@ -3,3 +3,6 @@ package/claude/settings.local.json
 package/zsh/.zsh_sessions/
 package/zsh/.zcompdump*
 result
+# Claude Code が mod の読み込み時に書き出す型定義
+package/claude/mods/*/.claude-plugin/types/
+package/claude/mods/*/tsconfig.json

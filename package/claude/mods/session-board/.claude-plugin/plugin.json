@@ -1,0 +1,6 @@
+{
+  "name": "session-board",
+  "version": "0.1.0",
+  "description": "セッションの概要・判断待ち・Claude が決めたこと・PR の状態を常に表示するペイン",
+  "types": "./types/index.d.ts"
+}

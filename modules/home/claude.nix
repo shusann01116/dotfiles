@@ -31,5 +31,6 @@ in
     (linksFor "scripts")
     (linksFor "hooks")
     (linksFor "skills")
+    (linksFor "mods")
   ];
 }
